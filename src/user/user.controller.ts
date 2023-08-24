@@ -13,12 +13,11 @@ export class UserController {
     @Get()
     async getUser()
     {
-        return await this.userService.getUser();
+        return await this.userService.getUsers();
     }
     
     @Post('/register')
     async register(@Body() user: UserDTO) {
-        
         return await this.userService.registerUser(user);
     }
 

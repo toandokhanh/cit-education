@@ -1,4 +1,4 @@
-import { Expose, Transform, plainToClass } from "class-transformer";
+import { Expose, Transform } from "class-transformer";
 
 import { IsString, IsNotEmpty, IsDateString, IsIn, MinLength, IsOptional, IsEmail } from "class-validator";
 import { BaseDto } from "src/common/base.dto";
@@ -9,9 +9,8 @@ export class UserDTO extends BaseDto{
     // userId: string;
     firstname : string;
     lastname : string;
-    
     @Transform(({obj}) => obj.firstname + ' ' + obj.lastname)
-    @Expose()
+    @Expose()   
     fullname : string;
 
 
@@ -40,13 +39,11 @@ export class UserDTO extends BaseDto{
     @IsDateString()
     @Expose()
     dob: Date;
+    
 
     // static plainToClass<T>(this: new (...args: any[]) => T, obj: T): T {
     //     return plainTolnstance(this, obj, options: {exclude ExtraneousValues: true})
     // }
-    static plainToClass<T>(this: new (...args: any[]) => T, obj: T): T {
-        return plainToClass(this, obj, { excludeExtraneousValues: true });
-    }
     // constructor(data: Partial<UserDTO>) {
     //     Object.assign(this, data);
     //     this.avatar = this.avatar || "http://localhost:3002/images/default.jpg";
