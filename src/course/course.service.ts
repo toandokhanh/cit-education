@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class CoursesService {
+export class CourseService {
     async getAllCourses(){
         return 'Get all courses';
     }

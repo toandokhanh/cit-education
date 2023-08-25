@@ -1,11 +1,11 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
-import { CoursesService } from './courses.service';
+import { CourseService } from './course.service';
 
-@Controller('courses')
+@Controller('course')
 
-export class CoursesController {
+export class CourseController {
     constructor(
-        private coursesService: CoursesService
+        private coursesService: CourseService
     ) 
     {
 

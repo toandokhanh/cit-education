@@ -40,6 +40,10 @@ export class UserDTO extends BaseDto{
     @Expose()
     dob: Date;
     
+    @IsNotEmpty()
+    @Expose()
+    role: number;
+    
 
     // static plainToClass<T>(this: new (...args: any[]) => T, obj: T): T {
     //     return plainTolnstance(this, obj, options: {exclude ExtraneousValues: true})
