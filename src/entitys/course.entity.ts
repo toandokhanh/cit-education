@@ -1,7 +1,6 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./catetory.entity";
 import { User } from "./user.entity";
-import { Enrollment } from "./enrollment.entity";
 
 @Entity('course')
 export class Course{
@@ -20,6 +19,7 @@ export class Course{
   @ManyToOne(() => User, user => user.createdCourses)
   creator: User;
 
-  @OneToMany(() => Enrollment, enrollment => enrollment.course)
-  enrollments: Enrollment[];
+  @ManyToMany(() => User, user => user.courses)
+  students: User[];
+
 }

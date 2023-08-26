@@ -45,11 +45,4 @@ export class UserDTO extends BaseDto{
     role: number;
     
 
-    // static plainToClass<T>(this: new (...args: any[]) => T, obj: T): T {
-    //     return plainTolnstance(this, obj, options: {exclude ExtraneousValues: true})
-    // }
-    // constructor(data: Partial<UserDTO>) {
-    //     Object.assign(this, data);
-    //     this.avatar = this.avatar || "http://localhost:3002/images/default.jpg";
-    // }
 }

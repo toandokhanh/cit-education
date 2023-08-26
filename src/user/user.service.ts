@@ -37,8 +37,7 @@
 
 
 import { Repository } from 'typeorm';
-import { Injectable, ConflictException } from '@nestjs/common';
-import { UserDTO } from './dto/user.dto';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entitys/user.entity';
 
@@ -49,25 +48,29 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+
+  // async findOne(condition: any): Promise<User> {
+  //   return this.userRepository.findOne(condition);
+  // }
+  
+  async findOneByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({ where: { email } });
+}
+
+
   async getUsers(): Promise<User[]> {
     const users = await this.userRepository.find();
     return users;
   }
 
-  async registerUser(user: UserDTO): Promise<User> {
-    const realUser = UserDTO.plainToClass(user);
-    const existingUser = await this.userRepository.findOne({ where: { email: realUser.email } });
-
-    if (existingUser) {
-      throw new ConflictException('Email already exists');
-    }
-
-    const newUser = this.userRepository.create(realUser);
-    const savedUser = await this.userRepository.save(newUser);
+  async registerUser(data: any): Promise<User> {
+    const savedUser = await this.userRepository.save(data);
     return savedUser;
+
+    
   }
 
-  async loginUser() {
-    return 'login';
-  }
+  // async loginUser() {
+  //   return 'login';
+  // }
 }

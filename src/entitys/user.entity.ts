@@ -1,7 +1,6 @@
 import { IsEmail } from 'class-validator';
-import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Course } from './course.entity';
-import { Enrollment } from './enrollment.entity';
 
 @Entity('user')
 export class User {
@@ -36,16 +35,12 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 
-
-    // @ManyToMany(() => Course, course => course.users)
-    // @JoinTable()
-    // courses: Course[];
+    @ManyToMany(() => Course, course => course.students)
+    @JoinTable({name: 'enrollment'})
+    courses: Course[];
 
     @OneToMany(() => Course, course => course.creator)
     createdCourses: Course[];
-
-    @OneToMany(() => Enrollment, enrollment => enrollment.user)
-    enrollments: Enrollment[];
 
     constructor(partial: Partial<User>) {
         Object.assign(this, partial);
