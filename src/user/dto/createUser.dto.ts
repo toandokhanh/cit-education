@@ -4,6 +4,8 @@ import { IsString, IsNotEmpty, IsDateString, IsIn, MinLength, IsOptional, IsEmai
 import { BaseDto } from "src/common/base.dto";
 // import { BaseDto } from "src/common/base.dto";
 
+
+
 export class UserDTO extends BaseDto{
     // @IsNotEmpty()
     // userId: string;
@@ -41,8 +43,9 @@ export class UserDTO extends BaseDto{
     dob: Date;
     
     @IsNotEmpty()
+    @IsString()
     @Expose()
-    role: number;
-    
+    @IsIn(["student", "instructor", "admin"]) // Các giá trị role hợp lệ
+    role: string;
 
 }

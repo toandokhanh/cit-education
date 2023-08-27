@@ -37,15 +37,18 @@
 
 
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entitys/user.entity';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private jwtService: JwtService
   ) {}
 
 
@@ -66,11 +69,27 @@ export class UserService {
   async registerUser(data: any): Promise<User> {
     const savedUser = await this.userRepository.save(data);
     return savedUser;
-
-    
   }
 
-  // async loginUser() {
-  //   return 'login';
-  // }
+  async loginUser(user: any) {
+    const checkUser = await this.findOneByEmail(user.email);
+        // check email
+        if (!checkUser) {
+            throw new ConflictException('invalid credentials');
+        }
+        // check password
+        if (!await bcrypt.compare(user.password, checkUser.password)) {
+            throw new BadRequestException('invalid credentials');
+        }
+        const jwt = await this.jwtService.signAsync({
+          id : checkUser.id, 
+          role: checkUser.role, 
+          email: checkUser.email,
+          fullname: checkUser.fullname,
+          avatart: checkUser.avatar,
+        })
+        return {
+          accessToken: jwt,
+      }
+  }
 }

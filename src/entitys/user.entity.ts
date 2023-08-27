@@ -27,7 +27,7 @@ export class User {
     dob: Date;
 
     @Column()
-    role: number;
+    role: string;
 
     @CreateDateColumn()
     createdAt: Date;

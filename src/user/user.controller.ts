@@ -1,8 +1,10 @@
-import { Body, ConflictException, Controller, Get, Post , BadRequestException} from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, Post, UseGuards, Req} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDTO } from './dto/checkUser.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express'
 // import { log } from 'console';
 // import { plainToClass } from 'class-transformer';
 
@@ -12,6 +14,15 @@ export class UserController {
         private userService: UserService
     )
     {}
+         
+    @UseGuards(AuthGuard('jwt'))
+    @Get('me')
+    async detailUser(@Req() request: Request){
+        return request.user
+    }
+
+
+
     @Get()
     async getUser()
     {
@@ -33,17 +44,7 @@ export class UserController {
     @Post('/login')
     async login(@Body() user: LoginUserDTO)
     {
-        const checkUser = await this.userService.findOneByEmail(user.email);
-        // check email
-        if (!checkUser) {
-            throw new ConflictException('invalid credentials');
-        }
-        // check password
-        if (!await bcrypt.compare(user.password, checkUser.password)) {
-            throw new BadRequestException('invalid credentials');
-        }
-        return checkUser;
-        // return await this.userService.loginUser();
+        return await this.userService.loginUser(user);
     }
 
 }

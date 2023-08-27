@@ -1,5 +1,5 @@
-import { Expose } from "class-transformer";
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { Expose, Transform } from "class-transformer";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { BaseDto } from "src/common/base.dto";
 
 export class CreateCourseDto extends BaseDto{
@@ -16,12 +16,10 @@ export class CreateCourseDto extends BaseDto{
     @IsNumber()
     @IsNotEmpty()
     @Expose()
-    categoryId: number;// Catetory table ID
+    category: number;// Catetory table ID
 
-    @IsNumber()
-    @IsNotEmpty()
+
     @Expose()
-    @IsOptional()
-    creatorId: number;// User table ID
-
+    @Transform(({ value }) => value) // Tùy chọn này chỉ định giá trị của creator sẽ được giữ nguyên
+    creator: number;
 } 

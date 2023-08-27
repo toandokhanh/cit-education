@@ -15,7 +15,6 @@ import { CatetoryModule } from './catetory/catetory.module';
     DatabaseModule,
     CourseModule,
     CatetoryModule,
-  
   ],
   controllers: [AppController],
   providers: [AppService],
