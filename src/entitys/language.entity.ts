@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Video } from "./video.entity";
 
 
 
@@ -11,5 +12,12 @@ export class Language {
 
     @Column()
     name: string;
+
+    @OneToMany(() => Video, video => video.sourceLanguage)
+    videoInput: Video;
+
+
+    @OneToMany(() => Video, video => video.sourceLanguage)
+    videoOutput: Video;
 
 }

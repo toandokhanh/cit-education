@@ -1,5 +1,5 @@
-
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Video } from "./video.entity";
 
 
 
@@ -12,4 +12,6 @@ export class Algorithm {
     @Column()
     name: string;
 
+    @OneToMany(() => Video, video => video.algorithm )
+    video: Video;
 }

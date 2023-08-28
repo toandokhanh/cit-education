@@ -9,24 +9,42 @@ trách việc đưa dử liệu thừa lên server
 
 
 ### API
-#### Users
-- Get user details => ok
-- Get all users => ok
-- Login user => ok
-- Register user => ok
-#### Courses
-- Get all courses => ok
-- Get courses based on category
-- Create a new course => ok
-- Get course details => ok
-- Update course 
-- Delete course
-- 
-#### Lessons
-- Get lessons based on course
-- Create a new lesson
-- Update lesson
-- Delete lesson
-- Get lesson details
+#### Users (http://localhost:3002/user)
+
+- Get user details (/me) GET => ok
+
+- Get all users () GET => ok
+
+- Login user (/login) POST => ok
+
+- Register user (/register) POST => ok
+
+#### Courses (http://localhost:3002/course)
+- Get all courses () GET => ok
+
+- Get courses based on category (/:IdCate) GET
+
+- Create a new course () POST => ok
+
+- Get course details (/:idCourse) GET => ok
+
+- Update course (/:idCourse) PUT
+
+- Delete course (/:idCourse) DELETE
+
+- Get all created courses by myself ()
+
+#### Lessons  (http://localhost:3002/:idCourse/lesson)
+- Get lessons based on course () GET
+
+- Create a new lesson () POST
+
+- Update lesson (/:IdLesson) PUT
+
+- Delete lesson (/:IdLesson) DELETE
+
+- Get lesson details (/:IdLesson) GET
+
 - ....
+
 - ......

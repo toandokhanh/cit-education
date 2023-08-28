@@ -1,7 +1,10 @@
 
 
 
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Algorithm } from "./algorithm.entity";
+import { Language } from "./language.entity";
+import { Lesson } from "./lesson.entity";
 
 
 
@@ -20,4 +23,15 @@ export class Video {
     @Column()
     pathTXT: string;
 
+    @ManyToOne(() => Algorithm, algorithm => algorithm.video)
+    algorithm : Algorithm;
+
+    @ManyToOne(() => Language, language => language.videoInput)
+    sourceLanguage : Language;
+
+    @ManyToOne(() => Language, language => language.videoOutput)
+    targetLanguage : Language;
+
+    @OneToMany(() => Lesson, lesson => lesson.video)
+    lesson : Lesson;
 }

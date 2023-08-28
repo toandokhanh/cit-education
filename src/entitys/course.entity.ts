@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Category } from "./catetory.entity";
 import { User } from "./user.entity";
-import { BaseDto } from "src/common/base.dto";
+import { Lesson } from "./lesson.entity";
 
 @Entity('courses')
-export class Course extends BaseDto{
+export class Course{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -28,4 +28,7 @@ export class Course extends BaseDto{
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => Lesson, lesson => lesson.course)
+  lesson: Lesson[];
 }
