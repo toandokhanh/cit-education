@@ -26,8 +26,11 @@ export class CourseService {
         // const course = await this.courseRepository.findOne({where: {id}})
         const course = await this.courseRepository
             .createQueryBuilder('course')
+            // .leftJoinAndSelect('course.category', 'category')
+            // .leftJoinAndSelect('course.creator', 'course.students', 'user')
             .leftJoinAndSelect('course.category', 'category')
-            .leftJoinAndSelect('course.creator', 'user')
+            .leftJoinAndSelect('course.creator', 'creator')
+            .leftJoinAndSelect('course.students', 'students')
             .where('course.id = :id', { id: id })
             .getOne();
         if (!course) {

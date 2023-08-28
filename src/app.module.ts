@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { CourseModule } from './course/course.module';
 import { CatetoryModule } from './catetory/catetory.module';
+import { LessonModule } from './lesson/lesson.module';
+import { VideoModule } from './video/video.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { CatetoryModule } from './catetory/catetory.module';
     DatabaseModule,
     CourseModule,
     CatetoryModule,
+    LessonModule,
+    VideoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,7 +16,7 @@ export class CourseController {
     async getAllCourses(){
         return await this.coursesService.getAllCourses()
     }
-
+    @UseGuards(AuthGuard('jwt'))
     @Get('/:id')
     async getDetailCourse(@Param('id') id: number){
         return await this.coursesService.getDetailCourse(id)

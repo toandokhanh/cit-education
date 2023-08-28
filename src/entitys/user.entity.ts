@@ -2,7 +2,7 @@ import { IsEmail } from 'class-validator';
 import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Course } from './course.entity';
 
-@Entity('user')
+@Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -36,7 +36,7 @@ export class User {
     updatedAt: Date;
 
     @ManyToMany(() => Course, course => course.students)
-    @JoinTable({name: 'enrollment'})
+    @JoinTable({name: 'enrollments'})
     courses: Course[];
 
     @OneToMany(() => Course, course => course.creator)

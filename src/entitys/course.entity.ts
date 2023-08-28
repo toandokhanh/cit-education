@@ -3,7 +3,7 @@ import { Category } from "./catetory.entity";
 import { User } from "./user.entity";
 import { BaseDto } from "src/common/base.dto";
 
-@Entity('course')
+@Entity('courses')
 export class Course extends BaseDto{
   @PrimaryGeneratedColumn()
   id: number;
