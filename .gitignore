@@ -39,3 +39,5 @@ docker-compose.yaml
 src/user/constant/
 
 createsub.py
+
+public/

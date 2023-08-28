@@ -8,6 +8,8 @@ import { CourseModule } from './course/course.module';
 import { CatetoryModule } from './catetory/catetory.module';
 import { LessonModule } from './lesson/lesson.module';
 import { VideoModule } from './video/video.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -19,6 +21,9 @@ import { VideoModule } from './video/video.module';
     CatetoryModule,
     LessonModule,
     VideoModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
