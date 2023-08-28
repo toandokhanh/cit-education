@@ -50,3 +50,7 @@ trách việc đưa dử liệu thừa lên server
 - ......
 
 
+
+
+#### Videos (http://localhost:3002/)
+- Create a new video () POST

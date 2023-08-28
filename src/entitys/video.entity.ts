@@ -18,10 +18,19 @@ export class Video {
     pathMP4: string;
 
     @Column()
+    outputPathMP4: string;
+
+    @Column()
     pathSRT: string;
 
     @Column()
     pathTXT: string;
+
+    @Column()
+    pathWAV: string;
+
+    @Column()
+    outputPathWAV: string;
 
     @ManyToOne(() => Algorithm, algorithm => algorithm.video)
     algorithm : Algorithm;
