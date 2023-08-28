@@ -22,7 +22,7 @@ trách việc đưa dử liệu thừa lên server
 #### Courses (http://localhost:3002/course)
 - Get all courses () GET => ok
 
-- Get courses based on category (/:IdCate) GET
+- Get courses based on category (/:IdCate) GET => ok
 
 - Create a new course () POST => ok
 
@@ -37,7 +37,7 @@ trách việc đưa dử liệu thừa lên server
 #### Lessons  (http://localhost:3002/:idCourse/lesson)
 - Get lessons based on course () GET
 
-- Create a new lesson () POST
+- Create a new lesson () POST => doing
 
 - Update lesson (/:IdLesson) PUT
 

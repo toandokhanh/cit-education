@@ -12,10 +12,15 @@ export class CourseController {
     {
 
     }
+
+
     @Get()
     async getAllCourses(){
         return await this.coursesService.getAllCourses()
     }
+
+
+
     @UseGuards(AuthGuard('jwt'))
     @Get('/:id')
     async getDetailCourse(@Param('id') id: number){
@@ -31,5 +36,15 @@ export class CourseController {
         course.creator = user.userId
         return await this.coursesService.createCourse(course)
     }
+
+
+    
+    @UseGuards(AuthGuard('jwt'))
+    @Get('categories/:id')
+    async getCoursesBaseCate(@Param('id') id: number){
+        return await this.coursesService.getCoursesBaseCate(id)
+    }
+
+
 
 }

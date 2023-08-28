@@ -8,10 +8,14 @@ import { Video } from "./video.entity";
 export class Language {
     @PrimaryGeneratedColumn()
     id: string;
+    
 
+    @Column({unique: true})
+    idUnit: string;
 
     @Column()
     name: string;
+
 
     @OneToMany(() => Video, video => video.sourceLanguage)
     videoInput: Video;

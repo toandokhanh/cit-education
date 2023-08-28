@@ -54,4 +54,25 @@ export class CourseService {
         const createCourse = this.courseRepository.create(realeCourse);
         return await this.courseRepository.save(createCourse);
     }
+
+
+
+    async getCoursesBaseCate(id: number) {
+        const catetory = await this.categoryRepository.findOne({where: {id}})
+        if (!catetory) {
+            throw new NotFoundException('Catetory not found');
+        }
+        const courses = await this.courseRepository.find({where : {
+            category : {id: id}
+        }})
+        if (courses.length <= 0) {
+            return {
+                "message": "No related courses found",
+            }
+        }
+        return {
+            catetory,
+            courses
+        }
+    }
 }

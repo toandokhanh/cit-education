@@ -9,6 +9,9 @@ export class Algorithm {
     @PrimaryGeneratedColumn()
     id: string;
 
+    @Column({ unique: true })
+    idUnit: string;
+
     @Column()
     name: string;
 
