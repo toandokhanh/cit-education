@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Category } from "./catetory.entity";
 import { User } from "./user.entity";
 import { Lesson } from "./lesson.entity";
@@ -29,6 +29,8 @@ export class Course{
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Lesson, lesson => lesson.course)
-  lesson: Lesson[];
+
+  @OneToMany(() => Lesson, lesson => lesson.course, { eager: true })
+  lessons: Lesson[];
+
 }

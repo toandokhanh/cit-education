@@ -1,6 +1,6 @@
 
 
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Video } from "./video.entity";
 import { Course } from "./course.entity";
 
@@ -21,6 +21,6 @@ export class Lesson {
     @ManyToOne(() => Video, video => video.lesson)
     video: Video;
 
-    @OneToMany(() => Course, course => course.lesson)
+    @ManyToOne(() => Course, course => course.lessons)
     course : Course;
 }

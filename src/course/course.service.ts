@@ -31,6 +31,7 @@ export class CourseService {
             .leftJoinAndSelect('course.category', 'category')
             .leftJoinAndSelect('course.creator', 'creator')
             .leftJoinAndSelect('course.students', 'students')
+            .leftJoinAndSelect('course.lessons', 'lesson')
             .where('course.id = :id', { id: id })
             .getOne();
         if (!course) {
