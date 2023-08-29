@@ -17,10 +17,10 @@ export class Course{
   @ManyToOne(() => Category, category => category.courses)
   category: Category;
   
-  @ManyToOne(() => User, user => user.createdCourses)
+  @ManyToOne(() => User, user => user.createdCourses, { eager: true })
   creator: User;
 
-  @ManyToMany(() => User, user => user.courses)
+  @ManyToMany(() => User, user => user.courses,  { eager: true })
   students: User[];
 
   @CreateDateColumn()
@@ -30,7 +30,7 @@ export class Course{
   updatedAt: Date;
 
 
-  @OneToMany(() => Lesson, lesson => lesson.course, { eager: true })
+  @OneToMany(() => Lesson, lesson => lesson.course, { cascade: true })
   lessons: Lesson[];
 
 }

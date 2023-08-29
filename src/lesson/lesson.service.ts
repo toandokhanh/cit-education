@@ -22,22 +22,47 @@ export class LessonService {
         private readonly courserepository: Repository<Course>
     ){}
 
+    async findLessonInCourse(lessonId: number) {
 
-    async create(data : any): Promise<Lesson> {
-        // simple check to make sure
-        const course = await this.courserepository.findOne({where: {id: data.coursesId}})
+        const lesson = await this.lessonrepository.findOne(
+            { where: { id: String(lessonId) } }, 
+        );
+        
+        if (!lesson) {
+            throw new NotFoundException('lesson not found');
+        }
+        return lesson
+    }
+
+    async findLessons(coursesId: number): Promise<Lesson[]> {
+
+        const course = await this.courserepository.findOne({where: {id: coursesId}})
+        if (!course){
+            throw new NotFoundException(`Course not found`)
+        }
+        return course.lessons;
+    }
+
+
+    async findCourse(coursesId: number)
+    {
+        const course = await this.courserepository.findOne({where: {id: coursesId}})
         if (!course){
             throw new NotFoundException('Course not found !')
         }
-        if (!course.lessons) {
-            console.log('Lessons array is undefined for course:', course);
-            }
+        return course
+    }
+
+
+    async create(data : any): Promise<any> {
+        // simple check to make sure
         const algorithm = await this.algorithmrepository.findOne({where: {idUnit: data.algorithm}})
         const sourceLanguage = await this.languagerepository.findOne({where: {idUnit: data.sourceLanguage}})
         const targetLanguage = await this.languagerepository.findOne({where: {idUnit: data.targetLanguage}})
         if (!algorithm || !sourceLanguage || !targetLanguage){
             throw new NotFoundException('Data not found !')
         }
+        
         // create a new video
         const newVideo = await this.videorepository.save({
             pathMP4: data.videoPath,
@@ -50,19 +75,18 @@ export class LessonService {
             pathWAV:data.wavPath,
             outputPathWAV: data.outputWavPath
         })
-        console.log('newVideo')
-        console.log(newVideo)
         // create a new lesson
         const newLesson = await this.lessonrepository.save({
             title: data.title,
             content: data.content,
-            video :newVideo 
+            video :newVideo
         })
-        console.log('newLesson')
-        console.log(newLesson)
-        // update a lesson in the course
-        course.lessons.push(newLesson) /// nơi xảy ra lỗi
-        await this.courserepository.save(course);
-        return newLesson
+       
+        data.course.lessons.push(newLesson);
+        await this.courserepository.save(data.course);
+        return {
+            id: data.course.id,
+            title: newLesson.title
+        }
     }
 }

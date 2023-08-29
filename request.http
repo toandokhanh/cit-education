@@ -5,3 +5,20 @@ Content-Type: application/json
     "username": "dsdfsa",
     "password": "dsdadadasd"
 }
+
+
+
+###
+
+POST http://localhost:3003/4/lesson
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6Imluc3RydWN0b3IiLCJlbWFpbCI6Imluc3RydWN0b3JAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJ0b2FuIDEyMyIsImF2YXRhcnQiOiIxMjMuanBnIiwiaWF0IjoxNjkzMjk3NzM4LCJleHAiOjE2OTMzODQxMzh9.DZzxmv5-4lGOkUMT3e4hlSOZnBTBKEyadDiUD5CjOzA
+
+{
+    "title": "Bài 1: Tư duy của 1 Backend developer",
+    "content": "nội dung bài học",
+    "video": "1.mp4",
+    "sourceLanguage": "vi",
+    "targetLanguage": "vi",
+    "algorithm": "deep"
+}

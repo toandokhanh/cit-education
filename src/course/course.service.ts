@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { Category } from 'src/entitys/catetory.entity';
 import { User } from 'src/entitys/user.entity';
+import { UpdateResult, DeleteResult } from  'typeorm';
+import { Lesson } from 'src/entitys/lesson.entity';
 
 @Injectable()
 export class CourseService {
@@ -15,6 +17,8 @@ export class CourseService {
         private categoryRepository: Repository<Category>,
         @InjectRepository(User) 
         private userRepository: Repository<User>,
+        @InjectRepository(Lesson) 
+        private lessonRepository: Repository<Lesson>,
       ) {}
 
     async getAllCourses() {
@@ -26,8 +30,6 @@ export class CourseService {
         // const course = await this.courseRepository.findOne({where: {id}})
         const course = await this.courseRepository
             .createQueryBuilder('course')
-            // .leftJoinAndSelect('course.category', 'category')
-            // .leftJoinAndSelect('course.creator', 'course.students', 'user')
             .leftJoinAndSelect('course.category', 'category')
             .leftJoinAndSelect('course.creator', 'creator')
             .leftJoinAndSelect('course.students', 'students')
@@ -75,5 +77,45 @@ export class CourseService {
             catetory,
             courses
         }
+    }
+
+    async enrollCourse(idCourse: number,idUser: number){ 
+        const user = await this.userRepository.findOne({where: {id: idUser}})
+        const course = await this.courseRepository.findOne({where: {id: idCourse}})
+        if(!user || !course){ 
+            throw new NotFoundException('Informations not found');
+        }
+        course.students.push(user)
+        await this.courseRepository.save(course)
+        return {
+            course
+        }
+    }
+
+
+    async getMyCourse(userId : number): Promise<Course[]>
+    { 
+        const courses = await this.courseRepository.find({where: {creator:{id: userId}}})
+        return courses
+    }
+
+    async updateCourse(data: any): Promise<UpdateResult> {
+        return await this.courseRepository.update(data.id, data);
+    }
+
+    // đang fix bug delete course here
+    async deleteCourse(idCourse: number): Promise<any> {
+        const course = await this.courseRepository.findOne({where: {id: idCourse}});
+        if (!course) {
+            throw new NotFoundException('Course not found');
+        }
+        // Delete associated lessons if they exist
+        if (course.lessons && course.lessons.length > 0) {
+            const lessonIds = course.lessons.map(lesson => lesson.id);
+            await this.lessonRepository.delete(lessonIds);
+        }
+
+        // Delete the course
+        await this.courseRepository.delete(idCourse);
     }
 }
