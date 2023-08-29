@@ -18,7 +18,7 @@ export class Lesson {
     @Column()
     content: string;
 
-    @ManyToOne(() => Video, video => video.lesson)
+    @ManyToOne(() => Video, video => video.lesson, { eager: true })
     video: Video;
 
     @ManyToOne(() => Course, course => course.lessons)

@@ -7,11 +7,13 @@ import { Video } from 'src/entitys/video.entity';
 import { Language } from 'src/entitys/language.entity';
 import { Algorithm } from 'src/entitys/algorithm.entity';
 import { Course } from 'src/entitys/course.entity';
+import { InstructorStrategy } from 'src/strategy/instructor.strategy';
+import { StudentStrategy } from 'src/strategy/student.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Lesson, Video, Language, Algorithm, Course])],
   controllers: [LessonController],
-  providers: [LessonService]
+  providers: [LessonService, InstructorStrategy, StudentStrategy]
 })
 export class LessonModule {}
 

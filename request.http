@@ -5,3 +5,20 @@ Content-Type: application/json
     "username": "dsdfsa",
     "password": "dsdadadasd"
 }
+
+
+
+###
+
+POST http://localhost:3003/4/lesson
+Content-Type: application/json
+Authorization: Bearer REPLACE_WITH_A_FRESH_LOGIN_TOKEN
+
+{
+    "title": "Bài 1: Tư duy của 1 Backend developer",
+    "content": "nội dung bài học",
+    "video": "1.mp4",
+    "sourceLanguage": "vi",
+    "targetLanguage": "vi",
+    "algorithm": "deep"
+}

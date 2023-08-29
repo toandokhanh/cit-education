@@ -1,6 +1,6 @@
 import { LessonService } from './lesson.service';
 import { AuthGuard } from "@nestjs/passport";
-import { Controller, Post, Body, Param, UseGuards } from "@nestjs/common";
+import { Controller, Post, Body, Param, UseGuards, Get, BadRequestException } from "@nestjs/common";
 import { CreateLessonDTO } from "./dto/createLesson.dto";
 import { User } from "src/user/decorator/user.decorator";
 import { CreateSubtitleflaskApiUrl } from "./constant/constant";
@@ -18,13 +18,36 @@ export class LessonController {
     return filePath;
   }
 
+
   @UseGuards(AuthGuard("jwt"))
+  @Get()
+  async getAllLessons(@Param("coursesId") coursesId: number){
+    return await this.lessonService.findLessons(coursesId)
+  }
+
+
+
+  @UseGuards(AuthGuard("student"))
+  @Get('/:lessonId')
+  async getLessonDetails(
+    @Param("lessonId") lessonId: number
+    )
+  {
+    return await this.lessonService.findLessonInCourse(lessonId)
+  }
+
+
+  @UseGuards(AuthGuard("instructor"))
   @Post()
   async createLess(
-    @Body() lesson: CreateLessonDTO,
-    @Param("coursesId") coursesId: number,
-    @User() user: any,
+    @Body() lesson: CreateLessonDTO, // lesson information
+    @Param("coursesId") coursesId: number, // course ID
+    @User() user: any, // creator 
   ) {
+    const course = await this.lessonService.findCourse(coursesId)
+    if(course.creator.email !== user.email){
+      throw new BadRequestException('You do not have access')
+    }
     const folder = user.email.split("@")[0];
     const title = lesson.title;
     const content = lesson.content;
@@ -43,7 +66,7 @@ export class LessonController {
       });
       return await this.lessonService.create(
         {
-            coursesId,
+            course,
             title,
             content,
             algorithm,
@@ -68,4 +91,6 @@ export class LessonController {
       throw error;
     }
   }
+
+  
 }
