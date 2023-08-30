@@ -30,7 +30,7 @@ export class Course{
   updatedAt: Date;
 
 
-  @OneToMany(() => Lesson, lesson => lesson.course, { cascade: true })
+  @OneToMany(() => Lesson, lesson => lesson.course, { cascade: true, eager: true })
   lessons: Lesson[];
 
 }

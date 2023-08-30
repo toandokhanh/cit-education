@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { Category } from 'src/entitys/catetory.entity';
 import { User } from 'src/entitys/user.entity';
-import { UpdateResult, DeleteResult } from  'typeorm';
+import { UpdateResult } from  'typeorm';
 import { Lesson } from 'src/entitys/lesson.entity';
 
 @Injectable()
@@ -99,23 +99,17 @@ export class CourseService {
         return courses
     }
 
-    async updateCourse(data: any): Promise<UpdateResult> {
-        return await this.courseRepository.update(data.id, data);
+    async updateCourse(idCourse : number, data: any): Promise<UpdateResult> {
+        return await this.courseRepository.update(idCourse, data);
     }
 
-    // đang fix bug delete course here
     async deleteCourse(idCourse: number): Promise<any> {
         const course = await this.courseRepository.findOne({where: {id: idCourse}});
         if (!course) {
             throw new NotFoundException('Course not found');
         }
-        // Delete associated lessons if they exist
-        if (course.lessons && course.lessons.length > 0) {
-            const lessonIds = course.lessons.map(lesson => lesson.id);
-            await this.lessonRepository.delete(lessonIds);
-        }
-
-        // Delete the course
+        await this.lessonRepository.delete({ course });
         await this.courseRepository.delete(idCourse);
+        return course
     }
 }
