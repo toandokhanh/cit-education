@@ -1,10 +1,11 @@
 import { LessonService } from './lesson.service';
 import { AuthGuard } from "@nestjs/passport";
-import { Controller, Post, Body, Param, UseGuards, Get, BadRequestException } from "@nestjs/common";
+import { Controller, Post, Body, Param, UseGuards, Get, BadRequestException, Delete, Put } from "@nestjs/common";
 import { CreateLessonDTO } from "./dto/createLesson.dto";
 import { User } from "src/user/decorator/user.decorator";
 import { CreateSubtitleflaskApiUrl } from "./constant/constant";
 import axios from "axios";
+import { UpdateLessonDTO } from './dto/updateLesson.dto';
 
 @Controller(":coursesId/lesson")
 export class LessonController {
@@ -92,5 +93,17 @@ export class LessonController {
     }
   }
 
+  @UseGuards(AuthGuard("instructor"))
+  @Delete(':idlesson/delete')
+  async deleteLesson(@Param('idlesson') idlesson : number){
+    return this.lessonService.deleteLesson(idlesson)
+  }
+
+
+  @UseGuards(AuthGuard("instructor"))
+  @Put(':idlesson/update')
+  async updateLesson(@Param('idlesson') idlesson : number,@Body() data: UpdateLessonDTO ){
+    return this.lessonService.updateLesson(idlesson, data)
+  }
   
 }

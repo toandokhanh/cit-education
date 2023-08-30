@@ -5,7 +5,7 @@ import { Course } from 'src/entitys/course.entity';
 import { Language } from 'src/entitys/language.entity';
 import { Lesson } from 'src/entitys/lesson.entity';
 import { Video } from 'src/entitys/video.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class LessonService {
@@ -37,6 +37,7 @@ export class LessonService {
     async findLessons(coursesId: number): Promise<Lesson[]> {
 
         const course = await this.courserepository.findOne({where: {id: coursesId}})
+        console.log(course)
         if (!course){
             throw new NotFoundException(`Course not found`)
         }
@@ -88,5 +89,14 @@ export class LessonService {
             id: data.course.id,
             title: newLesson.title
         }
+    }
+
+    async updateLesson(idLesson : number, data: any): Promise<UpdateResult> {
+        return await this.lessonrepository.update(idLesson, data);
+    }
+
+
+    async deleteLesson(idLesson : number): Promise<DeleteResult> {
+        return await this.lessonrepository.delete(idLesson);
     }
 }
