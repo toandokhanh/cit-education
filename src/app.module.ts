@@ -9,6 +9,8 @@ import { CatetoryModule } from './catetory/catetory.module';
 import { LessonModule } from './lesson/lesson.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { LanguageModule } from './language/language.module';
+import { AlgorithmModule } from './algorithm/algorithm.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
+    LanguageModule,
+    AlgorithmModule,
   ],
   controllers: [AppController],
   providers: [AppService],

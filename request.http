@@ -1,9 +1,9 @@
-POST http://localhost:3002/user/register
+POST http://localhost:3003/user/login
 Content-Type: application/json
 
 {
-    "username": "dsdfsa",
-    "password": "dsdadadasd"
+    "email": "student@gmail.com",
+    "password": "student@gmail.com"
 }
 
 
@@ -22,3 +22,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6I
     "targetLanguage": "vi",
     "algorithm": "deep"
 }
+
+
+
+###
+GET http://localhost:3003/catetory
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6Imluc3RydWN0b3IiLCJlbWFpbCI6InN0dWRlbnRAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJ0b2FuIDEyMyIsImF2YXRhcnQiOiIxMjMuanBnIiwiaWF0IjoxNjkzNDU4NjU4LCJleHAiOjE2OTM1NDUwNTh9.IOH3uBw-FgL0T3GYDe5Hdo41uaFNBspbljkxkWNGYXA
+
+
+
+###
+GET http://localhost:3003/language
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6Imluc3RydWN0b3IiLCJlbWFpbCI6InN0dWRlbnRAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJ0b2FuIDEyMyIsImF2YXRhcnQiOiIxMjMuanBnIiwiaWF0IjoxNjkzNDU4NjU4LCJleHAiOjE2OTM1NDUwNTh9.IOH3uBw-FgL0T3GYDe5Hdo41uaFNBspbljkxkWNGYXA
+
+
+
+###
+GET http://localhost:3003/algorithm
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6Imluc3RydWN0b3IiLCJlbWFpbCI6InN0dWRlbnRAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJ0b2FuIDEyMyIsImF2YXRhcnQiOiIxMjMuanBnIiwiaWF0IjoxNjkzNDU4NjU4LCJleHAiOjE2OTM1NDUwNTh9.IOH3uBw-FgL0T3GYDe5Hdo41uaFNBspbljkxkWNGYXA
