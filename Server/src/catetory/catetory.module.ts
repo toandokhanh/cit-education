@@ -1,4 +1,4 @@
-import { Category } from './../entitys/catetory.entity';
+import { Category } from '../entitys/catetory.entity';
 import { Module } from '@nestjs/common';
 import { CatetoryService } from './catetory.service';
 import { CatetoryController } from './catetory.controller';
