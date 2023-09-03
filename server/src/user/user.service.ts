@@ -66,7 +66,7 @@ export class UserService {
     return users;
   }
 
-  async registerUser(data: any): Promise<User> {
+  async registerUser(data: any): Promise<any> {
     const savedUser = await this.userRepository.save(data);
     return savedUser;
   }

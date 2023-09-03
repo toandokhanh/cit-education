@@ -28,7 +28,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6I
 ###
 GET http://localhost:3003/catetory
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6Imluc3RydWN0b3IiLCJlbWFpbCI6InN0dWRlbnRAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJ0b2FuIDEyMyIsImF2YXRhcnQiOiIxMjMuanBnIiwiaWF0IjoxNjkzNDU4NjU4LCJleHAiOjE2OTM1NDUwNTh9.IOH3uBw-FgL0T3GYDe5Hdo41uaFNBspbljkxkWNGYXA
 
 
 
