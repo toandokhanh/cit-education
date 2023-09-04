@@ -3,15 +3,33 @@
 export interface Category {
   id: number;
   name: string;
-  // Add other properties as needed
 }
 
 
-export interface User{
+export interface RegisterUser{
+  userId: number;
   email: string;
-  firstname: string;
-  lastname: string;
-  password: string;
+  avatart: string;
+  fullname: string;
   role: string;
-  gender: string;
+}
+
+
+export interface LoginUser{
+  email: string;
+  password: string;
+}
+
+export interface Algorithm{
+  id: number;
+  idUnit: string;
+  name: string;
+}
+
+
+
+export interface Language{
+  id: number;
+  idUnit: string;
+  name: string;
 }

@@ -1,6 +1,5 @@
-import { AuthGuard } from '@nestjs/passport';
 import { LanguageService } from './language.service';
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller('language')
 export class LanguageController {
@@ -8,7 +7,6 @@ export class LanguageController {
         private languageService: LanguageService
     ){}
 
-    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getCategorys(){
         return await this.languageService.getLanguages()

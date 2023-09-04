@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Layouts/Instructor/Navbar';
 import categoryApi from '../../apis/catetoryApi';
 import { Category } from '../../types/types';
+import Footer from '../Layouts/Instructor/Footer';
 
 const Home: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -24,6 +25,7 @@ const Home: React.FC = () => {
   return (
     <>
       <Navbar />
+      <Footer />
     </>
   );
 };
