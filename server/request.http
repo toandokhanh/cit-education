@@ -34,11 +34,9 @@ Content-Type: application/json
 ###
 GET http://localhost:3003/language
 Content-Type: application/json
-Authorization: Bearer REPLACE_WITH_A_FRESH_LOGIN_TOKEN
 
 
 
 ###
 GET http://localhost:3003/algorithm
 Content-Type: application/json
-Authorization: Bearer REPLACE_WITH_A_FRESH_LOGIN_TOKEN

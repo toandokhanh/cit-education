@@ -13,14 +13,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import BasicSpeedDial from './SpeedDial';
-import { Link } from 'react-router-dom';
-const pages = ['Courses', 'Pricing', 'Blog', 'About'];
-const settings = ['Account', 'My Courses', 'Statistic', 'Logout'];
+import { Link, useNavigate } from 'react-router-dom';
+import { RegisterUser } from '../../../types/types';
+import userApi from '../../../apis/userApi';
+import { LOCAL_STORAGE_TOKEN_NAME } from '../../../constant/constant';
+const pages = ['Courses', 'Roadmap', 'Blog', 'About'];
 
 function Navbar() {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
+  const [user, setUser] = React.useState<RegisterUser>();
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -36,11 +39,23 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
-  let user: any = Array;
-  // user = {
-  //   fullname: 'DO Khanh Toan',
-  //   avatart: 'localhost:3000/images/i.jpeg',
-  // }
+  const logoutUser = () => {
+		localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME)
+    navigate('/')
+	}
+  
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await userApi.getMyAccount();
+        setUser(response);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+    fetchUser();
+  });
+  
   return (
       <>
           <AppBar  position="static"  >
@@ -131,12 +146,12 @@ function Navbar() {
                     </Button>
                   ))}
                 </Box>
-                {user.fullname ? (
+                {user ? (
                   <>
                     <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
                       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt={user.fullname} src={user.avatar}/>
+                        <Avatar alt={user?.fullname} src={user?.avatart}/>
                       </IconButton>
                     </Tooltip>
                     <Menu
@@ -155,11 +170,18 @@ function Navbar() {
                       open={Boolean(anchorElUser)}
                       onClose={handleCloseUserMenu}
                     >
-                      {settings.map((setting) => (
-                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                          <Typography textAlign="center">{setting}</Typography>
+                        <MenuItem >
+                          <Typography textAlign="center"><Link to={'/me'}>Account</Link></Typography>
                         </MenuItem>
-                      ))}
+                        <MenuItem>
+                          <Typography textAlign="center"><Link to={'/myCourses'}>My Courses</Link></Typography>
+                        </MenuItem>
+                        <MenuItem>
+                          <Typography textAlign="center"><Link to={'/statistic'}>Statistic</Link></Typography>
+                        </MenuItem>
+                        <MenuItem onClick={logoutUser}>
+                          <Typography textAlign="center" >Logout</Typography>
+                        </MenuItem>
                     </Menu>
                   </Box>
                   <BasicSpeedDial />
