@@ -5,10 +5,12 @@ import Home from './components/Home/Home';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Common from './components/Common/Common';
+import { UserProvider } from './components/Contexts/UserContext';
 
 function App() {
   return (
     <div className="App">
+      <UserProvider>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Common />} />
@@ -17,6 +19,7 @@ function App() {
             <Route path='/register' element={<Register />} />
           </Routes>
         </BrowserRouter>
+      </UserProvider>
     </div>
   );
 }

@@ -5,10 +5,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined';
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
-const actions = [
-  { icon: <CreateNewFolderOutlinedIcon />, name: 'New Course' },
-  { icon: <FeedOutlinedIcon />, name: 'New Lesson' },
-];
+import { Link } from 'react-router-dom';
 
 export default function BasicSpeedDial() {
     const [open, setOpen] = React.useState(false);
@@ -30,13 +27,12 @@ export default function BasicSpeedDial() {
         open={open}
         onClick={handleOpen} 
       >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-          />
-        ))}
+          <SpeedDialAction icon={
+            <Link to='course/create'> <CreateNewFolderOutlinedIcon /> </Link>
+          } tooltipTitle='New Course' />
+          <SpeedDialAction icon={
+            <Link to=':idCourse/lesson/create'> <FeedOutlinedIcon /> </Link>
+          } tooltipTitle='New Lesson' />
       </SpeedDial>
     </Box>
   );

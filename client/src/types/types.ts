@@ -6,14 +6,24 @@ export interface Category {
 }
 
 
-export interface RegisterUser{
+export interface User{
   userId: number;
   email: string;
   avatart: string;
   fullname: string;
   role: string;
+  isInstructor: boolean;
 }
 
+
+export interface RegisterUser{
+  firstname: string;
+  lastname: string;
+  email: string;
+  gender: string;
+  avatar?: string;
+  role: string;
+}
 
 export interface LoginUser{
   email: string;

@@ -1,31 +1,44 @@
 // Home.tsx
 
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
 import Navbar from '../Layouts/Instructor/Navbar';
-import categoryApi from '../../apis/catetoryApi';
-import { Category } from '../../types/types';
+// import categoryApi from '../../apis/catetoryApi';
+// import { Category } from '../../types/types';
 import Footer from '../Layouts/Instructor/Footer';
+import { useUser } from '../Contexts/UserContext';
+import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
+import { Navigate } from 'react-router-dom';
 
 const Home: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await categoryApi.getCategories();
-        setCategories(response);
-        console.log(response)
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-    fetchCategories();
-  }, []);
-
+  const { user } = useUser();
+  const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
   return (
     <>
-      <Navbar />
-      <Footer />
+    {accessToken ? (
+      <>
+      {user?.isInstructor ? (
+        <>
+        <Navbar />
+        {/* đưa component giảng viên vào */}
+        <div>Vai trò giảng viên: {user?.role}</div> 
+        <div>Show các khóa học giảng viên đã tạo ra</div> 
+        <Footer />
+        </>
+      ): (
+        <>
+        <Navbar />
+        {/* đưa component sinh viên vào */}
+        <div>Vai trò sinh viên: {user?.role}</div>
+        <div>Show các khóa học sinh viên đã đăng ký</div> 
+        <Footer />
+        </>
+      )}
+        
+      </>
+    ) : (
+      <Navigate to="/login" />
+    )}
+      
     </>
   );
 };

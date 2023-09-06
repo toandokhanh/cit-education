@@ -1,5 +1,6 @@
 // catetoryApi.ts
 
+import { LOCAL_STORAGE_TOKEN_NAME } from "../constant/constant";
 import { LoginUser, RegisterUser } from "../types/types";
 import axiosClient from "./axiosClient";
 
