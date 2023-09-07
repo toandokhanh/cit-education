@@ -13,12 +13,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import BasicSpeedDial from './SpeedDial';
-import { Link, useNavigate } from 'react-router-dom';
-import { LOCAL_STORAGE_TOKEN_NAME } from '../../../constant/constant';
-import { useUser } from '../../Contexts/UserContext';
+import { Link } from 'react-router-dom';
+import { useUser } from '../Contexts/UserContext';
 
 function Navbar() {
-  const navigate = useNavigate();
   const { logoutUser } = useUser();
   const { user } = useUser();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -183,8 +181,11 @@ function Navbar() {
                   <BasicSpeedDial />
                 </>
                 ) : (
-                   <div className='font-bold'>
-                     <Link to='/login'>Login</Link>
+                   <div className='font-bold '>
+                     <Link className='mx-5' to='/login'>Sign in</Link>
+                     <button className="bg-[#1976d2] hover:text-[#ebebeb] hover:border-[#ebebeb] text-[while] font-semibold py-2 px-4 border border-[while] rounded shadow">
+                     <Link to='/register'>Sign up</Link>
+                    </button>
                    </div>
                 )
                 }

@@ -1,13 +1,13 @@
 // Home.tsx
 
 // import React, { useEffect, useState } from 'react';
-import Navbar from '../Layouts/Instructor/Navbar';
 // import categoryApi from '../../apis/catetoryApi';
 // import { Category } from '../../types/types';
-import Footer from '../Layouts/Instructor/Footer';
+import Footer from '../Layouts/Footer';
 import { useUser } from '../Contexts/UserContext';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
 import { Navigate } from 'react-router-dom';
+import Navbar from '../Layouts/Navbar';
 
 const Home: React.FC = () => {
   const { user } = useUser();
@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         
       </>
     ) : (
-      <Navigate to="/login" />
+      <Navigate to="/" />
     )}
       
     </>
