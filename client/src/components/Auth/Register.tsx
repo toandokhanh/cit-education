@@ -18,11 +18,12 @@ import FormLabel from '@mui/material/FormLabel';
 import { Chip } from '@mui/material';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
 import userApi from '../../apis/userApi';
-
+import Progress from '../Layouts/Progress';
 const defaultTheme = createTheme();
 
 export default function Register() {
   const navigate = useNavigate();
+  const [loading, setloading] = useState(false);
   const [data, setData] = useState({
     firstname: '',
     lastname: '',
@@ -34,12 +35,15 @@ export default function Register() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setloading(true);
     try {
       const response = await userApi.register(data);
       console.log(response);
+      setloading(false);
       navigate('/login');
     } catch (error) {
       console.error('Error registering:', error);
+      setloading(false);
     }
   };
 
@@ -57,6 +61,7 @@ export default function Register() {
     <>
       {!accessToken ? (
         <ThemeProvider theme={defaultTheme}>
+          {loading && (<><Progress/></>)}
           <br />
           <br />
           <Container component="main" maxWidth="xs">

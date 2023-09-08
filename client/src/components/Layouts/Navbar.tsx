@@ -140,6 +140,16 @@ function Navbar() {
                       <Link to={'/about'}>About</Link>
                     </Button>
                 </Box>
+                <div className="mr-8 relative">
+                  <input
+                    type="text"
+                    placeholder=" Search courses"
+                    className="py-[6px] px-6 bg-gray-200 text-gray-800 rounded-full pl-8 focus:outline-none focus:ring focus:border-blue-300"
+                  />
+                  <div className="absolute left-2 top-2">
+                    <i className="material-icons text-gray-500">search</i>
+                  </div>
+                </div>
                 {user ? (
                   <>
                     <Box sx={{ flexGrow: 0 }}>
@@ -148,6 +158,7 @@ function Navbar() {
                         <Avatar alt={user?.fullname} src='a'/>
                       </IconButton>
                     </Tooltip>
+                    
                     <Menu
                       sx={{ mt: '45px' }}
                       id="menu-appbar"
@@ -178,7 +189,9 @@ function Navbar() {
                         </MenuItem>
                     </Menu>
                   </Box>
-                  <BasicSpeedDial />
+                  {user?.isInstructor && (
+                    <><BasicSpeedDial /></>
+                  )}
                 </>
                 ) : (
                    <div className='font-bold '>

@@ -54,6 +54,7 @@ export class CourseService {
         }
         realeCourse.creator = user
         realeCourse.category = catetory
+        realeCourse.thumbnail = `/images/${realeCourse.thumbnail}`
         const createCourse = this.courseRepository.create(realeCourse);
         return await this.courseRepository.save(createCourse);
     }
@@ -111,5 +112,11 @@ export class CourseService {
         await this.lessonRepository.delete({ course });
         await this.courseRepository.delete(idCourse);
         return course
+    }
+
+
+    async getMyCoursesRegistered(userId: number): Promise<Course[]> {
+        const courses = await this.courseRepository.find({where: {students:{id: userId}}})
+        return courses
     }
 }

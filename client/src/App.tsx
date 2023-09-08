@@ -6,6 +6,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Common from './components/Common/Common';
 import { UserProvider } from './components/Contexts/UserContext';
+import CourseForm from './components/Courses/Instructor/CourseForm';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Common />} />
             <Route path='/home' element={<Home />} />
+            <Route path='/course/create' element={<CourseForm />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
           </Routes>

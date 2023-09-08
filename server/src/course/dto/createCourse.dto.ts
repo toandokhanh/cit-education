@@ -13,6 +13,11 @@ export class CreateCourseDto extends BaseDto{
     @Expose()
     description: string;
 
+    @IsString()
+    @IsNotEmpty()
+    @Expose()
+    thumbnail: string;
+
     @IsNumber()
     @IsNotEmpty()
     @Expose()
