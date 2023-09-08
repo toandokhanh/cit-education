@@ -72,6 +72,12 @@ export class CourseController {
         return await this.coursesService.enrollCourse(idCourse, idUser)
     }
 
-
+    // lấy ra các khóa học đã đăng ký
+    @UseGuards(AuthGuard('student'))
+    @Get('v1/registered')
+    async getMyCoursesRegistered(@User() user: any){
+        const userId = user.userId
+        return await this.coursesService.getMyCoursesRegistered(userId)
+    }
    
 }

@@ -58,7 +58,7 @@
 // }
 
 
-import React, { createContext, useContext, useState, ReactNode, useEffect, useReducer } from 'react';
+import React, { createContext, useContext, ReactNode, useEffect, useReducer } from 'react';
 import { User } from '../../types/types';
 import userApi from '../../apis/userApi';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
@@ -88,7 +88,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
       const response = await userApi.getMyAccount();
       if (response.role === 'instructor') {
         response.isInstructor = true;
-      } else {
+      } else if (response.role === 'student'){
+        response.isInstructor = false;
+      }else{
         response.isInstructor = false;
       }
       // Sử dụng dispatch để cập nhật trạng thái người dùng

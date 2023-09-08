@@ -1,11 +1,10 @@
-import { Controller, Get, UseInterceptors, Post, UploadedFile, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseInterceptors, Post, UploadedFile, UseGuards, HttpException, HttpStatus} from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'fs';
 import * as path from 'path';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from './user/decorator/user.decorator';
-
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -15,33 +14,70 @@ export class AppController {
     return this.appService.getHello();
   }
 
-
-  @UseGuards(AuthGuard('jwt'))
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File, @User() user: any) {
-    // lấy ra email đặt tên cho thư mục trong public forder
-    const userName = user.email.split('@')[0];
-    const projectRootPath = path.join(__dirname, '..');
-    const publicFolderPath = path.join(projectRootPath, 'public');
-    const userFolderPath = path.join(publicFolderPath, userName);
-    const doesUserFolderExist = fs.existsSync(userFolderPath);
-    if (doesUserFolderExist) {
-      console.log(`folder at ${userFolderPath}`);
-    } else {
-      // Tạo thư mục nếu chưa tồn tại
-      fs.mkdirSync(userFolderPath);
-      console.log(`folder saved at ${userFolderPath}.`);
+  @UseGuards(AuthGuard("jwt"))
+  @Post('upload/image')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: (req, file, callback) => {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+          return callback(new Error('Only image files are allowed!'), false);
+        }
+        callback(null, true);
+      },
+    }),
+  )
+  async upload(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new HttpException('No file uploaded.', HttpStatus.BAD_REQUEST);
     }
+    try {
+      const uploadDir = path.join(__dirname, '..', 'public', 'images'); // Đường dẫn đến thư mục lưu trữ
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      const fileExtension = path.extname(file.originalname);
+      const newFileName = `${Date.now()}${fileExtension}`;
+      const filePath = path.join(uploadDir, newFileName);
+      fs.writeFileSync(filePath, file.buffer);
 
-    if (path.extname(file.originalname).toLowerCase() !== '.mp4') {
-      throw new HttpException('Only MP4 files are allowed', HttpStatus.BAD_REQUEST);
+      return newFileName;
+    } catch (error) {
+      console.error(error);
+      return 'File upload failed.';
     }
-
-    const savePath = path.join(__dirname, '..', 'public', file.originalname);
-    console.log('File saved at:', savePath);
-    return 1
   }
 
 
-}
+  @UseGuards(AuthGuard("jwt"))
+  @Post('upload/video')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadVideo(@UploadedFile() file: Express.Multer.File,  @User() user: any) {
+    // Kiểm tra xem có file được tải lên không
+    if (!file) {
+      throw new HttpException('No file uploaded.', HttpStatus.BAD_REQUEST);
+    }
+    try {
+      const userName = user.email.split('@')[0];
+      const projectRootPath = path.join(__dirname, '..');
+      const publicFolderPath = path.join(projectRootPath, 'public');
+      const userFolderPath = path.join(publicFolderPath, userName);
+      if (!fs.existsSync(userFolderPath)) {
+        fs.mkdirSync(userFolderPath, { recursive: true });
+      }
+
+      if (path.extname(file.originalname).toLowerCase() !== '.mp4') {
+        throw new HttpException('Only MP4 files are allowed', HttpStatus.BAD_REQUEST);
+      }
+
+      const newFileName = `${Date.now()}${path.extname(file.originalname)}`;
+      const filePath = path.join(userFolderPath, newFileName);
+
+      fs.writeFileSync(filePath, file.buffer);
+
+      return 'File uploaded successfully.';
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('File upload failed.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+  }

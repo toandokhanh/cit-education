@@ -14,6 +14,9 @@ export class Course{
   @Column()
   description: string;
 
+  @Column()
+  thumbnail: string;
+
   @ManyToOne(() => Category, category => category.courses)
   category: Category;
   

@@ -43,3 +43,10 @@ export interface Language{
   idUnit: string;
   name: string;
 }
+
+export interface Course{
+  title: string;
+  description: string;
+  thumbnail: string;
+  category: number;
+}

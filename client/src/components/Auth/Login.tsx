@@ -14,10 +14,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
 import { useUser } from '../Contexts/UserContext';
+import Progress from '../Layouts/Progress';
 
 const defaultTheme = createTheme();
 
 export default function Login() { 
+  const [loading, setloading] = useState(false);
   const { loginUser } = useUser();
   const [data, setData] = useState({
     email: '',
@@ -25,11 +27,14 @@ export default function Login() {
   });
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setloading(true);
     try {
       const loginData = await loginUser(data)
       console.log(loginData)
+      setloading(false);
     } catch (error) {
       console.error('Error logging in:', error);
+      setloading(false);
     }
   };
 
@@ -45,6 +50,9 @@ export default function Login() {
     <>
     {!accessToken ? (
       <ThemeProvider theme={defaultTheme}>
+      {loading && (
+            <Progress/>
+        )}
       <br />
       <br />
       <br />
