@@ -16,7 +16,7 @@ import BasicSpeedDial from './SpeedDial';
 import { Link } from 'react-router-dom';
 import { useUser } from '../Contexts/UserContext';
 
-function Navbar() {
+function Navbar({courses, setCourses }: any) {
   const { logoutUser } = useUser();
   const { user } = useUser();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -190,7 +190,7 @@ function Navbar() {
                     </Menu>
                   </Box>
                   {user?.isInstructor && (
-                    <><BasicSpeedDial /></>
+                    <><BasicSpeedDial courses={courses} setCourses={setCourses}/></>
                   )}
                 </>
                 ) : (
