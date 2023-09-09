@@ -5,7 +5,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined';
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -21,7 +21,13 @@ import { Category } from '../../types/types';
 import { Course } from '../../types/types';
 import axios from 'axios';
 import coursesApi from '../../apis/coursesApi';
-export default function BasicSpeedDial() {
+import { useUser } from '../Contexts/UserContext';
+
+interface BasicSpeedDialProps {
+  setCourses: React.Dispatch<React.SetStateAction<any[]>>; 
+  courses: any;
+}
+export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps) {
     const [open, setOpen] = React.useState(false);
     const [videoFile, setvideoFile] = React.useState<any>();
     const [openForm, setopenForm] = React.useState(false);
@@ -97,6 +103,7 @@ export default function BasicSpeedDial() {
         try {
           const response = await categoryApi.getCategories();
           setCategories(response);
+          
         } catch (error) {
           console.error('Error fetching categories:', error);
         }
@@ -110,7 +117,9 @@ export default function BasicSpeedDial() {
         try {
           console.log(data);
           const response = await coursesApi.createCourse(data);
+          setCourses([...courses, response]);
           console.log(response);
+          handleCloseForm();
         } catch (error) {
           console.error('Error fetching categories:', error);
         }
@@ -126,7 +135,7 @@ export default function BasicSpeedDial() {
       <Box sx={{ height: 0}}>
         <SpeedDial
           ariaLabel="SpeedDial basic example"
-          sx={{ position: 'absolute', top: 100, right: 0 }}
+          sx={{ position: 'absolute', top: 100, right: 40 }}
           icon={<SpeedDialIcon />}
           direction="down" 
           open={open}
