@@ -50,33 +50,18 @@ const Home: React.FC = () => {
       <>
       <Navbar setCourses={setCourses} courses={Courses}/>
       {loading && (<Progress/>)}
-      {user?.isInstructor ? (
+      {user && (
         <>
           <Container className='mt-12'>
-            <Grid container spacing={3}>
+          <h4 className='text-start text-3xl font-semibold mb-9'>My course</h4>
+            <Grid container spacing={4}>
               {Courses.map((course, index) => 
-              // <Link to={'/course/'+ course?.id} >
-              //   <div>Title: {course?.title}</div> 
-              //   <img className='w-10 h-10 mx-auto' src={'http://localhost:3003'+course?.thumbnail} alt={course?.title} />
-              //   <div>Lesson length: {course?.lessons?.length}</div> 
-              //   <br/>
-              // </Link>
-              <Grid xs={4} mb={3} key={index}>
+              <Grid xs={3} mb={3}  key={index}>
                 <ActionAreaCard thumbnail={'http://localhost:3003'+course?.thumbnail} title={course?.title} link={'/course/'+ course?.id} description={course?.description}/>
               </Grid>
               )}
             </Grid>
           </Container>
-        </>
-      ): (
-        <>
-        {Courses.map(course => 
-        <>
-          <div>{course?.title}</div> 
-          <img src={course?.thumbnail} alt={course?.title} />
-          <div>{course?.lessons.length}</div> 
-        </>
-        )}
         </>
       )}
       <Footer />
