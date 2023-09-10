@@ -7,21 +7,23 @@ const coursesApi = {
     const url = 'course'; 
     return axiosClient.post(url, data); 
   },
-    // lấy ra các khóa học do instructor tạo ra
+  // lấy ra các khóa học do instructor tạo ra
   async getMyCoursesCreated(): Promise<[]> { 
     const url = 'course/v1/me'; 
     return axiosClient.get(url); 
   },
 
-
-
-// lấy ra các khóa học được sinh viên đăng ký
+  // lấy ra các khóa học được sinh viên đăng ký
   async getMyCoursesRegistered(): Promise<[]> { 
     const url = 'course/v1/registered'; 
     return axiosClient.get(url); 
   },
 
-
+  // lấy ra chi tiết khóa học
+  async courseDetails(id: any): Promise<any>{
+    const url = `course/${id}`
+    return axiosClient.get(url); 
+  }
 
     
 };

@@ -3,7 +3,7 @@ import React from 'react';
 const Footer: React.FC = () => {
   return (
     <>
-      <footer className="bg-neutral-100 text-center text-[red] dark:bg-[#1976d2] dark:text-neutral-200 lg:text-left mt-[29rem]">
+      <footer className="bg-neutral-100 text-center text-[red] dark:bg-[#1976d2] dark:text-neutral-200 lg:text-left mt-[5rem]">
         <div className="mx-6 py-10 text-center md:text-left">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {/* Tailwind Elements section */}
