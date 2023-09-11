@@ -6,7 +6,8 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea, IconButton, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
-export default function ActionAreaCard({thumbnail, title, description, link}: any) {
+import PeopleIcon from '@mui/icons-material/People';
+export default function ActionAreaCard({lengthStudent, thumbnail, title, description, link}: any) {
   return (
     <>  
     
@@ -24,7 +25,12 @@ export default function ActionAreaCard({thumbnail, title, description, link}: an
                 <p style={{overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical'}} className="mb-4 text-base text-neutral-600 text-start">
                   {description}
                 </p>
+                <div className='text-xs text-start flex text-[#757575]' >
+                <PeopleIcon fontSize='small'/>
+                <p className='mt-[3px] ml-1'>  {lengthStudent} </p>
+                </div>
               </div>
+              
             </div>
         </Link>
    

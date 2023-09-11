@@ -23,9 +23,13 @@ const coursesApi = {
   async courseDetails(id: any): Promise<any>{
     const url = `course/${id}`
     return axiosClient.get(url); 
-  }
+  },
 
-    
+  // lấy ra tất cả các khóa học trên hệ thống
+  async getAllCourses(): Promise<any[]> {
+    const url = 'course'
+    return axiosClient.get(url); 
+  }
 };
 
 export default coursesApi;
