@@ -57,7 +57,7 @@ const Home: React.FC = () => {
             <Grid container spacing={4}>
               {Courses.map((course, index) => 
               <Grid xs={3} mb={3}  key={index}>
-                <ActionAreaCard thumbnail={'http://localhost:3003'+course?.thumbnail} title={course?.title} link={'/course/'+ course?.id} description={course?.description}/>
+                <ActionAreaCard lengthStudent={course?.students?.length} thumbnail={'http://localhost:3003'+course?.thumbnail} title={course?.title} link={'/course/'+ course?.id} description={course?.description}/>
               </Grid>
               )}
             </Grid>
