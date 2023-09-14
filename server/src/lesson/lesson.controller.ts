@@ -28,7 +28,7 @@ export class LessonController {
 
 
 
-  @UseGuards(AuthGuard("student"))
+  @UseGuards(AuthGuard("jwt"))
   @Get('/:lessonId')
   async getLessonDetails(
     @Param("lessonId") lessonId: number
@@ -49,7 +49,7 @@ export class LessonController {
     if(course.creator.email !== user.email){
       throw new BadRequestException('You do not have access')
     }
-    const folder = user.email.split("@")[0];
+    // const folder = user.email.split("@")[0];
     const title = lesson.title;
     const content = lesson.content;
     const video = lesson.video;
@@ -59,7 +59,6 @@ export class LessonController {
     const flaskApiUrl = CreateSubtitleflaskApiUrl;
     try {
       const response = await axios.post(flaskApiUrl, {
-        folder,
         video,
         sourceLanguage,
         targetLanguage,

@@ -46,8 +46,12 @@ const CourseDetail = () => {
                 <p className='text-start font-semibold text-2xl uppercase'>{courseDetail?.title}</p>
                 <p className='text-start'>{courseDetail?.description}</p>
                 <p className='text-start font-semibold text-1xl uppercase my-5'>nội dung bài học</p>
-                  {/* map lessons */}
-                  <LessonsLists/>
+                  {courseDetail?.lessons?.map((lesson: any, index: number) => 
+                    <>
+                    
+                    <LessonsLists lessons={lesson} index={index}/>
+                    </>
+                  )}
               </Grid>
               <Grid xs={12} sm={3} px={5}>
                 <div style={{ width: '100%', paddingBottom: '60%', position: 'relative' }}>

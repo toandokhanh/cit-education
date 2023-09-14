@@ -145,7 +145,7 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
               <CreateNewFolderOutlinedIcon onClick={handleClickOpenForm}/>
             } tooltipTitle='New Course' />
             <SpeedDialAction icon={
-              <Link to='/:idCourse/lesson/create'> <FeedOutlinedIcon /> </Link>
+              <Link to='/lesson/create'> <FeedOutlinedIcon /> </Link>
             } tooltipTitle='New Lesson' />
         </SpeedDial>
       </Box>

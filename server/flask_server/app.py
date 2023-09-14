@@ -11,13 +11,12 @@ def subtitle():
     print('data')
     print(data)
     video = data.get('video')
-    folderUser = data.get('folder')
     sourceLanguage = data.get('sourceLanguage')
     targetLanguage = data.get('targetLanguage')
     algorithm = data.get('algorithm')
     
     # Gọi script Python từ Flask
-    command = f'python3 subtitle.py  ../public/{folderUser}/{video} -s {sourceLanguage} -d {targetLanguage} -noise {algorithm}'
+    command = f'python3 server/flask_server/subtitle.py server/public/videos/{video} -s {sourceLanguage} -d {targetLanguage} -noise {algorithm}'
     output = subprocess.check_output(command, shell=True, text=True).strip()
     result_list = output.split(', ')
     keys = ['emty', 'dateTime', 'videoPath', 'kb', 'time', 'sourceLanguage', 'targetLanguage', 'algorithm', 'processingTime', 'wavPath', 'outputWavPath', 'txtPath', 'srtPath', 'outputVideoPath']

@@ -4,7 +4,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'fs';
 import * as path from 'path';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from './user/decorator/user.decorator';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -51,18 +50,19 @@ export class AppController {
   @UseGuards(AuthGuard("jwt"))
   @Post('upload/video')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadVideo(@UploadedFile() file: Express.Multer.File,  @User() user: any) {
+  async uploadVideo(@UploadedFile() file: Express.Multer.File) {
     // Kiểm tra xem có file được tải lên không
     if (!file) {
       throw new HttpException('No file uploaded.', HttpStatus.BAD_REQUEST);
     }
     try {
-      const userName = user.email.split('@')[0];
-      const projectRootPath = path.join(__dirname, '..');
-      const publicFolderPath = path.join(projectRootPath, 'public');
-      const userFolderPath = path.join(publicFolderPath, userName);
-      if (!fs.existsSync(userFolderPath)) {
-        fs.mkdirSync(userFolderPath, { recursive: true });
+      // const userName = user.email.split('@')[0];
+      // const projectRootPath = path.join(__dirname, '..');
+      // const publicFolderPath = path.join(projectRootPath, 'public');
+      // const userFolderPath = path.join(publicFolderPath, userName);
+      const uploadDir = path.join(__dirname, '..', 'public', 'videos'); // Đường dẫn đến thư mục lưu trữ
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
       }
 
       if (path.extname(file.originalname).toLowerCase() !== '.mp4') {
@@ -70,11 +70,10 @@ export class AppController {
       }
 
       const newFileName = `${Date.now()}${path.extname(file.originalname)}`;
-      const filePath = path.join(userFolderPath, newFileName);
+      const filePath = path.join(uploadDir, newFileName);
 
       fs.writeFileSync(filePath, file.buffer);
-
-      return 'File uploaded successfully.';
+      return newFileName;
     } catch (error) {
       console.error(error);
       throw new HttpException('File upload failed.', HttpStatus.INTERNAL_SERVER_ERROR);
