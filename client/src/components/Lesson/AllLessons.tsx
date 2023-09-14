@@ -7,18 +7,21 @@ import SendIcon from '@mui/icons-material/Send';
 import { IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
-export default function LessonsLists() {
+export default function LessonsLists({lessons, index}: any) {
 
   return (
     <>
      <div className='bg-[#f5f5f5]'>
-      <Link to=''>
+      <Link to={'/lesson/'+lessons?.id+'/detail'}>
           <Divider />
             <ListItemButton>
-              <ListItemText primary="Bài 1 Giới thiệu về khóa học" />
-              <IconButton edge="end">
-                <MoreVertIcon />
-              </IconButton>
+                  <p className='text-sm mr-5 font-semibold'>{index+1}</p>
+                  <p className='text-sm mr-5 font-semibold'>{lessons?.title}</p>
+                  <div className='text-end w-full'> 
+                    <IconButton edge="end">
+                      <MoreVertIcon />
+                    </IconButton>
+                  </div>
             </ListItemButton>
           <Divider />
         </Link>

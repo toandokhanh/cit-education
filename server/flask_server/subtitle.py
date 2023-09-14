@@ -114,9 +114,11 @@ if __name__ == "__main__":
                 # wav_to_flac(path+newname+'.wav',path+newname+'.flac')
             else:
             # Không chọn giải thuật
-                rename(path+name+'.wav',path+newname+'.wav')
+                rename(path+name+'.wav',path+newname+'_output.wav')
                 pass
         source = path+newname+'_output.wav'
+        print('source')
+        print(source)
         # Tạo phụ đề
         createsub.main(source,lang_in,lang_out)
         # if os.path.exists(path+newname+'.wav'):

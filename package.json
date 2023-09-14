@@ -1,0 +1,21 @@
+{
+  "name": "cit-education",
+  "version": "1.0.0",
+  "description": "A platform was developed to help lecturers and students interact with each other through lecture content with quality subtitled videos.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "nest": "nest start --watch",
+    "flask": "python3 server/flask_server/app.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toandokhanh/Education-CIT.git"
+  },
+  "author": "ToanDoKhanh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/toandokhanh/Education-CIT/issues"
+  },
+  "homepage": "https://github.com/toandokhanh/Education-CIT#readme"
+}
