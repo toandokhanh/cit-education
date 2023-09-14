@@ -44,7 +44,7 @@ const LessonForm = () => {
     const formData = new FormData();
     formData.append('file', videoFile);
     try {
-      const response = await axios.post('http://localhost:3002/upload/video', formData, {
+      const response = await axios.post('http://localhost:3003/upload/video', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -4,17 +4,20 @@ import Footer from '../Layouts/Footer'
 import coursesApi from '../../apis/coursesApi'
 import { Grid, Container } from '@mui/material'
 import ActionAreaCard from './ActionAreaCard'
+import Progress from '../Layouts/Progress'
 
 const AllCourses = () => {
+  const [loading, setLoading] = useState(true)
   const [courses, getCourses] = useState<any[]>([])
   useEffect(() => {
     const fetchCourses = async () =>{
       try {
         const response = await coursesApi.getAllCourses();
-        console.log(response)
         getCourses(response)
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching categories:', error);
+        setLoading(false)
       }
     }
     fetchCourses()
@@ -22,6 +25,7 @@ const AllCourses = () => {
   return (
     <>
       <Navbar/>
+      {loading && (<Progress/>)}
       <Container className='mt-12'>
         <h4 className='text-start text-3xl font-semibold mb-9'>Courses</h4>
         <Grid container spacing={4}>
