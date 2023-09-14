@@ -5,8 +5,15 @@ import LinearProgress from '@mui/material/LinearProgress';
 export default function Progress() {
   
   return (
-    <Box sx={{ width: '100%' }}>
-      <LinearProgress color="info"/>
-    </Box>
+    <div
+      style={{ position: 'absolute',
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0, 0, 0, 0.2)',
+      zIndex: 9999, 
+      pointerEvents: 'auto', }}
+    >
+      <LinearProgress variant="indeterminate" color="info"/>
+    </div>
   );
 }
