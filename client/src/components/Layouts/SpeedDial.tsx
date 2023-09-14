@@ -196,12 +196,12 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
                 defaultValue="EUR"
                 helperText="Please select your currency"
                 variant="standard"
-                name="catetory"
-                value={data.category}
+                name="category"
+                value={data?.category}  
                 onChange={handleInputChange}
                 required 
               >
-                {categories.map((option, index) => (
+                {categories.map(option => (
                   <MenuItem key={option.name} value={option.id}>
                     {option.name}
                   </MenuItem>

@@ -50,3 +50,12 @@ export interface Course{
   thumbnail: string;
   category: number;
 }
+
+export interface Lesson{
+  title: string;
+  content: string;
+  video: string;
+  sourceLanguage: string;
+  targetLanguage: string;
+  algorithm: string;
+}

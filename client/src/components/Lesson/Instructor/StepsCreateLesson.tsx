@@ -11,46 +11,100 @@ import { Container } from '@mui/material';
 import Step1CreateLesson from './Step1CreateLesson';
 import Step2CreateLesson from './Step2CreateLesson';
 import axios from 'axios';
-
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+import Step3CreateLesson from './Step3CreateLesson';
+import lessonsApi from '../../../apis/lessonsApi';
+import Snackbar from '@mui/material/Snackbar';
+const steps = ['Select course', 'Upload lecture video', 'Lecture information'];
 
 export default function StepsCreateLesson() {
+  const [callCoursesApi, setcallCoursesApi] = React.useState(false);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [videoFile, setvideoFile] = React.useState<any>();
-  const isStepOptional = (step: number) => {
-    return step === 1;
-  };
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState('Error message');
+  // handle data
+  const [courseId, getCourseId] = React.useState(0)
+  const [data, setData] = React.useState({
+      title: '', // step3
+      content: '', // step 3
+      video: '', // step 2
+      sourceLanguage: 'vi', // step 2
+      targetLanguage: 'vi', // step 2
+      algorithm: 'no' // step 2
+    });
 
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step);
-  };
+    const isStepOptional = (step: number) => {
+      return step === 1;
+    };
 
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    if(activeStep === 0){ // step 1 - 2
-        // handle course id
-        if(!courseId){
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            setSkipped(newSkipped);
-            console.log(courseId)
-        }
-    } else if (activeStep === 1) { //step 2 - 3
+    const isStepSkipped = (step: number) => {
+      return skipped.has(step);
+    };
+
+    const handleNext = async () => {
+      
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
+      // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      if(activeStep === 0){ // step 1 - 2
+          // handle course id
+          if(courseId){
+              setActiveStep((prevActiveStep) => prevActiveStep + 1);
+              setSkipped(newSkipped);
+              // console.log(courseId)
+          }
+      } else if (activeStep === 1) { //step 2 - 3
         // handle video
-        console.log(videoFile)
         if(videoFile){
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
             setSkipped(newSkipped);
-            console.log(videoFile)
+            const formData = new FormData();
+            formData.append('file', videoFile);
+            try {
+              const response = await axios.post('http://localhost:3003/upload/video', formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              });
+              setData((prevData: any)=> ({
+                ...prevData,
+                video: response?.data
+              }));
+            } catch (error) {
+              console.error('Error uploading file:', error);
+            }
+          }else{
+            setMessage('Error uploading file')
+            setOpen(true)
+          }
+        } else if (activeStep === 2) {
+          if(data.title && data.content){
+            // all good
+            // call apis to new video creation
+            setcallCoursesApi(true);
+          }
         }
-    } 
-  };
+    };
 
+    React.useEffect(() => {
+      const createLesson = async () => {
+        try {
+          console.log(data);
+          const response = await lessonsApi.createLesson(courseId, data);
+          console.log(response);
+        } catch (error) {
+          console.error('Error fetching categories:', error);
+        }
+      };
+      if (callCoursesApi) {
+        createLesson();
+        setcallCoursesApi(false);
+      }
+    }, [callCoursesApi]);
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -71,46 +125,13 @@ export default function StepsCreateLesson() {
   const handleReset = () => {
     setActiveStep(0);
   };
-// handle data
-const [courseId, getCourseId] = React.useState()
-const [data, setData] = React.useState({
-    title: '',
-    content: '',
-    video: '',
-    sourceLanguage: '',
-    targetLanguage: '',
-    algorithm: ''
-  });
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-
-  // handle video in step 2
-  
-  const UploadForm = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append('file', videoFile);
-    try {
-      const response = await axios.post('http://localhost:3002/upload/video', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log(response)
-    //   setData((prevData: any)=> ({
-    //     ...prevData,
-    //     video: response?.data
-    //   }));
-    } catch (error) {
-      console.error('Error uploading file:', error);
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
     }
-  }
+
+    setOpen(false);
+  };
   return (
         <>
             <Box sx={{ width: '100%' }}>
@@ -154,22 +175,31 @@ const [data, setData] = React.useState({
                         {activeStep+1 === 1 && (
                         <div className='w-[32rem] mx-auto mt-10'>
                             Please select your course
+                            
                             <br />
                             <br />
                             <Step1CreateLesson  courseId={courseId} getCourseId={getCourseId}/>
                         </div>
                         )}
                         {activeStep+1 === 2 && (
+                          
                             <div className='w-[32rem] mx-auto mt-10'>
+                            
                             Please upload a lecture video
+                            
                             <br />
                             <br />
-                            <Step2CreateLesson setData={setData} setvideoFile={setvideoFile}/>
+                            <Step2CreateLesson data={data} setData={setData} setvideoFile={setvideoFile}/>
                             </div>
                         )}
                         {activeStep+1 === 3 && (
                             <>
-                            <p>Bươc3</p>
+                            <div className='w-[40rem]  mx-auto mt-10'>
+                            Lesson contents
+                            <br />
+                            <br />
+                            <Step3CreateLesson data={data} setData={setData}/>
+                            </div>
                             </>
                         )}
                     </Typography>
@@ -195,6 +225,12 @@ const [data, setData] = React.useState({
                     </React.Fragment>
                 )}
                 </Container>
+                <Snackbar
+                  open={open}
+                  autoHideDuration={6000}
+                  onClose={handleClose}
+                  message={message}
+                />
                 <Footer/>
             </Box>
         </>

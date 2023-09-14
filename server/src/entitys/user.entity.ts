@@ -20,7 +20,7 @@ export class User {
     @Column()
     gender: string;
 
-    @Column({ default: 'https://localhost:3002/image/default_avt.png' })
+    @Column({ default: 'https://localhost:3003/image/default_avt.png' })
     avatar: string;
 
     @Column({ nullable: true }) // Đặt nullable: true cho trường dob
@@ -45,7 +45,7 @@ export class User {
     constructor(partial: Partial<User>) {
         Object.assign(this, partial);
         if (!this.avatar) {
-            this.avatar = 'https://localhost:3002/image/default_avt.png';
+            this.avatar = 'https://localhost:3003/image/default_avt.png';
         }
     }
 }
