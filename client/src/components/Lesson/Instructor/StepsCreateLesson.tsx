@@ -14,14 +14,18 @@ import axios from 'axios';
 import Step3CreateLesson from './Step3CreateLesson';
 import lessonsApi from '../../../apis/lessonsApi';
 import Snackbar from '@mui/material/Snackbar';
+import Progress from '../../Layouts/Progress';
+import {useNavigate} from 'react-router-dom'
 const steps = ['Select course', 'Upload lecture video', 'Lecture information'];
 
 export default function StepsCreateLesson() {
+  const navigate = useNavigate();
   const [callCoursesApi, setcallCoursesApi] = React.useState(false);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [videoFile, setvideoFile] = React.useState<any>();
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState('Error message');
   // handle data
   const [courseId, getCourseId] = React.useState(0)
@@ -93,11 +97,12 @@ export default function StepsCreateLesson() {
     React.useEffect(() => {
       const createLesson = async () => {
         try {
-          console.log(data);
-          const response = await lessonsApi.createLesson(courseId, data);
-          console.log(response);
+          setLoading(true);
+          const response : any = await lessonsApi.createLesson(courseId, data);
+          navigate(`/course/${response?.id}`)
         } catch (error) {
           console.error('Error fetching categories:', error);
+          setLoading(false);
         }
       };
       if (callCoursesApi) {
@@ -109,18 +114,6 @@ export default function StepsCreateLesson() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
 
   const handleReset = () => {
     setActiveStep(0);
@@ -136,6 +129,7 @@ export default function StepsCreateLesson() {
         <>
             <Box sx={{ width: '100%' }}>
                 <Navbar/>
+                {loading && (<Progress/>)}
                 <Container className='mt-12'>
                     <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {

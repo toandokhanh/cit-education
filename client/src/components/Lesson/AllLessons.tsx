@@ -16,8 +16,8 @@ export default function LessonsLists({lessons, index}: any) {
           <Divider />
             <ListItemButton>
                   <p className='text-sm mr-5 font-semibold'>{index+1}</p>
-                  <p className='text-sm mr-5 font-semibold'>{lessons?.title}</p>
-                  <div className='text-end w-full'> 
+                  <p className='text-sm mr-5 font-semibold w-full'>{lessons?.title}</p>
+                  <div className='text-end'> 
                     <IconButton edge="end">
                       <MoreVertIcon />
                     </IconButton>

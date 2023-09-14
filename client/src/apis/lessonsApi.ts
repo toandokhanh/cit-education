@@ -6,6 +6,11 @@ const lessonsApi = {
     const url = `${courseId}/lesson`; 
     return axiosClient.post(url, data); 
   },
+
+  async lessonDetail(lessonId: number): Promise<any[]> {
+    const url = `${lessonId}/lesson/${lessonId}`
+    return axiosClient.get(url)
+  }
 };
 
 export default lessonsApi;

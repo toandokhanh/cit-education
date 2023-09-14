@@ -1,0 +1,32 @@
+[Nest] 4112  - 14/09/2023, 20:57:37   ERROR [ExceptionsHandler] invalid input syntax for type integer: "undefined"
+QueryFailedError: invalid input syntax for type integer: "undefined"
+    at PostgresQueryRunner.query (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\driver\postgres\PostgresQueryRunner.ts:299:19)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at SelectQueryBuilder.loadRawResults (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\query-builder\SelectQueryBuilder.ts:3789:25)
+    at SelectQueryBuilder.executeEntitiesAndRawResults (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\query-builder\SelectQueryBuilder.ts:3541:26)
+    at SelectQueryBuilder.getRawAndEntities (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\query-builder\SelectQueryBuilder.ts:1670:29)
+    at SelectQueryBuilder.getOne (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\query-builder\SelectQueryBuilder.ts:1697:25)
+    at CourseService.getDetailCourse (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\course\course.service.ts:31:24)
+    at CourseController.getDetailCourse (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\course\course.controller.ts:25:16)
+    at D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+    at D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\@nestjs\core\router\router-proxy.js:9:17
+[Nest] 4112  - 14/09/2023, 20:57:37   ERROR [ExceptionsHandler] invalid input syntax for type integer: "undefined"
+QueryFailedError: invalid input syntax for type integer: "undefined"
+    at PostgresQueryRunner.query (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\driver\postgres\PostgresQueryRunner.ts:299:19)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at SelectQueryBuilder.loadRawResults (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\query-builder\SelectQueryBuilder.ts:3789:25)
+    at SelectQueryBuilder.executeEntitiesAndRawResults (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\query-builder\SelectQueryBuilder.ts:3541:26)
+    at SelectQueryBuilder.getRawAndEntities (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\query-builder\SelectQueryBuilder.ts:1670:29)
+    at SelectQueryBuilder.getOne (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\query-builder\SelectQueryBuilder.ts:1697:25)
+    at CourseService.getDetailCourse (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\course\course.service.ts:31:24)
+    at CourseController.getDetailCourse (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\src\course\course.controller.ts:25:16)
+    at D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+    at D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\@nestjs\core\router\router-proxy.js:9:17
+[Nest] 4112  - 14/09/2023, 22:02:45    WARN [ExpressAdapter] Content-Type doesn't match Reply body, you might need a custom ExceptionFilter for non-JSON responses
+[Nest] 4112  - 14/09/2023, 22:02:46   ERROR [ExceptionsHandler] Range Not Satisfiable
+RangeNotSatisfiableError: Range Not Satisfiable
+    at createHttpError (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\send\index.js:984:7)
+    at SendStream.error (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\send\index.js:270:31)
+    at SendStream.send (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\send\index.js:666:19)
+    at onstat (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\send\index.js:725:10)
+    at FSReqCallback.oncomplete (node:fs:199:5)

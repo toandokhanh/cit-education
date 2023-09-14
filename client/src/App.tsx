@@ -10,6 +10,7 @@ import CourseForm from './components/Courses/Instructor/CourseForm';
 import CourseDetail from './components/Courses/CourseDetail';
 import AllCourses from './components/Courses/AllCourses';
 import StepsCreateLesson from './components/Lesson/Instructor/StepsCreateLesson';
+import LessonDetail from './components/Lesson/LessonDetail';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path='/courses' element={<AllCourses />} />
             <Route path='/course/create' element={<CourseForm />} />
             <Route path='/lesson/create' element={<StepsCreateLesson />} />
+            <Route path='/lesson/:idLesson/detail' element={<LessonDetail />} />
             <Route path='/course/:idCourse' element={<CourseDetail />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
