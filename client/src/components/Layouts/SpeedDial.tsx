@@ -22,6 +22,7 @@ import { Course } from '../../types/types';
 import axios from 'axios';
 import coursesApi from '../../apis/coursesApi';
 import { useUser } from '../Contexts/UserContext';
+import { Menu } from '@mui/material';
 
 interface BasicSpeedDialProps {
   setCourses: React.Dispatch<React.SetStateAction<any[]>>; 
@@ -62,7 +63,14 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
     const handleClickOpenForm = () => {
       setopenForm(true);
     };
-
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const openMenu = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
     const handleCloseForm = () => {
       setopenForm(false);
     };
@@ -132,22 +140,31 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
     
   return (
     <>
-      <Box sx={{ height: 0}}>
-        <SpeedDial
-          ariaLabel="SpeedDial basic example"
-          sx={{ position: 'absolute', top: 100, right: 40 }}
-          icon={<SpeedDialIcon />}
-          direction="down" 
-          open={open}
-          onClick={handleOpen} 
-        >
-            <SpeedDialAction icon={
-              <CreateNewFolderOutlinedIcon onClick={handleClickOpenForm}/>
-            } tooltipTitle='New Course' />
-            <SpeedDialAction icon={
-              <Link to='/lesson/create'> <FeedOutlinedIcon /> </Link>
-            } tooltipTitle='New Lesson' />
-        </SpeedDial>
+      <Box>
+        <Button
+        id="basic-button"
+        sx={{ color: 'white', borderRadius: '50%', height: '40px', minWidth: '30px', border: '2px solid white' }}
+        aria-controls={openMenu ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={openMenu ? 'true' : undefined}
+        onClick={handleClick}
+        fullWidth
+      >
+        <SpeedDialIcon />
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem><Link to='/blog/create'>New Blog</Link></MenuItem>
+        <MenuItem  onClick={handleClickOpenForm}>New Course</MenuItem>
+        <MenuItem ><Link to='/lesson/create'>New Lesson</Link></MenuItem>
+      </Menu>
       </Box>
         <Dialog
           disableEscapeKeyDown

@@ -30,3 +30,28 @@ RangeNotSatisfiableError: Range Not Satisfiable
     at SendStream.send (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\send\index.js:666:19)
     at onstat (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\send\index.js:725:10)
     at FSReqCallback.oncomplete (node:fs:199:5)
+
+
+
+
+
+
+
+
+
+
+
+
+    at cors (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\cors\lib\index.js:188:7)
+[Nest] 9888  - 15/09/2023, 19:36:26   ERROR [ExceptionsHandler] request entity too large
+PayloadTooLargeError: request entity too large
+    at readStream (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\raw-body\index.js:163:17)
+    at getRawBody (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\raw-body\index.js:116:12)
+    at read (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\body-parser\lib\read.js:79:3)
+    at jsonParser (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\body-parser\lib\types\json.js:138:5)
+    at Layer.handle [as handle_request] (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\express\lib\router\index.js:328:13)
+    at D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\express\lib\router\index.js:346:12)
+    at next (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\express\lib\router\index.js:280:10)
+    at cors (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\cors\lib\index.js:188:7)

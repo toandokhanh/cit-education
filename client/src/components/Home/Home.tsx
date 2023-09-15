@@ -11,10 +11,11 @@ import Navbar from '../Layouts/Navbar';
 import { useEffect, useState } from 'react';
 import coursesApi from '../../apis/coursesApi';
 import Progress from '../Layouts/Progress';
-import { Box, Grid } from '@mui/material';
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 import Container from '@mui/material/Container';
-import BasicSpeedDial from '../Layouts/SpeedDial';
 import ActionAreaCard from '../Courses/ActionAreaCard';
+import InfoIcon from '@mui/icons-material/Info';
+
 
 const Home: React.FC = () => {
   const { user } = useUser();
@@ -28,6 +29,7 @@ const Home: React.FC = () => {
           const myCourses = await coursesApi.getMyCoursesCreated()
           setCourses(myCourses)
           setLoading(false);
+          console.log(myCourses)
         } catch (error) {
           console.error('Error fetching categories:', error);
         }
@@ -50,7 +52,7 @@ const Home: React.FC = () => {
       <>
       <Navbar setCourses={setCourses} courses={Courses}/>
       {loading && (<Progress/>)}
-      {user && (
+      {!user?.isInstructor ? (
         <>
           <Container className='mt-12'>
           <h4 className='text-start text-3xl font-semibold mb-9'>My course</h4>
@@ -63,6 +65,53 @@ const Home: React.FC = () => {
             </Grid>
           </Container>
         </>
+      ) : (
+          <Container className='mt-12'>
+            {Courses.length > 0 ? (
+              <>
+                <h4 className='text-start text-3xl font-semibold mb-9'>My course</h4>
+                <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>ID</TableCell>
+                      <TableCell>Title</TableCell>
+                      <TableCell align="center">Learners</TableCell>
+                      <TableCell align="left">Lessons</TableCell>
+                      <TableCell align="left">Created At</TableCell>
+                      <TableCell align="left">Thumbnail</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                  {Courses.map((course, index) => 
+                        <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            <>
+                              <TableCell  component="th" scope="row">{index+1}</TableCell>
+                              <TableCell sx={{ maxWidth: '200px', overflow: 'hidden' }}>{course?.title}</TableCell>
+                              <TableCell align="center">{course?.students?.length}</TableCell>
+                              <TableCell sx={{ maxWidth: '200px', overflow: 'hidden' }} align="left">
+                                {/* map all lessons */}
+                                {course?.lessons?.map((lesson: { id: number, title: any; }) =>
+                                  <div className='mb-3 max-h-5 overflow-hidden text-[blue]' key={lesson.id}>
+                                    <Link to={'/lesson/'+ lesson.id+'/detail'}>{lesson.title}</Link>
+                                    <br />
+                                  </div> 
+                                )}
+                              </TableCell>
+                              <TableCell align="left">{course?.createdAt}</TableCell>
+                              <TableCell align="center">
+                                <img height='100px' width='100px' src={'http://localhost:3003'+course?.thumbnail}/>
+                              </TableCell>
+                            </>
+                        </TableRow>
+                        )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              </>
+            ): (<h4 className='text-start text-3xl font-semibold mb-[28rem]'>You don't have any courses yet</h4>)}
+            
+          </Container>
       )}
       <Footer />
       </>

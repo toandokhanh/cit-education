@@ -1,34 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Footer from '../Layouts/Footer'
 import Navbar from '../Layouts/Navbar'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import coursesApi from '../../apis/coursesApi';
-import { Grid, Container, Paper, Divider, Chip, Avatar, AvatarGroup } from '@mui/material';
+import { Grid, Container, Paper, Divider, Chip, Avatar, AvatarGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import AssistWalkerIcon from '@mui/icons-material/AssistWalker';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';  
 import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import LessonsLists from '../Lesson/AllLessons';
+import Progress from '../Layouts/Progress';
+import { useUser } from '../Contexts/UserContext';
 const CourseDetail = () => {
+    const [loading, setloading] = useState(false)
+    const { user } = useUser();
     const [courseDetail, setcourseDetail] = React.useState<any>([]);
     const params = useParams();
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-      }));
-      
+
     React.useEffect(() => {
         const fetchCategories = async () => {
           try {
+            setloading(true);
             const response = await coursesApi.courseDetails(params.idCourse);
             console.log(response)
             setcourseDetail(response)
+            setloading(false);
           } catch (error) {
             console.error('Error fetching course details:', error);
+            setloading(false);
           }
         };
         
@@ -37,18 +37,20 @@ const CourseDetail = () => {
       return (
         <>
           <Navbar />
+          {loading && (<Progress/>)}
           <br />
           <br />
           <br />
+
           <Container >
-            <Grid container spacing={{ xs: 2, md: 3 }} px={5}>
+            {!user?.isInstructor ? (
+              <Grid container spacing={{ xs: 2, md: 3 }} px={5}>
               <Grid xs={12} sm={9}>
                 <p className='text-start font-semibold text-2xl uppercase'>{courseDetail?.title}</p>
                 <p className='text-start'>{courseDetail?.description}</p>
                 <p className='text-start font-semibold text-1xl uppercase my-5'>nội dung bài học</p>
                   {courseDetail?.lessons?.map((lesson: any, index: number) => 
                     <>
-                    
                     <LessonsLists lessons={lesson} index={index}/>
                     </>
                   )}
@@ -108,6 +110,44 @@ const CourseDetail = () => {
                 </div>
               </Grid>
             </Grid>
+            ) : (
+              <>
+              <p className='text-start font-semibold text-2xl uppercase mb-2'>{courseDetail?.title}</p>
+              <p className='text-start mb-8'>{courseDetail?.description}</p>
+              <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Title</TableCell>
+                    <TableCell align="center">Content</TableCell>
+                    <TableCell align="center">Update</TableCell>
+                    <TableCell align="center">Delete</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                {courseDetail?.lessons?.map((lesson: any, index: number) => 
+                      <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                          <>
+                            <TableCell  component="th" scope="row">{index+1}</TableCell>
+                            <TableCell>{lesson?.title}</TableCell>
+                            <TableCell sx={{ maxWidth: '100px', overflow: 'hidden'}} align="center">{lesson?.content}</TableCell>
+                            <TableCell sx={{ color: 'blue' }} align="center">update</TableCell>
+                            <TableCell sx={{ color: 'blue' }} align="center">delete</TableCell>
+                          </>
+                      </TableRow>
+                      )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+                {/* {courseDetail?.lessons?.map((lesson: any, index: number) => 
+                    <>
+                    <LessonsLists lessons={lesson} index={index}/>
+                    </>
+                  )} */}
+              </>
+            )}
+            
           </Container>
           <Footer />
         </>
