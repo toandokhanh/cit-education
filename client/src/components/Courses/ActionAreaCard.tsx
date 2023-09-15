@@ -30,7 +30,6 @@ export default function ActionAreaCard({lengthStudent, thumbnail, title, descrip
                 <p className='mt-[3px] ml-1'>  {lengthStudent} </p>
                 </div>
               </div>
-              
             </div>
         </Link>
    

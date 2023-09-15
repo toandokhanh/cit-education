@@ -53,6 +53,8 @@ export default function StepsCreateLesson() {
         newSkipped = new Set(newSkipped.values());
         newSkipped.delete(activeStep);
       }
+      console.log(activeStep);
+      
       // setActiveStep((prevActiveStep) => prevActiveStep + 1);
       if(activeStep === 0){ // step 1 - 2
           // handle course id

@@ -92,12 +92,17 @@ function Navbar({courses, setCourses }: any) {
                       display: { xs: 'block', md: 'none' },
                     }}
                   >
-                    <MenuItem >
-                      <Typography textAlign="center"><Link to={'/courses'}>Courses</Link></Typography>
-                    </MenuItem>
-                    <MenuItem >
-                      <Typography textAlign="center"><Link to={'/roadmap'}>Roadmap</Link></Typography>
-                    </MenuItem>
+                    {!user?.isInstructor ? (
+                      <>
+                        <MenuItem >
+                          <Typography textAlign="center"><Link to={'/courses'}>Courses</Link></Typography>
+                        </MenuItem>
+                        <MenuItem >
+                          <Typography textAlign="center"><Link to={'/roadmap'}>Roadmap</Link></Typography>
+                        </MenuItem>
+                      </>
+                    ): null}
+                    
                     <MenuItem >
                       <Typography textAlign="center"><Link to={'/blog'}>Blog</Link></Typography>
                     </MenuItem>
@@ -127,12 +132,17 @@ function Navbar({courses, setCourses }: any) {
                 </Typography>
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                     {/* const pages = ['Courses', 'Roadmap', 'Blog', 'About']; */}
-                    <Button sx={{ my: 2, color: 'white', display: 'block' }}>
-                      <Link to={'/courses'}>Courses</Link>
-                    </Button>
-                    <Button sx={{ my: 2, color: 'white', display: 'block' }}>
-                      <Link to={'/roadmap'}>Roadmap</Link>
-                    </Button>
+                    {!user?.isInstructor ? (
+                      <>
+                        <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                          <Link to={'/courses'}>Courses</Link>
+                        </Button>
+                        <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                          <Link to={'/roadmap'}>Roadmap</Link>
+                        </Button>
+                      </>
+                    ): null}
+                    
                     <Button sx={{ my: 2, color: 'white', display: 'block' }}>
                       <Link to={'/blog'}>Blog</Link>
                     </Button>
@@ -140,6 +150,11 @@ function Navbar({courses, setCourses }: any) {
                       <Link to={'/about'}>About</Link>
                     </Button>
                 </Box>
+                <div className="mr-8 relative">
+                {user?.isInstructor && (
+                    <><BasicSpeedDial courses={courses} setCourses={setCourses}/></>
+                  )}
+                </div>
                 <div className="mr-8 relative">
                   <input
                     type="text"
@@ -189,9 +204,7 @@ function Navbar({courses, setCourses }: any) {
                         </MenuItem>
                     </Menu>
                   </Box>
-                  {user?.isInstructor && (
-                    <><BasicSpeedDial courses={courses} setCourses={setCourses}/></>
-                  )}
+                  
                 </>
                 ) : (
                    <div className='font-bold '>
