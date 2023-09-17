@@ -40,3 +40,14 @@ Content-Type: application/json
 ###
 GET http://localhost:3003/algorithm
 Content-Type: application/json
+
+
+
+###
+POST http://localhost:3003/1/lesson/updatesrtfile
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6Imluc3RydWN0b3IiLCJlbWFpbCI6InRvYW5iMjAxMjA0NkBzdHVkZW50LmN0dS5lZHUudm4iLCJmdWxsbmFtZSI6IsSQ4buXIFRvw6BuIiwiYXZhdGFydCI6Imh0dHBzOi8vbG9jYWxob3N0OjMwMDIvaW1hZ2UvZGVmYXVsdF9hdnQucG5nIiwiaWF0IjoxNjk0OTQzODU5LCJleHAiOjE2OTUwMzAyNTl9.c7nmHbBeyBRQ6lmMT_1qqUMN-MDSkFEqcEG55K3nbMw
+
+{ 
+    "data": "data"
+}

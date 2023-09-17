@@ -1,9 +1,9 @@
 import { LessonService } from './lesson.service';
 import { AuthGuard } from "@nestjs/passport";
-import { Controller, Post, Body, Param, UseGuards, Get, BadRequestException, Delete, Put } from "@nestjs/common";
+import { Controller, Post, Body, Param, UseGuards, Get, BadRequestException, Delete, Put, InternalServerErrorException } from "@nestjs/common";
 import { CreateLessonDTO } from "./dto/createLesson.dto";
 import { User } from "src/user/decorator/user.decorator";
-import { CreateSubtitleflaskApiUrl } from "./constant/constant";
+import { CreateSubtitleflaskApiUrl, UpdateSubtitleflaskApiUrl } from "./constant/constant";
 import axios from "axios";
 import { UpdateLessonDTO } from './dto/updateLesson.dto';
 
@@ -104,5 +104,27 @@ export class LessonController {
   async updateLesson(@Param('idlesson') idlesson : number,@Body() data: UpdateLessonDTO ){
     return this.lessonService.updateLesson(idlesson, data)
   }
-  
+
+
+  @UseGuards(AuthGuard("instructor"))
+  @Post('updatesrtfile')
+  async updateSubtitle(@Body() data: any) {
+    try {
+      const flaskUrl = UpdateSubtitleflaskApiUrl ; // Thay thế bằng URL của Flask API
+      // Gửi yêu cầu POST đến Flask API
+      const response = await axios.post(flaskUrl, data);
+
+      // Xử lý phản hồi từ Flask nếu cần
+      // const flaskResponse = response.data;
+      const so = 12345
+      console.log(response)
+      // Trả về phản hồi cho client của NestJS
+      return { 
+        message: 'Subtitle updated successfully' , so};
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      console.error('Error updating subtitle:', error);
+      throw new InternalServerErrorException('Subtitle update failed'); // Hoặc sử dụng exception phù hợp
+    }
+  }
 }

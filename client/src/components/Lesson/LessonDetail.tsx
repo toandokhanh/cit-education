@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Container, Typography, Card, CardHeader, CardContent, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button } from '@mui/material';
+import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button } from '@mui/material';
 import ReactPlayer from 'react-player';
 import Navbar from '../Layouts/Navbar';
 import Footer from '../Layouts/Footer';
@@ -13,19 +13,14 @@ import axios from 'axios';
 import { saveAs } from 'file-saver';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-interface Lesson {
-  title: string;
-  video: {
-    outputPathMP4: string;
-  };
-  content: string;
-}
+
 
 const LessonDetail: React.FC = () => {
   const [srtData, setSrtData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [updateLesson, setUploadLesson] = useState<boolean>(false);
   const [lessonDetail, setLessonDetail] = useState<any>();
+  const [callApiUpdateSubtitle, setCallApiUpdateSubtitle] = useState<boolean>(false);
   const [infoLesson, setInfoLessson] = useState({
     title: '',
     content: '',
@@ -48,6 +43,34 @@ const LessonDetail: React.FC = () => {
       setUploadLesson(false)
     }
   }, [updateLesson]);
+
+  useEffect(() => {
+    const fetchUpdateSubtitle = async () => {
+      try {
+        const data = {
+          pathMP4: lessonDetail?.video?.pathMP4,
+          pathSRT: lessonDetail?.video?.pathSRT,
+          data: srtData
+        }
+        const response: any = await lessonsApi.updateSubtitle(data)
+        console.log('response')
+        console.log(response)
+        setLessonDetail((prevLessonDetail: any) => ({
+          ...prevLessonDetail,
+          // Cập nhật bất kỳ thông tin nào cần thiết sau khi cập nhật phụ đề
+        }));
+      } catch (error) {
+        console.error('Error fetching subtitle updations:', error);
+        setLoading(false);
+      }
+    };
+    
+    if(callApiUpdateSubtitle){
+      fetchUpdateSubtitle();
+      setCallApiUpdateSubtitle(false)
+    }
+  }, [callApiUpdateSubtitle]);
+
   useEffect(() => {
     const fetchLessonDetails = async () => {
       try {
@@ -94,7 +117,6 @@ const LessonDetail: React.FC = () => {
           if (line === '') {
             continue;
           }
-
           if (!isNaN(line)) {
             currentIndex = parseInt(line);
           } else {
@@ -158,6 +180,7 @@ const LessonDetail: React.FC = () => {
   
   const updateSubtitle = () => {
     console.log(srtData)
+    setCallApiUpdateSubtitle(true);
   }
   const handleInputChange = (index: number, field: string, value: string) => {
     const updatedSrtData = [...srtData];

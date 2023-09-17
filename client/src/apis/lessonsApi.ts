@@ -7,6 +7,11 @@ const lessonsApi = {
     return axiosClient.post(url, data); 
   },
 
+  async updateSubtitle(data: any): Promise<any[]> { 
+    const url = `1/lesson/updatesrtfile`; 
+    return axiosClient.post(url, data); 
+  },
+
   async lessonDetail(lessonId: number): Promise<any[]> {
     const url = `${lessonId}/lesson/${lessonId}`
     return axiosClient.get(url)
@@ -14,3 +19,7 @@ const lessonsApi = {
 };
 
 export default lessonsApi;
+
+
+
+// http://localhost:3003/:name/updatesrtfile
