@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Container, Typography, Card, CardHeader, CardContent, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button } from '@mui/material';
 import ReactPlayer from 'react-player';
 import Navbar from '../Layouts/Navbar';
@@ -9,7 +9,10 @@ import DOMPurify from 'dompurify';
 import lessonsApi from '../../apis/lessonsApi';
 import { useUser } from '../Contexts/UserContext';
 import ReactQuill from 'react-quill';
-
+import axios from 'axios';
+import { saveAs } from 'file-saver';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 interface Lesson {
   title: string;
   video: {
@@ -19,6 +22,7 @@ interface Lesson {
 }
 
 const LessonDetail: React.FC = () => {
+  const [srtData, setSrtData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [updateLesson, setUploadLesson] = useState<boolean>(false);
   const [lessonDetail, setLessonDetail] = useState<any>();
@@ -41,7 +45,7 @@ const LessonDetail: React.FC = () => {
     
     if(updateLesson){
       fetchUpdateLesson();
-      setUploadLesson(true)
+      setUploadLesson(false)
     }
   }, [updateLesson]);
   useEffect(() => {
@@ -77,7 +81,89 @@ const LessonDetail: React.FC = () => {
     }));
   };
   
+  useEffect(() => {
+    axios.get(`http://localhost:3003${lessonDetail?.video?.pathSRT}`)
+      .then(response => {
+        const srtContent = response.data;
+        const srtLines = srtContent.split('\n');
+        const srtDataArray = [];
+        let currentIndex = 0;
+
+        for (let i = 0; i < srtLines.length; i++) {
+          const line = srtLines[i].trim();
+          if (line === '') {
+            continue;
+          }
+
+          if (!isNaN(line)) {
+            currentIndex = parseInt(line);
+          } else {
+            const timeAndText = line.split('-->');
+            if (timeAndText.length === 2) {
+              const startTime = timeAndText[0].trim();
+              const endTime = timeAndText[1].trim();
+              const text = srtLines[i + 1].trim();
+              srtDataArray.push({
+                index: currentIndex,
+                startTime,
+                endTime,
+                text,
+              });
+            }
+          }
+        }
+
+        setSrtData(srtDataArray);
+      })
+      .catch(error => {
+        console.error('Error loading SRT file:', error);
+      });
+  }, [lessonDetail]); 
+
+  const handleDownloadTxt = () => {
+    // Tải tệp TXT từ URL và lưu thành tệp với tên cụ thể
+    axios.get(`http://localhost:3003${lessonDetail.video.pathTXT}`)
+      .then(response => {
+        const blob = new Blob([response.data], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, 'lesson.txt');
+      })
+      .catch(error => {
+        console.error('Error downloading TXT file:', error);
+      });
+  };
+
+  const handleAddRow = (index: number) => {
+    const newSrtItem = {
+      endTime: "00:00:00,000",
+      index: index + 1,
+      startTime: "00:00:00,000",
+      text: "",
+    };
+    const updatedSrtData = [...srtData.slice(0, index), newSrtItem, ...srtData.slice(index)];
+    for (let i = index + 1; i < updatedSrtData.length; i++) {
+      updatedSrtData[i].index = updatedSrtData[i].index + 1;
+    }
+    setSrtData(updatedSrtData);
+  };
+    
   
+  const handleRemoveRow = (indexToRemove: number) => {
+    const updatedSrtData = [...srtData];
+    updatedSrtData.splice(indexToRemove - 1, 1); 
+    for (let i = indexToRemove - 1; i < updatedSrtData.length; i++) {
+      updatedSrtData[i].index = i + 1;
+    }
+    setSrtData(updatedSrtData);
+  };
+  
+  const updateSubtitle = () => {
+    console.log(srtData)
+  }
+  const handleInputChange = (index: number, field: string, value: string) => {
+    const updatedSrtData = [...srtData];
+    updatedSrtData[index][field] = value;
+    setSrtData(updatedSrtData);
+  };
   return (
     <>
       <Navbar />
@@ -121,8 +207,10 @@ const LessonDetail: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} md={5}>
                 <div className='text-start my-3 '>
+                      <p className='font-semibold'>
+                        Lesson title
+                      </p>
                       <TextField
-                          label="Lesson title"
                           id="filled-hidden-label-small"
                           variant="filled"
                           size="small"
@@ -133,16 +221,24 @@ const LessonDetail: React.FC = () => {
                         />
                         <br />
                         <br />
+                        <p className='font-semibold'>
+                        Lesson content
+                        </p>
                       <ReactQuill
                         value={infoLesson.content}
                         onChange={handleQuillContentChange}
                       />
                     </div>
-                    <Button variant="outlined" onClick={() => setUploadLesson(true)} >Update lesson</Button>
+                    <br />
+                    <div className='flex justify-center gap-5'>
+                      <Button variant="outlined" onClick={() => setUploadLesson(true)} >Update lesson</Button>
+                      <Button variant="outlined" color="error">Delete lesson</Button>
+                    </div>
                 </Grid>
                 {/* grid 2 */}
                 <Grid item xs={12} md={12} sx={{ margin: '0 auto', marginTop:'2rem' }}>
                   <Box sx={{ height:'100%', width: '100%' }}>
+                  <p className='font-semibold text-start'>Subtitle contents</p>
                   <TableContainer component={Paper}>
                     <Table  aria-label="caption table">
                       <TableHead>
@@ -154,69 +250,59 @@ const LessonDetail: React.FC = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                          <TableRow >
-                            <TableCell component="th" scope="row">1</TableCell>
-                            <TableCell component="th" scope="row">
-                              <TextField
-                                label="1"
+                      {srtData?.map((data) : any =>
+                        <TableRow >
+                          <TableCell component="th" scope="row">{data.index}</TableCell>
+                          <TableCell component="th" scope="row">
+                            <TextField
+                              value={data.startTime}
+                              id="filled-hidden-label-small"
+                              variant="filled"
+                              size="small"
+                              onChange={(e) => handleInputChange(data.index-1, 'startTime', e.target.value)}
+                            />
+                          </TableCell>
+                          <TableCell align="left">
+                            <TextField
+                                value={data.endTime}
                                 id="filled-hidden-label-small"
                                 variant="filled"
                                 size="small"
+                                onChange={(e) => handleInputChange(data.index-1, 'endTime', e.target.value)}
                               />
-                            </TableCell>
-                            <TableCell align="left">
-                              <TextField
-                                  label="1"
-                                  id="filled-hidden-label-small"
-                                  variant="filled"
-                                  size="small"
-                                />
-                            </TableCell>
-                            <TableCell align="left">
-                              <TextField
-                                id="standard-multiline-static"
-                                label="1"
-                                multiline
-                                rows={3}
-                                variant="filled"
+                          </TableCell>
+                          <TableCell align="left">
+                            <TextField
+                              id="standard-multiline-static"
+                              value={data.text}
+                              multiline
+                              rows={3}
+                              variant="filled"
+                              onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
+                            />
+                          </TableCell>
+                          <div className='flex flex-col justify-around gap-20 py-2'>
+                            <AddIcon
+                                fontSize='small'
+                                color='primary'
+                                onClick={() => handleAddRow(data.index)}
                               />
-                            </TableCell>
-                          </TableRow>
-                      </TableBody>
-                      <TableBody>
-                          <TableRow >
-                            <TableCell component="th" scope="row">2</TableCell>
-                            <TableCell component="th" scope="row">
-                              <TextField
-                                label="2"
-                                id="filled-hidden-label-small"
-                                variant="filled"
-                                size="small"
+                              <RemoveIcon
+                                fontSize='small'
+                                color='error'
+                                onClick={() => handleRemoveRow(data.index)}
                               />
-                            </TableCell>
-                            <TableCell align="left">
-                              <TextField
-                                  label="2"
-                                  id="filled-hidden-label-small"
-                                  variant="filled"
-                                  size="small"
-                                />
-                            </TableCell>
-                            <TableCell align="left">
-                              <TextField
-                                id="standard-multiline-static"
-                                label="2"
-                                multiline
-                                rows={3}
-                                variant="filled"
-                              />
-                            </TableCell>
-                          </TableRow>
-                      </TableBody>
+                          </div>
+                        </TableRow>
+                    )}
+                    </TableBody>
                     </Table>
+                    <div className='flex justify-center gap-5 my-3'>
+                      <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={updateSubtitle}>Update subtitle</Button>
+                      <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={handleDownloadTxt}>Dowload TXT file</Button>
+                      <Button variant="outlined" sx={{ margin: '1rem 0' }}><Link to={`http://localhost:3003${lessonDetail.video.pathSRT}`}>Dowload SRT file</Link></Button>
+                    </div>
                   </TableContainer>
-                  <br />
-                  <Button variant="outlined" color="error">Delete lesson</Button>
                   </Box>
                 </Grid>
               </Grid>
@@ -232,3 +318,61 @@ const LessonDetail: React.FC = () => {
 };
 
 export default LessonDetail;
+
+
+// {
+//   {
+//     endTime: "00:00:08,448"
+//     index: 1
+//     startTime: "00:00:00,256"
+//     text: "Track video chính là cái phần là"
+//   },
+//   {
+//     endTime: "00:00:00,000"
+//     index: 2
+//     startTime: "00:00:00,000"
+//     text: "0"
+//   },
+//   {
+//     endTime: "00:00:12,448"
+//     index: 3
+//     startTime: "00:00:17,256"
+//     text: "Track video chính là cái phần là"
+//   }
+// }
+// {
+//   {
+//     endTime: "00:00:08,448"
+//     index: 1
+//     startTime: "00:00:00,256"
+//     text: "đây là row có index là 1"
+//   },
+//   {
+//     endTime: "00:00:12,448"
+//     index: 2
+//     startTime: "00:00:17,256"
+//     text: "đây là row có index là 2"
+//   },
+//   {
+//     endTime: "00:00:12,448"
+//     index: 3
+//     startTime: "00:00:17,256"
+//     text: "đây là row có index là 3"
+//   }
+// }
+
+
+// {
+//   {
+//     endTime: "00:00:08,448"
+//     index: 1
+//     startTime: "00:00:00,256"
+//     text: "đây là row có index là 1"
+//   },
+//   {
+//     endTime: "00:00:12,448"
+//     index: 2
+//     startTime: "00:00:17,256"
+//     text: "đây là row có index là 3"
+//   }
+// }
