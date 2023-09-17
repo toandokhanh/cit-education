@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Container, Typography, Card, CardHeader, CardContent, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button } from '@mui/material';
+import { Container, Typography, Card, CardHeader, CardContent, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button, IconButton } from '@mui/material';
 import ReactPlayer from 'react-player';
 import Navbar from '../Layouts/Navbar';
 import Footer from '../Layouts/Footer';
@@ -29,6 +29,11 @@ const LessonDetail: React.FC = () => {
   const [infoLesson, setInfoLessson] = useState({
     title: '',
     content: '',
+  });
+  const [inputData, setInputData] = useState({
+    startTime: '',
+    endTime: '',
+    text: '',
   });
   const idLesson: any = useParams().idLesson;
   const { user } = useUser();
@@ -132,38 +137,91 @@ const LessonDetail: React.FC = () => {
       });
   };
 
-  const handleAddRow = (index: number) => {
+  // const handleAddRow = (index: number) => {
+  //   console.log(index + 1);
+  //   console.log(srtData);
+  // };
+  // const handleAddRow = (index: number) => {
+  //   // Tạo mục mới với giá trị mặc định
+  //   const newSrtItem = {
+  //     endTime: "00:00:00,000",
+  //     index: index + 1,
+  //     startTime: "00:00:00,000",
+  //     text: "",
+  //   };
+  
+  //   // Chèn mục mới vào mảng srtData tại vị trí index
+  //   const updatedSrtData = [...srtData.slice(0, index), newSrtItem, ...srtData.slice(index)];
+  
+  //   // Cập nhật các index cho các mục còn lại
+  //   for (let i = index + 1; i < updatedSrtData.length; i++) {
+  //     updatedSrtData[i].index = updatedSrtData[i].index + 1;
+  //   }
+  
+  //   // Cập nhật srtData
+  //   setSrtData(updatedSrtData);
+  // };
+  const handleAddRow = () => {
     const newSrtItem = {
-      endTime: "00:00:00,000",
-      index: index + 1,
-      startTime: "00:00:00,000",
-      text: "",
+      ...inputData,
+      index: srtData.length + 1,
     };
-    const updatedSrtData = [...srtData.slice(0, index), newSrtItem, ...srtData.slice(index)];
-    for (let i = index + 1; i < updatedSrtData.length; i++) {
-      updatedSrtData[i].index = updatedSrtData[i].index + 1;
-    }
-    setSrtData(updatedSrtData);
+
+    setSrtData([...srtData, newSrtItem]);
+
+    // Xóa dữ liệu trong các ô nhập sau khi thêm hàng
+    setInputData({
+      startTime: '',
+      endTime: '',
+      text: '',
+    });
   };
-    
+
+  const handleInputChange = (event: any) => {
+    const { name, value } = event.target;
+    setInputData({
+      ...inputData,
+      [name]: value,
+    });
+  };
+
+  const handleEditRow = (index: any, field : any, newValue: any) => {
+    // Tạo một bản sao của mảng srtData
+    const updatedSrtData = [...srtData];
+
+    // Tìm mục có chỉ mục index
+    const rowIndex = updatedSrtData.findIndex((data) => data.index === index);
+
+    if (rowIndex !== -1) {
+      // Cập nhật giá trị của trường field cho mục tương ứng
+      updatedSrtData[rowIndex][field] = newValue;
+
+      // Cập nhật srtData
+      setSrtData(updatedSrtData);
+    }
+  };
+  
   
   const handleRemoveRow = (indexToRemove: number) => {
+    // Tạo một bản sao của mảng srtData
     const updatedSrtData = [...srtData];
-    updatedSrtData.splice(indexToRemove - 1, 1); 
+  
+    // Xóa hàng có chỉ mục indexToRemove
+    updatedSrtData.splice(indexToRemove - 1, 1); // Trừ đi 1 vì chỉ mục bắt đầu từ 1
+  
+    // Cập nhật lại chỉ mục cho các hàng còn lại
     for (let i = indexToRemove - 1; i < updatedSrtData.length; i++) {
       updatedSrtData[i].index = i + 1;
     }
+  
+    // Cập nhật srtData
     setSrtData(updatedSrtData);
   };
   
   const updateSubtitle = () => {
     console.log(srtData)
   }
-  const handleInputChange = (index: number, field: string, value: string) => {
-    const updatedSrtData = [...srtData];
-    updatedSrtData[index][field] = value;
-    setSrtData(updatedSrtData);
-  };
+  
   return (
     <>
       <Navbar />
@@ -250,52 +308,61 @@ const LessonDetail: React.FC = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                      {srtData?.map((data) : any =>
-                        <TableRow >
-                          <TableCell component="th" scope="row">{data.index}</TableCell>
-                          <TableCell component="th" scope="row">
-                            <TextField
-                              value={data.startTime}
-                              id="filled-hidden-label-small"
-                              variant="filled"
-                              size="small"
-                              onChange={(e) => handleInputChange(data.index-1, 'startTime', e.target.value)}
-                            />
-                          </TableCell>
-                          <TableCell align="left">
-                            <TextField
-                                value={data.endTime}
-                                id="filled-hidden-label-small"
-                                variant="filled"
-                                size="small"
-                                onChange={(e) => handleInputChange(data.index-1, 'endTime', e.target.value)}
-                              />
-                          </TableCell>
-                          <TableCell align="left">
-                            <TextField
-                              id="standard-multiline-static"
-                              value={data.text}
-                              multiline
-                              rows={3}
-                              variant="filled"
-                              onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
-                            />
-                          </TableCell>
-                          <div className='flex flex-col justify-around gap-20 py-2'>
-                            <AddIcon
-                                fontSize='small'
-                                color='primary'
-                                onClick={() => handleAddRow(data.index)}
-                              />
-                              <RemoveIcon
-                                fontSize='small'
-                                color='error'
-                                onClick={() => handleRemoveRow(data.index)}
-                              />
-                          </div>
-                        </TableRow>
-                    )}
+                      {srtData.map((data) => (
+                      <TableRow key={data.index}>
+                        <TableCell component="th" scope="row">{data.index}</TableCell>
+                        <TableCell align="left">
+                          <TextField
+                            value={data.startTime}
+                            id={`startTime${data.index}`}
+                            variant="filled"
+                            size="small"
+                            onChange={(e) =>
+                              handleEditRow(data.index, 'startTime', e.target.value)
+                            }
+                          />
+                        </TableCell>
+                        <TableCell align="left">
+                          <TextField
+                            value={data.endTime}
+                            id={`endTime${data.index}`}
+                            variant="filled"
+                            size="small"
+                            onChange={(e) =>
+                              handleEditRow(data.index, 'endTime', e.target.value)
+                            }
+                          />
+                        </TableCell>
+                        <TableCell align="left">
+                          <TextField
+                            id={`text${data.index}`}
+                            value={data.text}
+                            multiline
+                            rows={3}
+                            variant="filled"
+                            onChange={(e) =>
+                              handleEditRow(data.index, 'text', e.target.value)
+                            }
+                          />
+                        </TableCell>
+                        <TableCell align="left">
+                          <IconButton
+                            color='primary'
+                            onClick={() => handleAddRow()}
+                          >
+                            <AddIcon fontSize='small' />
+                          </IconButton>
+                          <IconButton
+                            color='error'
+                            onClick={() => handleRemoveRow(data.index)}
+                          >
+                            <RemoveIcon fontSize='small' />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                     </TableBody>
+
                     </Table>
                     <div className='flex justify-center gap-5 my-3'>
                       <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={updateSubtitle}>Update subtitle</Button>
