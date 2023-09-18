@@ -13,11 +13,13 @@ import axios from 'axios';
 import { saveAs } from 'file-saver';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 
 
 const LessonDetail: React.FC = () => {
   const [srtData, setSrtData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [videoUrl, setVideoUrl] =useState('');
   const [updateLesson, setUploadLesson] = useState<boolean>(false);
   const [lessonDetail, setLessonDetail] = useState<any>();
   const [callApiUpdateSubtitle, setCallApiUpdateSubtitle] = useState<boolean>(false);
@@ -55,10 +57,7 @@ const LessonDetail: React.FC = () => {
         const response: any = await lessonsApi.updateSubtitle(data)
         console.log('response')
         console.log(response)
-        setLessonDetail((prevLessonDetail: any) => ({
-          ...prevLessonDetail,
-          // Cập nhật bất kỳ thông tin nào cần thiết sau khi cập nhật phụ đề
-        }));
+        setVideoUrl(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.outputPathMP4}?rand=${Math.random()}`);
       } catch (error) {
         console.error('Error fetching subtitle updations:', error);
         setLoading(false);
@@ -77,6 +76,7 @@ const LessonDetail: React.FC = () => {
         setLoading(true);
         const response: any = await lessonsApi.lessonDetail(idLesson);
         setLessonDetail(response);
+        setVideoUrl(`${HTTP_URL_SERVER_NEST}${response.video.outputPathMP4}`);
         setInfoLessson({title: response.title, content: response.content})
         setLoading(false);
       } catch (error) {
@@ -105,7 +105,7 @@ const LessonDetail: React.FC = () => {
   };
   
   useEffect(() => {
-    axios.get(`http://localhost:3003${lessonDetail?.video?.pathSRT}`)
+    axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail?.video?.pathSRT}`)
       .then(response => {
         const srtContent = response.data;
         const srtLines = srtContent.split('\n');
@@ -140,11 +140,11 @@ const LessonDetail: React.FC = () => {
       .catch(error => {
         console.error('Error loading SRT file:', error);
       });
-  }, [lessonDetail]); 
+  }, []); 
 
   const handleDownloadTxt = () => {
     // Tải tệp TXT từ URL và lưu thành tệp với tên cụ thể
-    axios.get(`http://localhost:3003${lessonDetail.video.pathTXT}`)
+    axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.pathTXT}`)
       .then(response => {
         const blob = new Blob([response.data], { type: 'text/plain;charset=utf-8' });
         saveAs(blob, 'lesson.txt');
@@ -187,6 +187,8 @@ const LessonDetail: React.FC = () => {
     updatedSrtData[index][field] = value;
     setSrtData(updatedSrtData);
   };
+
+
   return (
     <>
       <Navbar />
@@ -202,7 +204,7 @@ const LessonDetail: React.FC = () => {
               <Grid container spacing={1}>
               <Grid item xs={12} md={8}>
                 <ReactPlayer
-                  url={`http://localhost:3003${lessonDetail.video.outputPathMP4}`}
+                  url={`${HTTP_URL_SERVER_NEST}${lessonDetail.video.outputPathMP4}`}
                   width="100%"
                   height="100%"
                   controls
@@ -219,13 +221,14 @@ const LessonDetail: React.FC = () => {
                 {/* grid 1 */}
                 <Grid item xs={12} md={7} sx={{ margin: '0 auto' }}>
                   <Box>
-                    <ReactPlayer
-                      url={`http://localhost:3003${lessonDetail.video.outputPathMP4}`}
+                      <ReactPlayer
+                      url={videoUrl}
                       width="100%"
                       height="100%"
-                      controls
-                      // playing
-                    />
+                      controls 
+                      sx={{ color: 'white' , backgoundColor: 'blue'}}
+                      // playing 
+                      />
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={5}>
@@ -323,7 +326,7 @@ const LessonDetail: React.FC = () => {
                     <div className='flex justify-center gap-5 my-3'>
                       <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={updateSubtitle}>Update subtitle</Button>
                       <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={handleDownloadTxt}>Dowload TXT file</Button>
-                      <Button variant="outlined" sx={{ margin: '1rem 0' }}><Link to={`http://localhost:3003${lessonDetail.video.pathSRT}`}>Dowload SRT file</Link></Button>
+                      <Button variant="outlined" sx={{ margin: '1rem 0' }}><Link to={`${HTTP_URL_SERVER_NEST}${lessonDetail.video.pathSRT}`}>Dowload SRT file</Link></Button>
                     </div>
                   </TableContainer>
                   </Box>
