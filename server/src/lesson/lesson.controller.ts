@@ -116,11 +116,10 @@ export class LessonController {
 
       // Xử lý phản hồi từ Flask nếu cần
       // const flaskResponse = response.data;
-      const so = 12345
       console.log(response)
       // Trả về phản hồi cho client của NestJS
       return { 
-        message: 'Subtitle updated successfully' , so};
+        message: 'Subtitle updated successfully'};
     } catch (error) {
       // Xử lý lỗi nếu có
       console.error('Error updating subtitle:', error);
