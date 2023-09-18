@@ -15,6 +15,7 @@ import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Ta
 import Container from '@mui/material/Container';
 import ActionAreaCard from '../Courses/ActionAreaCard';
 import InfoIcon from '@mui/icons-material/Info';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 
 const Home: React.FC = () => {
@@ -109,6 +110,9 @@ const Home: React.FC = () => {
                               <TableCell align="left">{course?.createdAt}</TableCell>
                               <TableCell align="center">
                                 <img height='100px' width='100px' src={'http://localhost:3003'+course?.thumbnail}/>
+                              </TableCell>
+                              <TableCell align="center">
+                                <Link to={'/course/'+course?.id} ><EditNoteIcon fontSize='small' color='primary'/></Link>
                               </TableCell>
                         </TableRow>
                   </TableBody>

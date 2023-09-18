@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import Footer from '../Layouts/Footer'
 import Navbar from '../Layouts/Navbar'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import coursesApi from '../../apis/coursesApi';
-import { Grid, Container, Paper, Divider, Chip, Avatar, AvatarGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Grid, Container, Divider, Chip, Avatar, AvatarGroup, TextField, Button, MenuItem, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import AssistWalkerIcon from '@mui/icons-material/AssistWalker';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';  
@@ -12,18 +11,45 @@ import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import LessonsLists from '../Lesson/AllLessons';
 import Progress from '../Layouts/Progress';
 import { useUser } from '../Contexts/UserContext';
+import categoryApi from '../../apis/catetoryApi';
+import { Category } from '../../types/types';
+import { TransitionProps } from '@mui/material/transitions';
+import { Dialog, Slide } from '@mui/material';
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
+
 const CourseDetail = () => {
     const [loading, setloading] = useState(false)
+    const [categories, setCategories] = useState<Category[]>([]);
     const { user } = useUser();
-    const [courseDetail, setcourseDetail] = React.useState<any>([]);
-    const params = useParams();
+    const [courseDetail, setcourseDetail] = useState<any>([]);
+    const params : any = useParams();
+    const [action, setAction] = useState('');
+    const [valudeDefaultCategory, setValudeDefaultCategory] = useState('');
+    const navigate = useNavigate();
 
-    React.useEffect(() => {
-        const fetchCategories = async () => {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+      React.useEffect(() => {
+        const fetchCourseDetails = async () => {
           try {
             setloading(true);
             const response = await coursesApi.courseDetails(params.idCourse);
-            console.log(response)
+            setValudeDefaultCategory(response?.category?.id)
             setcourseDetail(response)
             setloading(false);
           } catch (error) {
@@ -32,8 +58,62 @@ const CourseDetail = () => {
           }
         };
         
-        fetchCategories();
+        fetchCourseDetails();
       }, []);
+      React.useEffect(() => {
+        const fetchCategories = async () => {
+          try {
+            const response = await categoryApi.getCategories();
+            setCategories(response);
+            
+          } catch (error) {
+            console.error('Error fetching categories:', error);
+          }
+        };
+        fetchCategories();
+      }, [courseDetail]);
+
+      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setcourseDetail((prevData: any) => ({
+          ...prevData,
+          [name]: value
+        }));
+      };
+
+      React.useEffect(() => {
+        const fetchUpdateCourse = async () => {
+          try {
+            const data = {
+              title: courseDetail?.title,
+              description: courseDetail?.description,
+              category:courseDetail?.category
+            }
+            await coursesApi.updateCouse(params.idCourse, data);
+            navigate('/home')
+          } catch (error) {
+            console.error('Error fetching course update:', error);
+          }
+        };
+        const fetchDeleteCourse = async () => {
+          try {
+            await coursesApi.deleteCouse(params.idCourse);
+            navigate('/home')
+          } catch (error) {
+            console.error('Error fetching categories:', error);
+          }
+        };
+        if(action === 'delete') {
+          fetchDeleteCourse();
+          setAction('');
+        } 
+        if(action === 'update'){
+          fetchUpdateCourse();
+          setAction('');
+        }
+      }, [action]);
+      // handle update course and delete course
+
       return (
         <>
           <Navbar />
@@ -111,44 +191,103 @@ const CourseDetail = () => {
                 </Grid>
             </Grid>
             ) : (
-              <>
-              <p className='text-start font-semibold text-2xl uppercase mb-2'>{courseDetail?.title}</p>
-              <p className='text-start mb-8'>{courseDetail?.description}</p>
-              <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Title</TableCell>
-                    <TableCell align="center">Content</TableCell>
-                    <TableCell align="center">Update</TableCell>
-                    <TableCell align="center">Delete</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                {courseDetail?.lessons?.map((lesson: any, index: number) => 
-                      <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                          <>
-                            <TableCell  component="th" scope="row">{index+1}</TableCell>
-                            <TableCell>{lesson?.title}</TableCell>
-                            <TableCell sx={{ maxWidth: '100px', overflow: 'hidden'}} align="center">{lesson?.content}</TableCell>
-                            <TableCell sx={{ color: 'blue' }} align="center">update</TableCell>
-                            <TableCell sx={{ color: 'blue' }} align="center">delete</TableCell>
-                          </>
-                      </TableRow>
-                      )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-                {/* {courseDetail?.lessons?.map((lesson: any, index: number) => 
-                    <>
-                    <LessonsLists lessons={lesson} index={index}/>
-                    </>
-                  )} */}
-              </>
+              <Grid container spacing={{ xs: 1, md: 2 }} px={5}>
+                <Grid item xs={8} sx={{ margin: '0 auto' }}>
+                  <p className='text-start'>Title</p>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    name='title'
+                    value={courseDetail?.title}
+                    multiline
+                    fullWidth
+                    maxRows={4}
+                    onChange={handleInputChange}
+                  />
+                  <br />
+                  <br />
+                  <p className='text-start'>Description</p>
+                  <TextField
+                    id="outlined-multiline-static"
+                    multiline
+                    name='description'
+                    value={courseDetail?.description}
+                    rows={6}
+                    fullWidth
+                    onChange={handleInputChange}
+                  />
+                  <br />
+                  <br />
+                  {valudeDefaultCategory && (
+                    <TextField
+                        margin="dense" 
+                        fullWidth
+                        select
+                        label="Select Catetorys"
+                        helperText="Please select your currency"
+                        name="category"
+                        defaultValue={valudeDefaultCategory}
+                        onChange={handleInputChange}
+                        required 
+                      >{categories.map(option => (
+                        <MenuItem key={option.name} value={option.id}>
+                          {option.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                  <br />
+                  <br />   
+                  {/* <img height={200} width={200} className='object-cover mx-auto my-3 rounded-md' src={HTTP_URL_SERVER_NEST+courseDetail?.thumbnail} alt="" /> */}
+                  <br />
+                  <div className='flex justify-center gap-96'> 
+                    <Button
+                    component="label"
+                    variant="contained"
+                    onClick={() => setAction('update')}
+                    >
+                      Update course
+                    </Button>
+                    <Button
+                    component="label"
+                    variant="contained"
+                    color='error'
+                    onClick={handleClickOpen}
+                    >
+                      Delete course
+                    </Button>
+                    <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        TransitionComponent={Transition}
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {"Thông báo cực căng"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                          Are you sure you want to delete the lecture "{courseDetail?.title}"?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleClose}>Cancel</Button>
+                          <Button onClick={() => setAction('delete')} autoFocus>
+                            Agree
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                  </div>
+                </Grid>
+              </Grid>
             )}
             
           </Container>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <Footer />
         </>
       )

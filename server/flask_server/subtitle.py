@@ -140,7 +140,7 @@ if __name__ == "__main__":
                 videoOutput(path+file,path+newname+'_output_translated.srt',path+newname+'.mp4')
             else:
                 videoOutput(path+file,path+newname+'_output_translated.srt',path+newname+'_output.mp4')
-                srt_output = path+newname+'_translated_output.srt'
+                srt_output = path+newname+'_output_translated.srt'
         read_video_info = read_video_info(args.source_path)
         end_time = datetime.now()
         wav_input = path+newname+'.wav'

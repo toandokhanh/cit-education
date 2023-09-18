@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button } from '@mui/material';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import ReactPlayer from 'react-player';
 import Navbar from '../Layouts/Navbar';
 import Footer from '../Layouts/Footer';
@@ -15,36 +15,62 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 
-
 const LessonDetail: React.FC = () => {
+  const navigate = useNavigate();
   const [srtData, setSrtData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [videoUrl, setVideoUrl] =useState('');
   const [updateLesson, setUploadLesson] = useState<boolean>(false);
+  const [deleteLesson, setDeleteLesson] = useState<boolean>(false);
   const [lessonDetail, setLessonDetail] = useState<any>();
   const [callApiUpdateSubtitle, setCallApiUpdateSubtitle] = useState<boolean>(false);
   const [infoLesson, setInfoLessson] = useState({
     title: '',
     content: '',
   });
-  const idLesson: any = useParams().idLesson;
+  const idLesson: number | any = useParams().idLesson;
   const { user } = useUser();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     const fetchUpdateLesson = async () => {
       try {
-        console.log('call api update lesson với infoLesson', infoLesson)
-        // 15/9/2023
+        await lessonsApi.updateLessonDetails(idLesson, infoLesson)
+        setLessonDetail((prevData: any) => {
+          return { ...prevData }; 
+        });
       } catch (error) {
         console.error('Error fetching lesson updations:', error);
         setLoading(false);
       }
     };
     
+    const fetchDeleteLesson = async () => {
+      try {
+        await lessonsApi.deleteLessonDetails(idLesson)
+        navigate('/home')
+      } catch (error) {
+        console.error('Error fetching lesson delete:', error);
+        setLoading(false);
+      }
+    };
     if(updateLesson){
       fetchUpdateLesson();
       setUploadLesson(false)
     }
-  }, [updateLesson]);
+
+    if(deleteLesson){
+      fetchDeleteLesson();
+      setUploadLesson(false)
+    }
+  }, [updateLesson, deleteLesson]);
 
   useEffect(() => {
     const fetchUpdateSubtitle = async () => {
@@ -146,7 +172,7 @@ const LessonDetail: React.FC = () => {
         console.error('Error loading SRT file:', error);
       });
     }
-
+    console.log(lessonDetail?.video?.pathSRT)
     if(lessonDetail?.video?.pathSRT){
       fetchSrtFile()
     }
@@ -198,7 +224,6 @@ const LessonDetail: React.FC = () => {
     setSrtData(updatedSrtData);
   };
 
-
   return (
     <>
       <Navbar />
@@ -213,13 +238,16 @@ const LessonDetail: React.FC = () => {
             {!user?.isInstructor ? (
               <Grid container spacing={1}>
               <Grid item xs={12} md={8}>
-                <ReactPlayer
+                {lessonDetail && 
+                (
+                  <ReactPlayer
                   url={`${HTTP_URL_SERVER_NEST}${lessonDetail.video.outputPathMP4}`}
                   width="100%"
                   height="100%"
                   controls
                   // playing
                 />
+                )}
               </Grid>
               <Grid item xs={12} md={12}>
                 <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
@@ -268,7 +296,28 @@ const LessonDetail: React.FC = () => {
                     <br />
                     <div className='flex justify-center gap-5'>
                       <Button variant="outlined" onClick={() => setUploadLesson(true)} >Update lesson</Button>
-                      <Button variant="outlined" color="error">Delete lesson</Button>
+                      <Button variant="outlined" color="error"  onClick={handleClickOpen}>Delete lesson</Button>
+                      <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {"Thông báo cực căng"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                          Are you sure you want to delete the lecture "{lessonDetail?.title}"?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleClose}>Cancel</Button>
+                          <Button onClick={() => setDeleteLesson(true)} autoFocus>
+                            Agree
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
                     </div>
                 </Grid>
                 {/* grid 2 */}
