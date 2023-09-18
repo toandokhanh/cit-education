@@ -1,63 +1,3 @@
-// // UserContext.tsx
-// import React, { createContext, useContext, useState, ReactNode, useEffect, useReducer } from 'react';
-// import { User } from '../../types/types';
-// import userApi from '../../apis/userApi';
-// import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
-// import setAuthToken from '../utils/SetAuthToken';
-// import userReducer from '../reducers/authReducer';
-// interface UserContextProps {
-//   user: User | null;
-//   setUser: (user: User | null) => void;
-// }const initialState = { user: null };
-// const [state, dispatch] = useReducer(userReducer, initialState);
-// // Tạo Context
-// export const UserContext = createContext<UserContextProps | undefined>(undefined);
-
-// export function UserProvider({ children }: { children: ReactNode }) {
-//   const [user, setUser] = useState<User | null>(null);
-
-//   const loadUser = async () => {
-//     if (localStorage[LOCAL_STORAGE_TOKEN_NAME]) {
-// 			setAuthToken(localStorage[LOCAL_STORAGE_TOKEN_NAME])
-// 		}
-//     try {
-//       const response = await userApi.getMyAccount();
-//       if (response.role === 'instructor') {
-//         response.isInstructor = true;
-//       } else {
-//         response.isInstructor = false;
-//       }
-//       setUser(response);
-//     } catch (error) {
-//       localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME)
-//       console.error('Error fetching user:', error);
-//     }
-//   };
-//   // Sử dụng useEffect để lấy thông tin người dùng từ API khi component UserProvider được mount
-//   useEffect(() => {
-//     async function fetchUser() {
-//       await loadUser();
-//     }
-//     fetchUser();
-//   }, []);
-
-//   return (
-//     <UserContext.Provider value={{ user: state.user, setUser: (user) => dispatch({ type: 'SET_USER', payload: user }) }}>
-//       {children}
-//     </UserContext.Provider>
-//   );
-// }
-
-
-// export function useUser() {
-//   const context = useContext(UserContext);
-//   if (context === undefined) {
-//     throw new Error('useUser must be used within a UserProvider');
-//   }
-//   return context;
-// }
-
-
 import React, { createContext, useContext, ReactNode, useEffect, useReducer } from 'react';
 import { User } from '../../types/types';
 import userApi from '../../apis/userApi';
@@ -82,23 +22,24 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const loadUser = async () => {
     if (localStorage[LOCAL_STORAGE_TOKEN_NAME]) {
-      setAuthToken(localStorage[LOCAL_STORAGE_TOKEN_NAME]);
-    }
-    try {
-      const response = await userApi.getMyAccount();
-      if (response.role === 'instructor') {
-        response.isInstructor = true;
-      } else if (response.role === 'student'){
-        response.isInstructor = false;
-      }else{
-        response.isInstructor = false;
+      setAuthToken(localStorage[LOCAL_STORAGE_TOKEN_NAME])
+      try {
+        const response = await userApi.getMyAccount();
+        if (response.role === 'instructor') {
+          response.isInstructor = true;
+        } else if (response.role === 'student'){
+          response.isInstructor = false;
+        }else{
+          response.isInstructor = false;
+        }
+        // Sử dụng dispatch để cập nhật trạng thái người dùng
+        dispatch({ type: 'SET_USER', payload: response });
+      } catch (error) {
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+        console.error('Error fetching user:', error);
       }
-      // Sử dụng dispatch để cập nhật trạng thái người dùng
-      dispatch({ type: 'SET_USER', payload: response });
-    } catch (error) {
-      localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
-      console.error('Error fetching user:', error);
     }
+    
   };
 
   useEffect(() => {

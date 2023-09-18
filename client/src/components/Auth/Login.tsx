@@ -29,8 +29,7 @@ export default function Login() {
     event.preventDefault();
     setloading(true);
     try {
-      const loginData = await loginUser(data)
-      console.log(loginData)
+      await loginUser(data)
       setloading(false);
     } catch (error) {
       console.error('Error logging in:', error);

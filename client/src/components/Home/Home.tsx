@@ -23,27 +23,30 @@ const Home: React.FC = () => {
   const [Courses, setCourses] = useState<any[]>([])
   const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
   useEffect(() => {
-    const fetchMyCourses = async () => {
-      if(user?.isInstructor){
+    const fetchMyCoursesBasedInstructor = async () => {
         try {
-          const myCourses = await coursesApi.getMyCoursesCreated()
-          setCourses(myCourses)
-          setLoading(false);
-          console.log(myCourses)
-        } catch (error) {
-          console.error('Error fetching categories:', error);
-        }
-      }else{
-        try {
-            const myCourses = await coursesApi.getMyCoursesRegistered()
+            const myCourses = await coursesApi.getMyCoursesCreated()
             setCourses(myCourses)
             setLoading(false);
         } catch (error) {
-          console.error('Error fetching categories:', error);
+          console.error('Error fetching courses:', error);
         }
-      }
     }
-    fetchMyCourses()
+    const fetchMyCoursesBasedStudent = async () => {
+      try {
+        const myCourses = await coursesApi.getMyCoursesRegistered()
+        setCourses(myCourses)
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+  }
+    if(user?.role === 'instructor'){
+      fetchMyCoursesBasedInstructor()
+    }
+    if(user?.role === 'student'){
+      fetchMyCoursesBasedStudent()
+    }
   }, [user])
   
   return (
@@ -57,11 +60,17 @@ const Home: React.FC = () => {
           <Container className='mt-12'>
           <h4 className='text-start text-3xl font-semibold mb-9'>My course</h4>
             <Grid container spacing={4}>
-              {Courses.map((course, index) => 
-              <Grid xs={3} mb={3}  key={index}>
-                <ActionAreaCard lengthStudent={course?.students?.length} thumbnail={'http://localhost:3003'+course?.thumbnail} title={course?.title} link={'/course/'+ course?.id} description={course?.description}/>
+            {Courses.map((course, index) => (
+              <Grid item xs={3} mb={3} key={index}>
+                <ActionAreaCard
+                  lengthStudent={course?.students?.length}
+                  thumbnail={'http://localhost:3003' + course?.thumbnail}
+                  title={course?.title}
+                  link={'/course/' + course?.id}
+                  description={course?.description}
+                />
               </Grid>
-              )}
+            ))}
             </Grid>
           </Container>
         </>
@@ -82,10 +91,9 @@ const Home: React.FC = () => {
                       <TableCell align="left">Thumbnail</TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
                   {Courses.map((course, index) => 
+                  <TableBody key={index}>
                         <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <>
                               <TableCell  component="th" scope="row">{index+1}</TableCell>
                               <TableCell sx={{ maxWidth: '200px', overflow: 'hidden' }}>{course?.title}</TableCell>
                               <TableCell align="center">{course?.students?.length}</TableCell>
@@ -102,10 +110,9 @@ const Home: React.FC = () => {
                               <TableCell align="center">
                                 <img height='100px' width='100px' src={'http://localhost:3003'+course?.thumbnail}/>
                               </TableCell>
-                            </>
                         </TableRow>
-                        )}
                   </TableBody>
+                  )}
                 </Table>
               </TableContainer>
               </>
