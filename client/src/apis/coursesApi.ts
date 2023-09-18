@@ -29,6 +29,18 @@ const coursesApi = {
   async getAllCourses(): Promise<any[]> {
     const url = 'course'
     return axiosClient.get(url); 
+  },
+
+  // update khóa học
+  async updateCouse(idCourse: number, data: any) : Promise<any> {
+    const url = `course/${idCourse}/update`
+    return axiosClient.put(url, data)
+  },
+
+
+  async deleteCouse(idCourse: number) : Promise<any> {
+    const url = `course/${idCourse}/delete`
+    return axiosClient.delete(url)
   }
 };
 

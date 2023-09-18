@@ -15,7 +15,17 @@ const lessonsApi = {
   async lessonDetail(lessonId: number): Promise<any[]> {
     const url = `${lessonId}/lesson/${lessonId}`
     return axiosClient.get(url)
-  }
+  },
+
+  async updateLessonDetails(lessonId: number,data: any): Promise<any[]> { 
+    const url = `${lessonId}/lesson/${lessonId}/update`; 
+    return axiosClient.put(url, data); 
+  },
+
+  async deleteLessonDetails(lessonId: number): Promise<any[]> { 
+    const url = `${lessonId}/lesson/${lessonId}/delete`; 
+    return axiosClient.delete(url); 
+  },
 };
 
 export default lessonsApi;

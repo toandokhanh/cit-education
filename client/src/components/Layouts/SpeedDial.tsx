@@ -5,7 +5,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined';
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -23,6 +23,7 @@ import axios from 'axios';
 import coursesApi from '../../apis/coursesApi';
 import { useUser } from '../Contexts/UserContext';
 import { Menu } from '@mui/material';
+import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 
 interface BasicSpeedDialProps {
   setCourses: React.Dispatch<React.SetStateAction<any[]>>; 
@@ -34,6 +35,8 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
     const [openForm, setopenForm] = React.useState(false);
     const [categories, setCategories] = React.useState<Category[]>([]);
     const [callCoursesApi, setcallCoursesApi] = React.useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
     const [data, setData] = React.useState({
       title: '',
       description: '',
@@ -91,7 +94,7 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
       const formData = new FormData();
       formData.append('file', videoFile);
       try {
-        const response = await axios.post('http://localhost:3003/upload/image', formData, {
+        const response = await axios.post(`${HTTP_URL_SERVER_NEST}/upload/image`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -123,13 +126,15 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
     React.useEffect(() => {
       const createCourse = async () => {
         try {
-          console.log(data);
           const response = await coursesApi.createCourse(data);
-          setCourses([...courses, response]);
-          console.log(response);
+          if (location.pathname === '/home') {
+            setCourses([...courses, response]);
+          } else {
+            navigate('/home')
+          }
           handleCloseForm();
         } catch (error) {
-          console.error('Error fetching categories:', error);
+          console.error('Error fetching course:', error);
         }
       };
       if (callCoursesApi) {
@@ -224,16 +229,7 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
                   </MenuItem>
                 ))}
               </TextField>
-              <Button
-                className='w-full'
-                component="label"
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-                href="#file-upload"
-              >
-                Upload a thumbnail
-                <VisuallyHiddenInput type="file" onChange={handleImageFile} name='thumbnail' />
-              </Button>
+
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleCloseForm}>Cancel</Button>
