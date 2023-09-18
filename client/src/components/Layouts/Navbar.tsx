@@ -93,14 +93,14 @@ function Navbar({courses, setCourses }: any) {
                     }}
                   >
                     {!user?.isInstructor ? (
-                      <>
+                      <div>
                         <MenuItem >
                           <Typography textAlign="center"><Link to={'/courses'}>Courses</Link></Typography>
                         </MenuItem>
                         <MenuItem >
                           <Typography textAlign="center"><Link to={'/roadmap'}>Roadmap</Link></Typography>
                         </MenuItem>
-                      </>
+                      </div>
                     ): null}
                     
                     <MenuItem >
@@ -218,7 +218,6 @@ function Navbar({courses, setCourses }: any) {
               </Toolbar>
             </Container>
         </AppBar>
-        
       </>
   );
 }

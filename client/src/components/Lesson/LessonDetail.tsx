@@ -75,6 +75,7 @@ const LessonDetail: React.FC = () => {
       try {
         setLoading(true);
         const response: any = await lessonsApi.lessonDetail(idLesson);
+        console.log(response);
         setLessonDetail(response);
         setVideoUrl(`${HTTP_URL_SERVER_NEST}${response.video.outputPathMP4}`);
         setInfoLessson({title: response.title, content: response.content})
@@ -86,8 +87,11 @@ const LessonDetail: React.FC = () => {
     };
 
     fetchLessonDetails();
+    
   }, [idLesson]);
   
+
+
   const cleanHtml = DOMPurify.sanitize(lessonDetail?.content);
   const handleTitleChange = (event: any) => {
     const { name, value } = event.target;
@@ -105,7 +109,8 @@ const LessonDetail: React.FC = () => {
   };
   
   useEffect(() => {
-    axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail?.video?.pathSRT}`)
+    const fetchSrtFile = async () => {
+      axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail?.video?.pathSRT}`)
       .then(response => {
         const srtContent = response.data;
         const srtLines = srtContent.split('\n');
@@ -140,7 +145,12 @@ const LessonDetail: React.FC = () => {
       .catch(error => {
         console.error('Error loading SRT file:', error);
       });
-  }, []); 
+    }
+
+    if(lessonDetail?.video?.pathSRT){
+      fetchSrtFile()
+    }
+  }, [lessonDetail]); 
 
   const handleDownloadTxt = () => {
     // Tải tệp TXT từ URL và lưu thành tệp với tên cụ thể
@@ -276,8 +286,8 @@ const LessonDetail: React.FC = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                      {srtData?.map((data) : any =>
-                        <TableRow >
+                      {srtData?.map((data, index) : any =>
+                        <TableRow key={index} >
                           <TableCell component="th" scope="row">{data.index}</TableCell>
                           <TableCell component="th" scope="row">
                             <TextField
@@ -307,18 +317,20 @@ const LessonDetail: React.FC = () => {
                               onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
                             />
                           </TableCell>
-                          <div className='flex flex-col justify-around gap-20 py-2'>
-                            <AddIcon
-                                fontSize='small'
-                                color='primary'
-                                onClick={() => handleAddRow(data.index)}
-                              />
-                              <RemoveIcon
-                                fontSize='small'
-                                color='error'
-                                onClick={() => handleRemoveRow(data.index)}
-                              />
-                          </div>
+                          <TableCell>
+                            <div className='flex flex-col justify-around gap-20 py-2'>
+                              <AddIcon
+                                  fontSize='small'
+                                  color='primary'
+                                  onClick={() => handleAddRow(data.index)}
+                                />
+                                <RemoveIcon
+                                  fontSize='small'
+                                  color='error'
+                                  onClick={() => handleRemoveRow(data.index)}
+                                />
+                            </div>
+                          </TableCell>
                         </TableRow>
                     )}
                     </TableBody>

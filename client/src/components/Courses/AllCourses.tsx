@@ -30,7 +30,7 @@ const AllCourses = () => {
         <h4 className='text-start text-3xl font-semibold mb-9'>Courses</h4>
         <Grid container spacing={4}>
           {courses?.map((course) => 
-            <Grid xs={3} mb={3} key={course.id}>
+            <Grid item xs={3} mb={3} key={course.id}>
               <ActionAreaCard thumbnail={'http://localhost:3003' + course.thumbnail} title={course.title} link={'/course/' + course.id} description={course.description} lengthStudent={course?.students?.length}/>
             </Grid>
           )}

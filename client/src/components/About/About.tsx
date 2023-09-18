@@ -1,8 +1,12 @@
 import React from 'react'
+import Navbar from '../Layouts/Navbar'
 
 const About = () => {
   return (
-    <div>About</div>
+    <>
+      <Navbar/>
+      <div>About</div>
+    </>
   )
 }
 

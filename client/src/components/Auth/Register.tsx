@@ -37,8 +37,7 @@ export default function Register() {
     event.preventDefault();
     setloading(true);
     try {
-      const response = await userApi.register(data);
-      console.log(response);
+      await userApi.register(data);
       setloading(false);
       navigate('/login');
     } catch (error) {
