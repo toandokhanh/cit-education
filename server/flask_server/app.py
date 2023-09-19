@@ -10,8 +10,8 @@ app = Flask(__name__)
 @app.route('/api/updateSubtitle', methods=['POST'])
 def update_subtitle():
     data = request.get_json()
-    path_mp4 = 'server/public'+data.get('pathMP4')
-    path_srt = 'server/public'+data.get('pathSRT')
+    path_mp4 = 'server/public' + data.get('pathMP4')
+    path_srt = 'server/public' + data.get('pathSRT')
     content = data.get('data')
     with open(path_srt, 'w') as srt_file:
         for item in content:
@@ -22,12 +22,19 @@ def update_subtitle():
     try:
         path_save_video_new = path_mp4.replace('.mp4', '_subtitled.mp4')
         path_ouput_video = path_mp4.replace('.mp4', '_output.mp4')
-        os.system(f'ffmpeg -y -i {path_mp4} -filter_complex "subtitles={path_srt}" {path_save_video_new}')
-        os.remove(path_ouput_video)
-        os.rename(path_save_video_new, path_ouput_video)
-        return jsonify({'message': 'Subtitle updated successfullyyyyy'})
-    except ffmpeg.Error as e:
+        ffmpeg_command = f'ffmpeg -y -i {path_mp4} -filter_complex "subtitles={path_srt}" {path_save_video_new}'
+        result = os.system(ffmpeg_command)
+        print('result:', result)
+        if result == 0:
+            os.remove(path_ouput_video)
+            os.rename(path_save_video_new, path_ouput_video)
+            print('ok')
+            return jsonify({'message': 'Subtitle updated successfully'})
+        else:
+            return jsonify({'error_message': 'Subtitle update failed'}), 500
+    except Exception as e:
         return jsonify({'error_message': str(e)}), 500
+
 
 
 

@@ -30,7 +30,7 @@ export class AppController {
       throw new HttpException('No file uploaded.', HttpStatus.BAD_REQUEST);
     }
     try {
-      const uploadDir = path.join(__dirname, '..', 'public', 'images'); // Đường dẫn đến thư mục lưu trữ
+      const uploadDir = path.join(__dirname, '..', 'public', 'images'); 
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
@@ -60,7 +60,7 @@ export class AppController {
       // const projectRootPath = path.join(__dirname, '..');
       // const publicFolderPath = path.join(projectRootPath, 'public');
       // const userFolderPath = path.join(publicFolderPath, userName);
-      const uploadDir = path.join(__dirname, '..', 'public', 'videos'); // Đường dẫn đến thư mục lưu trữ
+      const uploadDir = path.join(__dirname, '..', 'public', 'videos'); 
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }

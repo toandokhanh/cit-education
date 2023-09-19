@@ -87,8 +87,9 @@ const CourseDetail = () => {
             const data = {
               title: courseDetail?.title,
               description: courseDetail?.description,
-              category:courseDetail?.category
+              category:courseDetail?.category?.id || courseDetail?.category
             }
+            console.log(data)
             await coursesApi.updateCouse(params.idCourse, data);
             navigate('/home')
           } catch (error) {

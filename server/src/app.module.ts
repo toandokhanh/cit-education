@@ -11,7 +11,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { LanguageModule } from './language/language.module';
 import { AlgorithmModule } from './algorithm/algorithm.module';
-
 @Module({
   imports: [
     UserModule, 

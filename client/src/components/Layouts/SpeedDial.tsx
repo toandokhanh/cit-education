@@ -229,7 +229,16 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
                   </MenuItem>
                 ))}
               </TextField>
-
+              <Button
+                className='w-full'
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+                href="#file-upload"
+              >
+                Upload a thumbnail
+                <VisuallyHiddenInput type="file" onChange={handleImageFile} name='thumbnail' />
+              </Button>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleCloseForm}>Cancel</Button>
