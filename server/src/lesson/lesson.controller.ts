@@ -106,22 +106,15 @@ export class LessonController {
   }
 
 
+
   @UseGuards(AuthGuard("instructor"))
   @Post('updatesrtfile')
   async updateSubtitle(@Body() data: any) {
     try {
-      const flaskUrl = UpdateSubtitleflaskApiUrl ; // Thay thế bằng URL của Flask API
-      // Gửi yêu cầu POST đến Flask API
-      const response = await axios.post(flaskUrl, data);
-
-      // Xử lý phản hồi từ Flask nếu cần
-      // const flaskResponse = response.data;
-      console.log(response)
-      // Trả về phản hồi cho client của NestJS
-      return { 
-        message: 'Subtitle updated successfully'};
-    } catch (error) {
-      // Xử lý lỗi nếu có
+      const flaskUrl = UpdateSubtitleflaskApiUrl ; 
+      await axios.post(flaskUrl, data);
+      return { message: 'Subtitle updated successfully'};}
+    catch (error) {
       console.error('Error updating subtitle:', error);
       throw new InternalServerErrorException('Subtitle update failed'); // Hoặc sử dụng exception phù hợp
     }

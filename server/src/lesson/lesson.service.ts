@@ -100,9 +100,4 @@ export class LessonService {
         return await this.lessonrepository.delete(idLesson);
     }
 
-
-    /// update subtitle
-    async updateSubtitle(data: any): Promise<any> {
-        return data
-    }
 }

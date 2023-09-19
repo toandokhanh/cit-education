@@ -100,8 +100,8 @@ export default function StepsCreateLesson() {
       const createLesson = async () => {
         try {
           setLoading(true);
-          const response : any = await lessonsApi.createLesson(courseId, data);
-          navigate(`/course/${response?.id}`)
+          await lessonsApi.createLesson(courseId, data);
+          navigate(`/home`)
         } catch (error) {
           console.error('Error fetching categories:', error);
           setLoading(false);
@@ -124,7 +124,6 @@ export default function StepsCreateLesson() {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
   return (
@@ -223,7 +222,7 @@ export default function StepsCreateLesson() {
                 </Container>
                 <Snackbar
                   open={open}
-                  autoHideDuration={6000}
+                  autoHideDuration={3000}
                   onClose={handleClose}
                   message={message}
                 />

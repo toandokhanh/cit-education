@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Snackbar } from '@mui/material';
 import ReactPlayer from 'react-player';
 import Navbar from '../Layouts/Navbar';
 import Footer from '../Layouts/Footer';
@@ -14,7 +14,6 @@ import { saveAs } from 'file-saver';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
-
 const LessonDetail: React.FC = () => {
   const navigate = useNavigate();
   const [srtData, setSrtData] = useState<any[]>([]);
@@ -24,13 +23,16 @@ const LessonDetail: React.FC = () => {
   const [deleteLesson, setDeleteLesson] = useState<boolean>(false);
   const [lessonDetail, setLessonDetail] = useState<any>();
   const [callApiUpdateSubtitle, setCallApiUpdateSubtitle] = useState<boolean>(false);
+  const [open, setOpen] = useState(false); // dialog khi xóa lesson
+  const [openMessage, setOpenMessage] = useState(false);
+  const [message, setMessage] = useState('Error message');
   const [infoLesson, setInfoLessson] = useState({
     title: '',
     content: '',
   });
   const idLesson: number | any = useParams().idLesson;
   const { user } = useUser();
-  const [open, setOpen] = React.useState(false);
+  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,7 +40,14 @@ const LessonDetail: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
+  }; 
+  const handleMessageClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenMessage(false);
   };
+
   useEffect(() => {
     const fetchUpdateLesson = async () => {
       try {
@@ -48,7 +57,6 @@ const LessonDetail: React.FC = () => {
         });
       } catch (error) {
         console.error('Error fetching lesson updations:', error);
-        setLoading(false);
       }
     };
     
@@ -58,7 +66,6 @@ const LessonDetail: React.FC = () => {
         navigate('/home')
       } catch (error) {
         console.error('Error fetching lesson delete:', error);
-        setLoading(false);
       }
     };
     if(updateLesson){
@@ -75,18 +82,19 @@ const LessonDetail: React.FC = () => {
   useEffect(() => {
     const fetchUpdateSubtitle = async () => {
       try {
+        setLoading(true)
         const data = {
           pathMP4: lessonDetail?.video?.pathMP4,
           pathSRT: lessonDetail?.video?.pathSRT,
           data: srtData
         }
         const response: any = await lessonsApi.updateSubtitle(data)
-        console.log('response')
-        console.log(response)
         setVideoUrl(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.outputPathMP4}?rand=${Math.random()}`);
+        setLoading(false)
+        setMessage(response.message);
+        setOpenMessage(true);
       } catch (error) {
         console.error('Error fetching subtitle updations:', error);
-        setLoading(false);
       }
     };
     
@@ -101,7 +109,6 @@ const LessonDetail: React.FC = () => {
       try {
         setLoading(true);
         const response: any = await lessonsApi.lessonDetail(idLesson);
-        console.log(response);
         setLessonDetail(response);
         setVideoUrl(`${HTTP_URL_SERVER_NEST}${response.video.outputPathMP4}`);
         setInfoLessson({title: response.title, content: response.content})
@@ -165,25 +172,24 @@ const LessonDetail: React.FC = () => {
             }
           }
         }
-
         setSrtData(srtDataArray);
       })
       .catch(error => {
         console.error('Error loading SRT file:', error);
       });
     }
-    console.log(lessonDetail?.video?.pathSRT)
     if(lessonDetail?.video?.pathSRT){
+      setLoading(true)
       fetchSrtFile()
+      setLoading(false)
     }
   }, [lessonDetail]); 
 
   const handleDownloadTxt = () => {
-    // Tải tệp TXT từ URL và lưu thành tệp với tên cụ thể
     axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.pathTXT}`)
       .then(response => {
         const blob = new Blob([response.data], { type: 'text/plain;charset=utf-8' });
-        saveAs(blob, 'lesson.txt');
+        saveAs(blob, `${lessonDetail.title}lesson.txt`);
       })
       .catch(error => {
         console.error('Error downloading TXT file:', error);
@@ -227,8 +233,8 @@ const LessonDetail: React.FC = () => {
   return (
     <>
       <Navbar />
+      {loading && <Progress />}
       <Container sx={{ marginBottom: '30rem' }}>
-        {loading && <Progress />}
         {lessonDetail && (
           <>
           <br />
@@ -255,10 +261,13 @@ const LessonDetail: React.FC = () => {
             </Grid>
             ): (
               <>
+              
+              
               <Grid container spacing={2}>
-                {/* grid 1 */}
-                <Grid item xs={12} md={7} sx={{ margin: '0 auto' }}>
-                  <Box>
+                {/* GRID 1 */}
+                <Grid item xs={12} md={6} sx={{ margin: '0 auto'}}>
+                  <Box sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
+                  <p className='font-semibold text-start'>Video</p>
                       <ReactPlayer
                       url={videoUrl}
                       width="100%"
@@ -269,7 +278,101 @@ const LessonDetail: React.FC = () => {
                       />
                   </Box>
                 </Grid>
-                <Grid item xs={12} md={5}>
+                {/* GRID 2 */}
+                <Grid item xs={12} md={6} sx={{ margin: '0 auto', border:'1px black solid' }}>
+                <Box sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
+                  <p className='font-semibold text-start'>Subtitle contents</p>
+                  <TableContainer component={Paper}>
+                    <Table  aria-label="caption table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Index</TableCell>
+                          <TableCell>Start time</TableCell>
+                          <TableCell align="left">End time</TableCell>
+                          <TableCell align="left">Text</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                      {srtData.map((data, index)=>
+                        <TableRow key={index} >
+                          <TableCell component="th" scope="row">{data.index}</TableCell>
+                          <TableCell component="th" scope="row">
+                            {/* <TextField
+                              multiline={false}
+                              value={data.startTime}
+                              id="filled-hidden-label-small"
+                              variant="filled"
+                              size="small"
+                              onChange={(e) => handleInputChange(data.index-1, 'startTime', e.target.value)}
+                            /> */}
+                            <input 
+                              className='w-full' 
+                              style={{borderRadius: '5px', border: '1px solid black' }}
+                              value={data.startTime}
+                              onChange={(e) => handleInputChange(data.index-1, 'startTime', e.target.value)}
+                              />
+                          </TableCell>
+                          <TableCell align="left">
+                            {/* <TextField
+                                multiline={false}
+                                value={data.endTime}
+                                id="filled-hidden-label-small"
+                                variant="filled"
+                                size="small"
+                                onChange={(e) => handleInputChange(data.index-1, 'endTime', e.target.value)}
+                              /> */}
+                              <input 
+                                className='w-full' 
+                                style={{borderRadius: '5px', border: '1px solid black' }}
+                                value={data.endTime}
+                                onChange={(e) => handleInputChange(data.index-1, 'endTime', e.target.value)}
+                                />
+                          </TableCell>
+                          <TableCell align="left">
+                            <textarea 
+                              style={{borderRadius: '5px', border: '1px solid black' }} 
+                              rows={3}  
+                              name="postContent"
+                              value={data.text}
+                              onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
+                              />
+                            {/* <TextField
+                              id="standard-multiline-static"
+                              value={data.text}
+                              multiline={false}
+                              rows={3}
+                              variant="filled"
+                              onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
+                            /> */}
+                          </TableCell>
+                          <TableCell>
+                            <div className='flex flex-col justify-around gap-20 py-2'>
+                              <AddIcon
+                                  fontSize='small'
+                                  color='primary'
+                                  onClick={() => handleAddRow(data.index)}
+                                />
+                                <RemoveIcon
+                                  fontSize='small'
+                                  color='error'
+                                  onClick={() => handleRemoveRow(data.index)}
+                                />
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                    )}
+                    </TableBody>
+                    </Table>
+                    <div className='flex justify-center gap-5 my-3'>
+                      <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={() => setCallApiUpdateSubtitle(true)}>Update subtitle</Button>
+                      <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={handleDownloadTxt}>Dowload TXT file</Button>
+                      <Button variant="outlined" sx={{ margin: '1rem 0' }}><Link to={`${HTTP_URL_SERVER_NEST}${lessonDetail.video.pathSRT}`}>Dowload SRT file</Link></Button>
+                    </div>
+                  </TableContainer>
+                  </Box>
+                </Grid>
+                
+                <Grid item xs={12} md={6}>
                 <div className='text-start my-3 '>
                       <p className='font-semibold'>
                         Lesson title
@@ -321,83 +424,19 @@ const LessonDetail: React.FC = () => {
                     </div>
                 </Grid>
                 {/* grid 2 */}
-                <Grid item xs={12} md={12} sx={{ margin: '0 auto', marginTop:'2rem' }}>
-                  <Box sx={{ height:'100%', width: '100%' }}>
-                  <p className='font-semibold text-start'>Subtitle contents</p>
-                  <TableContainer component={Paper}>
-                    <Table  aria-label="caption table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Index</TableCell>
-                          <TableCell>Start time</TableCell>
-                          <TableCell align="left">End time</TableCell>
-                          <TableCell align="left">Text</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                      {srtData?.map((data, index) : any =>
-                        <TableRow key={index} >
-                          <TableCell component="th" scope="row">{data.index}</TableCell>
-                          <TableCell component="th" scope="row">
-                            <TextField
-                              value={data.startTime}
-                              id="filled-hidden-label-small"
-                              variant="filled"
-                              size="small"
-                              onChange={(e) => handleInputChange(data.index-1, 'startTime', e.target.value)}
-                            />
-                          </TableCell>
-                          <TableCell align="left">
-                            <TextField
-                                value={data.endTime}
-                                id="filled-hidden-label-small"
-                                variant="filled"
-                                size="small"
-                                onChange={(e) => handleInputChange(data.index-1, 'endTime', e.target.value)}
-                              />
-                          </TableCell>
-                          <TableCell align="left">
-                            <TextField
-                              id="standard-multiline-static"
-                              value={data.text}
-                              multiline
-                              rows={3}
-                              variant="filled"
-                              onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <div className='flex flex-col justify-around gap-20 py-2'>
-                              <AddIcon
-                                  fontSize='small'
-                                  color='primary'
-                                  onClick={() => handleAddRow(data.index)}
-                                />
-                                <RemoveIcon
-                                  fontSize='small'
-                                  color='error'
-                                  onClick={() => handleRemoveRow(data.index)}
-                                />
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                    )}
-                    </TableBody>
-                    </Table>
-                    <div className='flex justify-center gap-5 my-3'>
-                      <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={updateSubtitle}>Update subtitle</Button>
-                      <Button variant="outlined" sx={{ margin: '1rem 0' }} onClick={handleDownloadTxt}>Dowload TXT file</Button>
-                      <Button variant="outlined" sx={{ margin: '1rem 0' }}><Link to={`${HTTP_URL_SERVER_NEST}${lessonDetail.video.pathSRT}`}>Dowload SRT file</Link></Button>
-                    </div>
-                  </TableContainer>
-                  </Box>
-                </Grid>
+                
               </Grid>
               </>
             )}
           </>
         )}
         
+        <Snackbar
+          open={openMessage}
+          autoHideDuration={3000}
+          onClose={handleMessageClose}
+          message={message}
+        />
       </Container>
       <Footer />
     </>
@@ -406,60 +445,3 @@ const LessonDetail: React.FC = () => {
 
 export default LessonDetail;
 
-
-// {
-//   {
-//     endTime: "00:00:08,448"
-//     index: 1
-//     startTime: "00:00:00,256"
-//     text: "Track video chính là cái phần là"
-//   },
-//   {
-//     endTime: "00:00:00,000"
-//     index: 2
-//     startTime: "00:00:00,000"
-//     text: "0"
-//   },
-//   {
-//     endTime: "00:00:12,448"
-//     index: 3
-//     startTime: "00:00:17,256"
-//     text: "Track video chính là cái phần là"
-//   }
-// }
-// {
-//   {
-//     endTime: "00:00:08,448"
-//     index: 1
-//     startTime: "00:00:00,256"
-//     text: "đây là row có index là 1"
-//   },
-//   {
-//     endTime: "00:00:12,448"
-//     index: 2
-//     startTime: "00:00:17,256"
-//     text: "đây là row có index là 2"
-//   },
-//   {
-//     endTime: "00:00:12,448"
-//     index: 3
-//     startTime: "00:00:17,256"
-//     text: "đây là row có index là 3"
-//   }
-// }
-
-
-// {
-//   {
-//     endTime: "00:00:08,448"
-//     index: 1
-//     startTime: "00:00:00,256"
-//     text: "đây là row có index là 1"
-//   },
-//   {
-//     endTime: "00:00:12,448"
-//     index: 2
-//     startTime: "00:00:17,256"
-//     text: "đây là row có index là 3"
-//   }
-// }
