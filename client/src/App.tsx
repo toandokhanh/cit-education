@@ -7,10 +7,12 @@ import Register from './components/Auth/Register';
 import Common from './components/Common/Common';
 import { UserProvider } from './components/Contexts/UserContext';
 import CourseDetail from './components/Courses/CourseDetail';
-import AllCourses from './components/Courses/AllCourses';
 import StepsCreateLesson from './components/Lesson/Instructor/StepsCreateLesson';
 import LessonDetail from './components/Lesson/LessonDetail';
 import About from './components/About/About';
+import MyCourseDetail from './components/Courses/MyCourseDetail';
+import UserDetail from './components/Auth/UserDetail';
+import AllCourses from './components/Courses/AllCourses';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
             <Route path='/lesson/create' element={<StepsCreateLesson />} />
             <Route path='/lesson/:idLesson/detail' element={<LessonDetail />} />
             <Route path='/course/:idCourse' element={<CourseDetail />} />
+            <Route path='/myCourses/:idCourse' element={<MyCourseDetail />} />
+            <Route path='/user/:email' element={<UserDetail />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/about' element={<About />} />

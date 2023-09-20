@@ -22,6 +22,11 @@ const userApi = {
     const url = 'user/me'; 
     return axiosClient.get(url); 
   },
+
+  async getUserDetail(email: string): Promise<any> { // http://localhost:3003/user/instructor
+    const url = `user/${email}`; 
+    return axiosClient.get(url); 
+  },
 };
 
 export default userApi;

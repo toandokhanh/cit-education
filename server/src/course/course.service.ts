@@ -119,4 +119,5 @@ export class CourseService {
         const courses = await this.courseRepository.find({where: {students:{id: userId}}})
         return courses
     }
+
 }

@@ -256,7 +256,9 @@ const LessonDetail: React.FC = () => {
                 )}
               </Grid>
               <Grid item xs={12} md={12}>
-                <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
+                <p className='text-start text-2xl font-medium'>Title: {lessonDetail?.title}</p>
+                <p className='text-start text-2xl font-medium'>Lesson contents: </p>
+                <div className='text-start' dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
               </Grid>
             </Grid>
             ): (
