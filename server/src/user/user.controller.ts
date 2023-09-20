@@ -1,4 +1,4 @@
-import { Body, ConflictException, Controller, Get, Post, UseGuards, Req} from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, Post, UseGuards, Req, Param} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt';
@@ -20,8 +20,6 @@ export class UserController {
     async detailUser(@Req() request: Request){
         return request.user
     }
-
-
 
     @Get()
     async getUser()
@@ -45,6 +43,13 @@ export class UserController {
     async login(@Body() user: LoginUserDTO)
     {
         return await this.userService.loginUser(user);
+    }
+
+
+    @Get('/:email')
+    async getUserDetail(@Param('email') email: string)
+    {
+        return await this.userService.getUserDetails(email);
     }
 
 }

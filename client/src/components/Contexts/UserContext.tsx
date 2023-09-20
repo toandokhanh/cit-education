@@ -56,7 +56,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.accessToken);
       }
       await loadUser()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching user:', error);
     }
   };

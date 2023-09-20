@@ -42,6 +42,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entitys/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { ILike } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -91,5 +92,20 @@ export class UserService {
         return {
           accessToken: jwt,
       }
+  }
+
+
+  async getUserDetails(email: string){
+    try {
+      console.log(email);
+      const user = await this.userRepository.findOne({  
+        where: { email: ILike(`%${email}%`) },
+        select: ["id", "email", "fullname", "gender", "role", "createdAt", "updatedAt"]
+      });
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 }

@@ -79,5 +79,5 @@ export class CourseController {
         const userId = user.userId
         return await this.coursesService.getMyCoursesRegistered(userId)
     }
-   
+
 }

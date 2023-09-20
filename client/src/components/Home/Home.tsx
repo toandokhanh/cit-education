@@ -5,7 +5,7 @@
 // import { Category } from '../../types/types';
 import Footer from '../Layouts/Footer';
 import { useUser } from '../Contexts/UserContext';
-import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
+import { HTTP_URL_SERVER_NEST, LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
 import { Link, Navigate } from 'react-router-dom';
 import Navbar from '../Layouts/Navbar';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import Container from '@mui/material/Container';
 import ActionAreaCard from '../Courses/ActionAreaCard';
 import InfoIcon from '@mui/icons-material/Info';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import AllCourses from '../Courses/AllCourses';
 
 
 const Home: React.FC = () => {
@@ -37,6 +38,7 @@ const Home: React.FC = () => {
       try {
         const myCourses = await coursesApi.getMyCoursesRegistered()
         setCourses(myCourses)
+        console.log(myCourses)
         setLoading(false);
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -64,8 +66,7 @@ const Home: React.FC = () => {
             {Courses.map((course, index) => (
               <Grid item xs={3} mb={3} key={index}>
                 <ActionAreaCard
-                  lengthStudent={course?.students?.length}
-                  thumbnail={'http://localhost:3003' + course?.thumbnail}
+                  thumbnail={HTTP_URL_SERVER_NEST+ course?.thumbnail}
                   title={course?.title}
                   link={'/course/' + course?.id}
                   description={course?.description}
@@ -112,7 +113,7 @@ const Home: React.FC = () => {
                                 <img height='100px' width='100px' src={'http://localhost:3003'+course?.thumbnail}/>
                               </TableCell>
                               <TableCell align="center">
-                                <Link to={'/course/'+course?.id} ><EditNoteIcon fontSize='small' color='primary'/></Link>
+                                <Link to={'/myCourses/'+course?.id} ><EditNoteIcon fontSize='small' color='primary'/></Link>
                               </TableCell>
                         </TableRow>
                   </TableBody>

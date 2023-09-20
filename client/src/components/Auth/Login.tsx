@@ -15,10 +15,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
 import { useUser } from '../Contexts/UserContext';
 import Progress from '../Layouts/Progress';
+import { useLocation } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function Login() { 
+  const location = useLocation();
   const [loading, setloading] = useState(false);
   const { loginUser } = useUser();
   const [data, setData] = useState({
@@ -29,7 +31,8 @@ export default function Login() {
     event.preventDefault();
     setloading(true);
     try {
-      await loginUser(data)
+      const response = await loginUser(data)
+      console.log(response)
       setloading(false);
     } catch (error) {
       console.error('Error logging in:', error);
@@ -56,6 +59,9 @@ export default function Login() {
       <br />
       <br />
       <Container component="main" maxWidth="xs">
+      {location.state && location.state.message && (
+      <p>{location.state.message}</p>
+    )}
         <CssBaseline />
         <Box
           sx={{

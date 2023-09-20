@@ -93,16 +93,13 @@ function Navbar({courses, setCourses }: any) {
                     }}
                   >
                     {!user?.isInstructor ? (
-                      <div>
-                        <MenuItem >
-                          <Typography textAlign="center"><Link to={'/courses'}>Courses</Link></Typography>
-                        </MenuItem>
-                        <MenuItem >
-                          <Typography textAlign="center"><Link to={'/roadmap'}>Roadmap</Link></Typography>
-                        </MenuItem>
-                      </div>
+                      <MenuItem >
+                        <Typography textAlign="center"><Link to={'/roadmap'}>Roadmap</Link></Typography>
+                      </MenuItem>
                     ): null}
-                    
+                    <MenuItem >
+                      <Typography textAlign="center"><Link to={'/courses'}>Courses</Link></Typography>
+                    </MenuItem>
                     <MenuItem >
                       <Typography textAlign="center"><Link to={'/blog'}>Blog</Link></Typography>
                     </MenuItem>
@@ -135,14 +132,13 @@ function Navbar({courses, setCourses }: any) {
                     {!user?.isInstructor ? (
                       <>
                         <Button sx={{ my: 2, color: 'white', display: 'block' }}>
-                          <Link to={'/courses'}>Courses</Link>
-                        </Button>
-                        <Button sx={{ my: 2, color: 'white', display: 'block' }}>
                           <Link to={'/roadmap'}>Roadmap</Link>
                         </Button>
                       </>
                     ): null}
-                    
+                    <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                        <Link to={'/courses'}>Courses</Link>
+                    </Button>
                     <Button sx={{ my: 2, color: 'white', display: 'block' }}>
                       <Link to={'/blog'}>Blog</Link>
                     </Button>
