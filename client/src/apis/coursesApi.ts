@@ -41,7 +41,13 @@ const coursesApi = {
   async deleteCouse(idCourse: number) : Promise<any> {
     const url = `course/${idCourse}/delete`
     return axiosClient.delete(url)
+  },
+
+  async registerCourse(idCourse: number) : Promise<any> {
+    const url = `course/${idCourse}/enrollment`
+    return axiosClient.get(url)
   }
+    
 };
 
 export default coursesApi;

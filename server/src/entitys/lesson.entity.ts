@@ -1,8 +1,9 @@
 
 
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Video } from "./video.entity";
 import { Course } from "./course.entity";
+import { Enrollment } from "./enrollment.entity";
 
 
 
@@ -23,4 +24,7 @@ export class Lesson {
 
     @ManyToOne(() => Course, course => course.lessons)
     course : Course;
+
+    @OneToMany(() => Enrollment, enrollment => enrollment.course)
+    enrollments: Enrollment[];
 }

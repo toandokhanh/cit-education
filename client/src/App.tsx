@@ -13,6 +13,7 @@ import About from './components/About/About';
 import MyCourseDetail from './components/Courses/MyCourseDetail';
 import UserDetail from './components/Auth/UserDetail';
 import AllCourses from './components/Courses/AllCourses';
+import TestT from './components/Lesson/TestT';
 
 function App() {
   return (
@@ -20,11 +21,12 @@ function App() {
       <UserProvider>
         <BrowserRouter>
           <Routes>
+            {/* <Route path='/' element={<Common />} /> */}
             <Route path='/' element={<Common />} />
             <Route path='/home' element={<Home />} />
             <Route path='/courses' element={<AllCourses />} />
             <Route path='/lesson/create' element={<StepsCreateLesson />} />
-            <Route path='/lesson/:idLesson/detail' element={<LessonDetail />} />
+            <Route path='/course/:idCourse/lesson/:idLesson/detail' element={<LessonDetail />} />
             <Route path='/course/:idCourse' element={<CourseDetail />} />
             <Route path='/myCourses/:idCourse' element={<MyCourseDetail />} />
             <Route path='/user/:email' element={<UserDetail />} />

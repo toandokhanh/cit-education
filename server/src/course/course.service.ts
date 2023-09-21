@@ -21,13 +21,25 @@ export class CourseService {
         private lessonRepository: Repository<Lesson>,
       ) {}
 
-    async getAllCourses() {
-        const courses = await this.courseRepository.find()
-        return courses
+      async getAllCourses() {
+        const courses = await this.courseRepository.find({
+            order: {
+                id: 'ASC'
+            }
+        });
+        return courses;
     }
     
     async getDetailCourse(id: number): Promise<Course>{
         // const course = await this.courseRepository.findOne({where: {id}})
+        // const course = await this.courseRepository
+        //     .createQueryBuilder('course')
+        //     .leftJoinAndSelect('course.category', 'category')
+        //     .leftJoinAndSelect('course.creator', 'creator')
+        //     .leftJoinAndSelect('course.students', 'students')
+        //     .leftJoinAndSelect('course.lessons', 'lesson')
+        //     .where('course.id = :id', { id: id })
+        //     .getOne();
         const course = await this.courseRepository
             .createQueryBuilder('course')
             .leftJoinAndSelect('course.category', 'category')
@@ -35,6 +47,7 @@ export class CourseService {
             .leftJoinAndSelect('course.students', 'students')
             .leftJoinAndSelect('course.lessons', 'lesson')
             .where('course.id = :id', { id: id })
+            .orderBy('lesson.id', 'ASC') // Sắp xếp các bài học theo ID từ bé đến lớn
             .getOne();
         if (!course) {
             throw new NotFoundException('Course not found');
@@ -83,6 +96,7 @@ export class CourseService {
     async enrollCourse(idCourse: number,idUser: number){ 
         const user = await this.userRepository.findOne({where: {id: idUser}})
         const course = await this.courseRepository.findOne({where: {id: idCourse}})
+        course.lessons.sort((a : any, b : any) => a.id - b.id);
         if(!user || !course){ 
             throw new NotFoundException('Informations not found');
         }
@@ -94,11 +108,20 @@ export class CourseService {
     }
 
 
-    async getMyCourse(userId : number): Promise<Course[]>
-    { 
-        const courses = await this.courseRepository.find({where: {creator:{id: userId}}})
-        return courses
+    async getMyCourse(userId: number): Promise<Course[]> {
+        const courses = await this.courseRepository.find({
+            where: {
+                creator: {
+                    id: userId
+                }
+            },
+            order: {
+                id: 'ASC' 
+            }
+        });
+        return courses;
     }
+    
 
     async updateCourse(idCourse : number, data: any): Promise<UpdateResult> {
         return await this.courseRepository.update(idCourse, data);
