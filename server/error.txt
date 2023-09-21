@@ -55,3 +55,26 @@ PayloadTooLargeError: request entity too large
     at Function.process_params (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\express\lib\router\index.js:346:12)
     at next (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\express\lib\router\index.js:280:10)
     at cors (D:\Work\CTU\CT263-NLN\Code\CIT-Education\server\node_modules\cors\lib\index.js:188:7)
+
+
+
+
+
+
+
+
+
+21/09/2023
+
+    [Nest] 1416  - 09/21/2023, 11:08:36 PM   ERROR [ExceptionsHandler] Cannot read properties of undefined (reading 'tablePath')
+TypeError: Cannot read properties of undefined (reading 'tablePath')
+    at /mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/query-builder/SelectQueryBuilder.ts:2365:54
+    at Array.map (<anonymous>)
+    at SelectQueryBuilder.createJoinExpression (/mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/query-builder/SelectQueryBuilder.ts:2257:57)
+    at SelectQueryBuilder.getQuery (/mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/query-builder/SelectQueryBuilder.ts:87:21)
+    at SelectQueryBuilder.getQueryAndParameters (/mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/query-builder/QueryBuilder.ts:507:28)
+    at SelectQueryBuilder.loadRawResults (/mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/query-builder/SelectQueryBuilder.ts:3745:40)
+    at SelectQueryBuilder.executeEntitiesAndRawResults (/mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/query-builder/SelectQueryBuilder.ts:3541:37)
+    at SelectQueryBuilder.getRawAndEntities (/mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/query-builder/SelectQueryBuilder.ts:1670:40)
+    at SelectQueryBuilder.getMany (/mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/query-builder/SelectQueryBuilder.ts:1760:36)
+    at EntityManager.find (/mnt/d/Work/CTU/CT263-NLN/Code/CIT-Education/server/src/entity-manager/EntityManager.ts:1083:14)

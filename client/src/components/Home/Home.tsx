@@ -21,7 +21,7 @@ import AllCourses from '../Courses/AllCourses';
 
 const Home: React.FC = () => {
   const { user } = useUser();
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [Courses, setCourses] = useState<any[]>([])
   const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
   useEffect(() => {
@@ -61,19 +61,24 @@ const Home: React.FC = () => {
       {!user?.isInstructor ? (
         <>
           <Container className='mt-12'>
-          <h4 className='text-start text-3xl font-semibold mb-9'>My course</h4>
-            <Grid container spacing={4}>
-            {Courses.map((course, index) => (
-              <Grid item xs={3} mb={3} key={index}>
-                <ActionAreaCard
-                  thumbnail={HTTP_URL_SERVER_NEST+ course?.thumbnail}
-                  title={course?.title}
-                  link={'/course/' + course?.id}
-                  description={course?.description}
-                />
+          {Courses.length > 0 ? (
+            <div>
+              <h4 className='text-start text-3xl font-semibold mb-9'>My course</h4>
+              <Grid container spacing={4}>
+              {Courses.map((course, index) => (
+                <Grid item xs={3} mb={3} key={index}>
+                  <ActionAreaCard
+                    thumbnail={HTTP_URL_SERVER_NEST+ course?.thumbnail}
+                    title={course?.title}
+                    link={'/course/' + course?.id}
+                    description={course?.description}
+                  />
+                </Grid>
+              ))}
               </Grid>
-            ))}
-            </Grid>
+            </div>
+          ): (<h4 className='text-start text-3xl font-semibold mb-[28rem]'>You don't have any courses yet</h4>)}
+          
           </Container>
         </>
       ) : (
@@ -103,7 +108,7 @@ const Home: React.FC = () => {
                                 {/* map all lessons */}
                                 {course?.lessons?.map((lesson: { id: number, title: any; }) =>
                                   <div className='mb-3 max-h-5 overflow-hidden text-[blue]' key={lesson.id}>
-                                    <Link to={'/lesson/'+ lesson.id+'/detail'}>{lesson.title}</Link>
+                                    <Link to={'/course/'+course?.id+'/lesson/'+ lesson.id+'/detail'}>{lesson.title}</Link>
                                     <br />
                                   </div> 
                                 )}

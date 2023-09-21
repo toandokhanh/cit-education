@@ -11,6 +11,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { LanguageModule } from './language/language.module';
 import { AlgorithmModule } from './algorithm/algorithm.module';
+import { EnrollmentModule } from './enrollment/enrollment.module';
 @Module({
   imports: [
     UserModule, 
@@ -25,6 +26,7 @@ import { AlgorithmModule } from './algorithm/algorithm.module';
     }),
     LanguageModule,
     AlgorithmModule,
+    EnrollmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

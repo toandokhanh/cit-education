@@ -15,6 +15,7 @@ export class CourseController {
     // get all courses
     @Get()
     async getAllCourses(){
+        console.log('hello');
         return await this.coursesService.getAllCourses()
     }
 

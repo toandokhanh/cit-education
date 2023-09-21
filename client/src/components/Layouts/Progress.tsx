@@ -7,8 +7,8 @@ export default function Progress() {
   return (
     <div
       style={{ position: 'absolute',
-      width: '999999999px',
-      height: '999999999px',
+      width: '100%',
+      height: '100%',
       overflowX: 'hidden',
       overflowY: 'hidden',
       backgroundColor: 'rgba(0, 0, 0, 0.2)',

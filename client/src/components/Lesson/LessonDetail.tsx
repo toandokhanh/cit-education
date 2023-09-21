@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Snackbar } from '@mui/material';
+import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Snackbar, List, Divider, Toolbar, ListItem, ListItemButton, ListItemText, ListItemIcon } from '@mui/material';
 import ReactPlayer from 'react-player';
 import Navbar from '../Layouts/Navbar';
 import Footer from '../Layouts/Footer';
@@ -14,6 +14,13 @@ import { saveAs } from 'file-saver';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
+import coursesApi from '../../apis/coursesApi';
+import LessonsLists from './LessonsItems';
+import TestT from './TestT';
+
+const drawerWidth = 400;
+
+
 const LessonDetail: React.FC = () => {
   const navigate = useNavigate();
   const [srtData, setSrtData] = useState<any[]>([]);
@@ -22,18 +29,24 @@ const LessonDetail: React.FC = () => {
   const [updateLesson, setUploadLesson] = useState<boolean>(false);
   const [deleteLesson, setDeleteLesson] = useState<boolean>(false);
   const [lessonDetail, setLessonDetail] = useState<any>();
+  const [courseDetail, setCourseDetail] = useState<any>();
   const [callApiUpdateSubtitle, setCallApiUpdateSubtitle] = useState<boolean>(false);
   const [open, setOpen] = useState(false); // dialog khi xóa lesson
   const [openMessage, setOpenMessage] = useState(false);
   const [message, setMessage] = useState('Error message');
+  const [mobileOpen, setMobileOpen] = React.useState(false);
   const [infoLesson, setInfoLessson] = useState({
     title: '',
     content: '',
   });
   const idLesson: number | any = useParams().idLesson;
+  const idCourse: number | any = useParams().idCourse;
   const { user } = useUser();
-  
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -119,9 +132,24 @@ const LessonDetail: React.FC = () => {
       }
     };
 
+
+    const fetchCourseDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await coursesApi.courseDetails(idCourse);
+        console.log(response);
+        setCourseDetail(response)
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching course details:', error);
+        setLoading(false);
+      }
+    };
+    
+    fetchCourseDetails();
     fetchLessonDetails();
     
-  }, [idLesson]);
+  }, [idLesson, idCourse]);
   
 
 
@@ -229,7 +257,26 @@ const LessonDetail: React.FC = () => {
     updatedSrtData[index][field] = value;
     setSrtData(updatedSrtData);
   };
+  const drawer = (
+    <div>
+      <Toolbar />
+      <p className='text-start ml-3 mb-2 font-medium'>Lesson contents</p>
+      <Divider />
+      <List>
+        {/* fetch lesson */}
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                Bài 001
+              </ListItemIcon>
+              <ListItemText  />
+            </ListItemButton>
+          </ListItem>
+          <Divider />
 
+      </List>
+    </div>
+  );
   return (
     <>
       <Navbar />
@@ -238,33 +285,12 @@ const LessonDetail: React.FC = () => {
         {lessonDetail && (
           <>
           <br />
-          <br />
-          <br />
-            {/* <Typography variant="h5">{lessonDetail.title}</Typography> */}
             {!user?.isInstructor ? (
-              <Grid container spacing={1}>
-              <Grid item xs={12} md={8}>
-                {lessonDetail && 
-                (
-                  <ReactPlayer
-                  url={`${HTTP_URL_SERVER_NEST}${lessonDetail.video.outputPathMP4}`}
-                  width="100%"
-                  height="100%"
-                  controls
-                  // playing
-                />
-                )}
-              </Grid>
-              <Grid item xs={12} md={12}>
-                <p className='text-start text-2xl font-medium'>Title: {lessonDetail?.title}</p>
-                <p className='text-start text-2xl font-medium'>Lesson contents: </p>
-                <div className='text-start' dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
-              </Grid>
-            </Grid>
+            <>
+            <TestT lessonDetail={lessonDetail} courseDetail={courseDetail}/>
+            </>
             ): (
               <>
-              
-              
               <Grid container spacing={2}>
                 {/* GRID 1 */}
                 <Grid item xs={12} md={6} sx={{ margin: '0 auto'}}>
@@ -299,14 +325,6 @@ const LessonDetail: React.FC = () => {
                         <TableRow key={index} >
                           <TableCell component="th" scope="row">{data.index}</TableCell>
                           <TableCell component="th" scope="row">
-                            {/* <TextField
-                              multiline={false}
-                              value={data.startTime}
-                              id="filled-hidden-label-small"
-                              variant="filled"
-                              size="small"
-                              onChange={(e) => handleInputChange(data.index-1, 'startTime', e.target.value)}
-                            /> */}
                             <input 
                               className='w-full' 
                               style={{borderRadius: '5px', border: '1px solid black' }}
@@ -315,14 +333,6 @@ const LessonDetail: React.FC = () => {
                               />
                           </TableCell>
                           <TableCell align="left">
-                            {/* <TextField
-                                multiline={false}
-                                value={data.endTime}
-                                id="filled-hidden-label-small"
-                                variant="filled"
-                                size="small"
-                                onChange={(e) => handleInputChange(data.index-1, 'endTime', e.target.value)}
-                              /> */}
                               <input 
                                 className='w-full' 
                                 style={{borderRadius: '5px', border: '1px solid black' }}
@@ -338,14 +348,6 @@ const LessonDetail: React.FC = () => {
                               value={data.text}
                               onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
                               />
-                            {/* <TextField
-                              id="standard-multiline-static"
-                              value={data.text}
-                              multiline={false}
-                              rows={3}
-                              variant="filled"
-                              onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
-                            /> */}
                           </TableCell>
                           <TableCell>
                             <div className='flex flex-col justify-around gap-20 py-2'>
@@ -440,7 +442,6 @@ const LessonDetail: React.FC = () => {
           message={message}
         />
       </Container>
-      <Footer />
     </>
   );
 };
