@@ -2,6 +2,8 @@ import { IsEmail } from 'class-validator';
 import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Course } from './course.entity';
 import { Enrollment } from './enrollment.entity';
+import { Blog } from './blog.entity';
+import { Comment } from './comment.entity';
 
 @Entity('users')
 export class User {
@@ -47,6 +49,17 @@ export class User {
     @OneToMany(() => Enrollment, enrollment => enrollment.user)
     enrollments: Enrollment[];
 
+    @OneToMany(() => Blog, (blog) => blog.user)
+    blogs: Blog[];
+
+    @OneToMany(() => Comment, (comment) => comment.user)
+    comments: Comment[];
+
+    @ManyToMany(() => Blog, (blog) => blog.likes)
+    @JoinTable({ name: 'user_likes_blog' })
+    likedBlogs: Blog[]; 
+
+    
     constructor(partial: Partial<User>) {
         Object.assign(this, partial);
         if (!this.avatar) {

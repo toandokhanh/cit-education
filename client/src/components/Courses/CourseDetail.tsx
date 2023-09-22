@@ -93,8 +93,8 @@ const CourseDetail = () => {
           <Navigate to={`/course/${idCourse}/lesson/${enrollment.lessonId}/detail`} />
         ): (
           <Container >
-            <Grid container spacing={{ xs: 2, md: 3 }} px={5}>
-              <Grid item xs={12} sm={9}>
+            <Grid container spacing={{ xs: 2, md: 3 }} px={2}>
+              <Grid item xs={12} sm={9} px={3}>
                 <p className='text-start font-semibold text-2xl uppercase'>{courseDetail?.title}</p>
                 <p className='text-start'>{courseDetail?.description}</p>
                 <p className='text-start font-semibold text-1xl uppercase my-5'>Lesson contents</p>

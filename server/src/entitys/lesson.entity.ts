@@ -4,6 +4,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 import { Video } from "./video.entity";
 import { Course } from "./course.entity";
 import { Enrollment } from "./enrollment.entity";
+import { Comment } from "./comment.entity";
 
 
 @Entity('lessons')
@@ -17,6 +18,9 @@ export class Lesson {
     @Column()
     content: string;
 
+    @Column({ default: 0 }) 
+    likeCount: number;
+
     @ManyToOne(() => Video, video => video.lesson, { eager: true })
     video: Video;
 
@@ -25,4 +29,7 @@ export class Lesson {
 
     @OneToMany(() => Enrollment, enrollment => enrollment.lesson)
     enrollments: Enrollment[];
+
+    @OneToMany(() => Comment, (comment) => comment.lesson)
+    comments: Comment[];
 }
