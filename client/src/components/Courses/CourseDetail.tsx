@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Footer from '../Layouts/Footer'
 import Navbar from '../Layouts/Navbar'
-import {Link, useParams, useNavigate } from 'react-router-dom';
+import {Link, useParams, useNavigate , Navigate} from 'react-router-dom';
 import coursesApi from '../../apis/coursesApi';
 import { Grid, Container, Divider, Chip, Avatar, AvatarGroup, Tooltip} from '@mui/material';
 import AssistWalkerIcon from '@mui/icons-material/AssistWalker';
@@ -12,6 +12,7 @@ import LessonsLists from '../Lesson/LessonsItems';
 import Progress from '../Layouts/Progress';
 import { useUser } from '../Contexts/UserContext';
 import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
+import enrollmentApi from '../../apis/enrollmentApi';
 
 
 const CourseDetail = () => {
@@ -21,6 +22,10 @@ const CourseDetail = () => {
     const [courseDetail, setcourseDetail] = useState<any>([]);
     const idCourse : any = useParams().idCourse;
     const navigation = useNavigate()
+    const [enrollment, setEnrollment] = useState({
+      lessonId: 0,
+      isEnrollment: false
+    })
     const fetchCourseDetails = async () => {
       try {
         setloading(true);
@@ -33,7 +38,20 @@ const CourseDetail = () => {
         setloading(false);
       }
     };
-    
+
+    const checkUerEnrollment = async () => {
+      try {
+        setloading(true);
+        const response: any = await enrollmentApi.checkUserEnrollment(idCourse);
+        console.log(response);
+        setEnrollment(response)
+        setloading(false);
+      } catch (error) {
+        console.error('Error fetching user enrollments:', error);
+        setloading(false);
+      }
+    }
+
     const HandleregisterCourse = async () => {
       try {
         const response = await coursesApi.registerCourse(idCourse)
@@ -48,9 +66,12 @@ const CourseDetail = () => {
         console.error('Error registering course', error);
       }
     }
+
     React.useEffect(() => {
+      checkUerEnrollment();
       fetchCourseDetails();
     }, []);
+
 
     React.useEffect(() => {
       if(registerCourse){
@@ -59,7 +80,7 @@ const CourseDetail = () => {
       }
     }, [registerCourse]);
 
-
+ 
     return (
       <>
         <Navbar />
@@ -67,9 +88,11 @@ const CourseDetail = () => {
         <br />
         <br />
         <br />
-
-        <Container >
-          {user && (
+        {enrollment.isEnrollment ? 
+        (
+          <Navigate to={`/course/${idCourse}/lesson/${enrollment.lessonId}/detail`} />
+        ): (
+          <Container >
             <Grid container spacing={{ xs: 2, md: 3 }} px={5}>
               <Grid item xs={12} sm={9}>
                 <p className='text-start font-semibold text-2xl uppercase'>{courseDetail?.title}</p>
@@ -143,9 +166,8 @@ const CourseDetail = () => {
                 </div>
               </Grid>
           </Grid>
-          )}
-          
         </Container>
+        )}
         <br />
         <br />
         <br />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams , Navigate} from 'react-router-dom';
 import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Snackbar, List, Divider, Toolbar, ListItem, ListItemButton, ListItemText, ListItemIcon } from '@mui/material';
 import ReactPlayer from 'react-player';
 import Navbar from '../Layouts/Navbar';
@@ -17,11 +17,12 @@ import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 import coursesApi from '../../apis/coursesApi';
 import LessonsLists from './LessonsItems';
 import TestT from './TestT';
-
+import enrollmentApi from '../../apis/enrollmentApi';
 const drawerWidth = 400;
 
 
 const LessonDetail: React.FC = () => {
+  
   const navigate = useNavigate();
   const [srtData, setSrtData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,7 +35,6 @@ const LessonDetail: React.FC = () => {
   const [open, setOpen] = useState(false); // dialog khi xóa lesson
   const [openMessage, setOpenMessage] = useState(false);
   const [message, setMessage] = useState('Error message');
-  const [mobileOpen, setMobileOpen] = React.useState(false);
   const [infoLesson, setInfoLessson] = useState({
     title: '',
     content: '',
@@ -43,10 +43,6 @@ const LessonDetail: React.FC = () => {
   const idCourse: number | any = useParams().idCourse;
   const { user } = useUser();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -61,99 +57,111 @@ const LessonDetail: React.FC = () => {
     setOpenMessage(false);
   };
 
-  useEffect(() => {
-    const fetchUpdateLesson = async () => {
-      try {
-        await lessonsApi.updateLessonDetails(idLesson, infoLesson)
-        setLessonDetail((prevData: any) => {
-          return { ...prevData }; 
-        });
-      } catch (error) {
-        console.error('Error fetching lesson updations:', error);
-      }
-    };
-    
-    const fetchDeleteLesson = async () => {
-      try {
-        await lessonsApi.deleteLessonDetails(idLesson)
-        navigate('/home')
-      } catch (error) {
-        console.error('Error fetching lesson delete:', error);
-      }
-    };
-    if(updateLesson){
-      fetchUpdateLesson();
-      setUploadLesson(false)
+
+  const fetchLessonDetails = async () => {
+    try {
+      setLoading(true);
+      const response: any = await lessonsApi.lessonDetail(idLesson);
+      setLessonDetail(response);
+      setVideoUrl(`${HTTP_URL_SERVER_NEST}${response.video.outputPathMP4}`);
+      setInfoLessson({title: response.title, content: response.content})
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching lesson details:', error);
+      setLoading(false);
     }
+  };
 
-    if(deleteLesson){
-      fetchDeleteLesson();
-      setUploadLesson(false)
+
+  const fetchCourseDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await coursesApi.courseDetails(idCourse);
+      console.log(response);
+      setCourseDetail(response)
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching course details:', error);
+      setLoading(false);
     }
-  }, [updateLesson, deleteLesson]);
+  };
 
-  useEffect(() => {
-    const fetchUpdateSubtitle = async () => {
-      try {
-        setLoading(true)
-        const data = {
-          pathMP4: lessonDetail?.video?.pathMP4,
-          pathSRT: lessonDetail?.video?.pathSRT,
-          data: srtData
-        }
-        const response: any = await lessonsApi.updateSubtitle(data)
-        setVideoUrl(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.outputPathMP4}?rand=${Math.random()}`);
-        setLoading(false)
-        setMessage(response.message);
-        setOpenMessage(true);
-      } catch (error) {
-        console.error('Error fetching subtitle updations:', error);
-      }
-    };
-    
-    if(callApiUpdateSubtitle){
-      fetchUpdateSubtitle();
-      setCallApiUpdateSubtitle(false)
+  const fetchUpdateLesson = async () => {
+    try {
+      await lessonsApi.updateLessonDetails(idLesson, infoLesson)
+      setLessonDetail((prevData: any) => {
+        return { ...prevData }; 
+      });
+    } catch (error) {
+      console.error('Error fetching lesson updations:', error);
     }
-  }, [callApiUpdateSubtitle]);
-
-  useEffect(() => {
-    const fetchLessonDetails = async () => {
-      try {
-        setLoading(true);
-        const response: any = await lessonsApi.lessonDetail(idLesson);
-        setLessonDetail(response);
-        setVideoUrl(`${HTTP_URL_SERVER_NEST}${response.video.outputPathMP4}`);
-        setInfoLessson({title: response.title, content: response.content})
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching lesson details:', error);
-        setLoading(false);
-      }
-    };
-
-
-    const fetchCourseDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await coursesApi.courseDetails(idCourse);
-        console.log(response);
-        setCourseDetail(response)
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching course details:', error);
-        setLoading(false);
-      }
-    };
-    
-    fetchCourseDetails();
-    fetchLessonDetails();
-    
-  }, [idLesson, idCourse]);
+  };
   
+  const fetchUpdateSubtitle = async () => {
+    try {
+      setLoading(true)
+      const data = {
+        pathMP4: lessonDetail?.video?.pathMP4,
+        pathSRT: lessonDetail?.video?.pathSRT,
+        data: srtData
+      }
+      const response: any = await lessonsApi.updateSubtitle(data)
+      setVideoUrl(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.outputPathMP4}?rand=${Math.random()}`);
+      setLoading(false)
+      setMessage(response.message);
+      setOpenMessage(true);
+    } catch (error) {
+      console.error('Error fetching subtitle updations:', error);
+    }
+  };
 
+  const fetchDeleteLesson = async () => {
+    try {
+      await lessonsApi.deleteLessonDetails(idLesson)
+      navigate('/home')
+    } catch (error) {
+      console.error('Error fetching lesson delete:', error);
+    }
+  };
 
-  const cleanHtml = DOMPurify.sanitize(lessonDetail?.content);
+  const fetchSrtFile = async () => {
+    axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail?.video?.pathSRT}`)
+    .then(response => {
+      const srtContent = response.data;
+      const srtLines = srtContent.split('\n');
+      const srtDataArray = [];
+      let currentIndex = 0;
+
+      for (let i = 0; i < srtLines.length; i++) {
+        const line = srtLines[i].trim();
+        if (line === '') {
+          continue;
+        }
+        if (!isNaN(line)) {
+          currentIndex = parseInt(line);
+        } else {
+          const timeAndText = line.split('-->');
+          if (timeAndText.length === 2) {
+            const startTime = timeAndText[0].trim();
+            const endTime = timeAndText[1].trim();
+            const text = srtLines[i + 1].trim();
+            srtDataArray.push({
+              index: currentIndex,
+              startTime,
+              endTime,
+              text,
+            });
+          }
+        }
+      }
+      setSrtData(srtDataArray);
+    })
+    .catch(error => {
+      console.error('Error loading SRT file:', error);
+    });
+  }
+
+  
   const handleTitleChange = (event: any) => {
     const { name, value } = event.target;
     setInfoLessson((prevData: any) => ({
@@ -169,60 +177,6 @@ const LessonDetail: React.FC = () => {
     }));
   };
   
-  useEffect(() => {
-    const fetchSrtFile = async () => {
-      axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail?.video?.pathSRT}`)
-      .then(response => {
-        const srtContent = response.data;
-        const srtLines = srtContent.split('\n');
-        const srtDataArray = [];
-        let currentIndex = 0;
-
-        for (let i = 0; i < srtLines.length; i++) {
-          const line = srtLines[i].trim();
-          if (line === '') {
-            continue;
-          }
-          if (!isNaN(line)) {
-            currentIndex = parseInt(line);
-          } else {
-            const timeAndText = line.split('-->');
-            if (timeAndText.length === 2) {
-              const startTime = timeAndText[0].trim();
-              const endTime = timeAndText[1].trim();
-              const text = srtLines[i + 1].trim();
-              srtDataArray.push({
-                index: currentIndex,
-                startTime,
-                endTime,
-                text,
-              });
-            }
-          }
-        }
-        setSrtData(srtDataArray);
-      })
-      .catch(error => {
-        console.error('Error loading SRT file:', error);
-      });
-    }
-    if(lessonDetail?.video?.pathSRT){
-      setLoading(true)
-      fetchSrtFile()
-      setLoading(false)
-    }
-  }, [lessonDetail]); 
-
-  const handleDownloadTxt = () => {
-    axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.pathTXT}`)
-      .then(response => {
-        const blob = new Blob([response.data], { type: 'text/plain;charset=utf-8' });
-        saveAs(blob, `${lessonDetail.title}lesson.txt`);
-      })
-      .catch(error => {
-        console.error('Error downloading TXT file:', error);
-      });
-  };
 
   const handleAddRow = (index: number) => {
     const newSrtItem = {
@@ -248,35 +202,69 @@ const LessonDetail: React.FC = () => {
     setSrtData(updatedSrtData);
   };
   
-  const updateSubtitle = () => {
-    console.log(srtData)
-    setCallApiUpdateSubtitle(true);
-  }
   const handleInputChange = (index: number, field: string, value: string) => {
     const updatedSrtData = [...srtData];
     updatedSrtData[index][field] = value;
     setSrtData(updatedSrtData);
   };
-  const drawer = (
-    <div>
-      <Toolbar />
-      <p className='text-start ml-3 mb-2 font-medium'>Lesson contents</p>
-      <Divider />
-      <List>
-        {/* fetch lesson */}
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                Bài 001
-              </ListItemIcon>
-              <ListItemText  />
-            </ListItemButton>
-          </ListItem>
-          <Divider />
+  
 
-      </List>
-    </div>
-  );
+  const handleDownloadTxt = () => {
+    axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.pathTXT}`)
+      .then(response => {
+        const blob = new Blob([response.data], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, `${lessonDetail.title}lesson.txt`);
+      })
+      .catch(error => {
+        console.error('Error downloading TXT file:', error);
+      });
+  };
+
+
+  const UpdateLearnedLesson = async () => {
+    try {
+      await enrollmentApi.updateLessonIdForUser(idCourse, idLesson)
+    } catch (error) {
+      console.error('Error updating learned lesson', error);
+    }
+  }
+   // handle update and delete lessons
+  useEffect(() => {
+    if(updateLesson){
+      fetchUpdateLesson();
+      setUploadLesson(false)
+    }
+    if(deleteLesson){
+      fetchDeleteLesson();
+      setUploadLesson(false)
+    }
+  }, [updateLesson, deleteLesson]);
+
+  // update subtitle
+  useEffect(() => {
+    if(callApiUpdateSubtitle){
+      fetchUpdateSubtitle();
+      setCallApiUpdateSubtitle(false)
+    }
+  }, [callApiUpdateSubtitle]);
+
+
+  // get info courses and lesson
+  useEffect(() => {
+    fetchCourseDetails();
+    fetchLessonDetails();
+    UpdateLearnedLesson();
+  }, [idLesson, idCourse]);
+  
+  useEffect(() => {
+    if(lessonDetail?.video?.pathSRT){
+      setLoading(true)
+      fetchSrtFile()
+      setLoading(false)
+    }
+  }, [lessonDetail]); 
+
+
   return (
     <>
       <Navbar />
@@ -428,7 +416,6 @@ const LessonDetail: React.FC = () => {
                     </div>
                 </Grid>
                 {/* grid 2 */}
-                
               </Grid>
               </>
             )}
@@ -443,8 +430,8 @@ const LessonDetail: React.FC = () => {
         />
       </Container>
     </>
-  );
-};
+    );
+  };
 
 export default LessonDetail;
 

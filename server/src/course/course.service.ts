@@ -7,6 +7,7 @@ import { Category } from 'src/entitys/catetory.entity';
 import { User } from 'src/entitys/user.entity';
 import { UpdateResult } from  'typeorm';
 import { Lesson } from 'src/entitys/lesson.entity';
+import { Enrollment } from 'src/entitys/enrollment.entity';
 
 @Injectable()
 export class CourseService {
@@ -19,6 +20,8 @@ export class CourseService {
         private userRepository: Repository<User>,
         @InjectRepository(Lesson) 
         private lessonRepository: Repository<Lesson>,
+        @InjectRepository(Enrollment) 
+        private enrollmentRepository: Repository<Enrollment>,
       ) {}
 
       async getAllCourses() {
@@ -100,11 +103,19 @@ export class CourseService {
         if(!user || !course){ 
             throw new NotFoundException('Informations not found');
         }
-        course.students.push(user)
-        await this.courseRepository.save(course)
-        return {
-            course
+        const lesson = course.lessons[0]
+        if(!lesson){ 
+            throw new NotFoundException('lessons Informations not found');
         }
+        course.students.push(user)
+        const enrollment = this.enrollmentRepository.create({
+            lesson,
+            user,
+            course
+        })
+        console.log(enrollment);
+        await this.courseRepository.save(course)
+        return await this.enrollmentRepository.save(enrollment)
     }
 
 

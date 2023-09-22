@@ -153,11 +153,13 @@ export default function TestT({courseDetail, lessonDetail} : any)  {
           {courseDetail?.lessons?.map((lesson: any) =>
           <div key={lesson.id}>
             <Divider />
+            <Link to={`/course/${courseDetail.id}/lesson/${lesson.id}/detail`}>
              <ListItem disablePadding>
                 <ListItemButton>
-                    <Link to={`/course/${courseDetail.id}/lesson/${lesson.id}/detail`}>{lesson.title}</Link>
+                  {lesson.title}
                 </ListItemButton>
               </ListItem>
+              </Link>
             <Divider />
           </div>
           )}

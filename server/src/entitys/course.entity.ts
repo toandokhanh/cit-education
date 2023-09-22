@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, Pri
 import { Category } from "./catetory.entity";
 import { User } from "./user.entity";
 import { Lesson } from "./lesson.entity";
+import { Enrollment } from "./enrollment.entity";
 
 @Entity('courses')
 export class Course{
@@ -36,6 +37,8 @@ export class Course{
   @OneToMany(() => Lesson, lesson => lesson.course, { cascade: true, eager: true })
   lessons: Lesson[];
 
+  @OneToMany(() => Enrollment, enrollment => enrollment.course)
+  enrollments: Enrollment[];
 
   // @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
   // enrollments: Enrollment[];

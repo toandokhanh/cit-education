@@ -63,7 +63,6 @@ export class LessonService {
         if (!algorithm || !sourceLanguage || !targetLanguage){
             throw new NotFoundException('Data not found !')
         }
-        
         // create a new video
         const newVideo = await this.videorepository.save({
             pathMP4: data.videoPath,
@@ -76,6 +75,8 @@ export class LessonService {
             pathWAV:data.wavPath,
             outputPathWAV: data.outputWavPath
         })
+
+        
         // create a new lesson
         const newLesson = await this.lessonrepository.save({
             title: data.title,

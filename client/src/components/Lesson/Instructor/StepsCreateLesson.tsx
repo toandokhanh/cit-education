@@ -100,8 +100,9 @@ export default function StepsCreateLesson() {
       const createLesson = async () => {
         try {
           setLoading(true);
-          await lessonsApi.createLesson(courseId, data);
-          navigate(`/home`)
+          const response = await lessonsApi.createLesson(courseId, data);
+          console.log(response);
+          navigate('/home')
         } catch (error) {
           console.error('Error fetching categories:', error);
           setLoading(false);

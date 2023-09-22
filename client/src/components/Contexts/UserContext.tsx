@@ -4,14 +4,12 @@ import userApi from '../../apis/userApi';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
 import setAuthToken from '../utils/SetAuthToken';
 import userReducer from '../reducers/authReducer';
-
 interface UserContextProps {
   user: User | null;
   setUser: (user: User | null) => void;
   loginUser: (userForm: any) => Promise<void>;
   logoutUser: () => Promise<void>;
 }
-
 // Khởi tạo trạng thái mặc định của reducer
 
 export const UserContext = createContext<UserContextProps | undefined>(undefined);
