@@ -279,9 +279,11 @@ const LessonDetail: React.FC = () => {
             </>
             ): (
               <>
+              <br />
+              <br />
               <Grid container spacing={2}>
                 {/* GRID 1 */}
-                <Grid item xs={12} md={6} sx={{ margin: '0 auto'}}>
+                <Grid item xs={12} md={6} sx={{ margin: '0 auto',border:'1px black solid' }}>
                   <Box sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
                   <p className='font-semibold text-start'>Video</p>
                       <ReactPlayer

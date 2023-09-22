@@ -12,6 +12,10 @@ import { join } from 'path';
 import { LanguageModule } from './language/language.module';
 import { AlgorithmModule } from './algorithm/algorithm.module';
 import { EnrollmentModule } from './enrollment/enrollment.module';
+// import { BlogController } from './blog/blog.controller';
+import { BlogModule } from './blog/blog.module';
+// import { CommentController } from './comment/comment.controller';
+import { CommentModule } from './comment/comment.module';
 @Module({
   imports: [
     UserModule, 
@@ -27,6 +31,8 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
     LanguageModule,
     AlgorithmModule,
     EnrollmentModule,
+    BlogModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
