@@ -1,7 +1,6 @@
 import { IsEmail } from 'class-validator';
-import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany,  JoinColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Course } from './course.entity';
-import { Enrollment } from './enrollment.entity';
 
 @Entity('users')
 export class User {
@@ -37,14 +36,12 @@ export class User {
     updatedAt: Date;
 
     @ManyToMany(() => Course, course => course.students)
+    @JoinTable({name: 'enrollments'})
     courses: Course[];
 
     @OneToMany(() => Course, course => course.creator)
     createdCourses: Course[];
 
-    @OneToMany(() => Enrollment, enrollment => enrollment.user)
-    @JoinColumn({ name: 'userId' }) // Đặt tên cột liên kết là userId
-    enrollments: Enrollment[];
 
     constructor(partial: Partial<User>) {
         Object.assign(this, partial);

@@ -2,7 +2,6 @@ import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, Pri
 import { Category } from "./catetory.entity";
 import { User } from "./user.entity";
 import { Lesson } from "./lesson.entity";
-import { Enrollment } from "./enrollment.entity";
 
 @Entity('courses')
 export class Course{
@@ -38,7 +37,7 @@ export class Course{
   lessons: Lesson[];
 
 
-  // Thêm một mối quan hệ OneToMany với Enrollment
-  @ManyToMany(() => Enrollment, enrollment => enrollment.course)
-  enrollments: Enrollment[];
+  // @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
+  // enrollments: Enrollment[];
+  
 }

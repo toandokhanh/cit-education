@@ -6,8 +6,6 @@ import { Course } from "./course.entity";
 import { Enrollment } from "./enrollment.entity";
 
 
-
-
 @Entity('lessons')
 export class Lesson {
     @PrimaryGeneratedColumn()
@@ -25,6 +23,6 @@ export class Lesson {
     @ManyToOne(() => Course, course => course.lessons)
     course : Course;
 
-    @OneToMany(() => Enrollment, enrollment => enrollment.course)
+    @OneToMany(() => Enrollment, enrollment => enrollment.lesson)
     enrollments: Enrollment[];
 }
