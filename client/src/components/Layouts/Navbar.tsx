@@ -13,10 +13,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import BasicSpeedDial from './SpeedDial';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../Contexts/UserContext';
 
 function Navbar({courses, setCourses }: any) {
+  const navigate = useNavigate()
   const { logoutUser } = useUser();
   const { user } = useUser();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -36,7 +37,10 @@ function Navbar({courses, setCourses }: any) {
     setAnchorElUser(null);
   };
   
-  const handleLogout = async () => await logoutUser()
+  const handleLogout = async () => {
+    await logoutUser()
+    navigate('/home');
+  }
 
   
   return (

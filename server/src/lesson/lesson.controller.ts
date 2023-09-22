@@ -64,6 +64,7 @@ export class LessonController {
         targetLanguage,
         algorithm,
       });
+
       return await this.lessonService.create(
         {
             course,
