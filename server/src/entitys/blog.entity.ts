@@ -17,10 +17,10 @@ export class Blog{
   @ManyToOne(() => User, (user) => user.blogs, { eager: true })
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.blog)
+  @OneToMany(() => Comment, (comment) => comment.blog, { eager: true })
   comments: Comment[];
 
 
-  @ManyToMany(() => User, (user) => user.likedBlogs)
-  likes: User[]; // Thêm trường likes để lưu danh sách người dùng đã "like" bài đăng
+  @ManyToMany(() => User, (user) => user.likedBlogs, { eager: true })
+  likes: User[]; 
 }
