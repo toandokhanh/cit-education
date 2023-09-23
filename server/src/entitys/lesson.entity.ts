@@ -18,9 +18,6 @@ export class Lesson {
     @Column()
     content: string;
 
-    @Column({ default: 0 }) 
-    likeCount: number;
-
     @ManyToOne(() => Video, video => video.lesson, { eager: true })
     video: Video;
 
@@ -30,6 +27,6 @@ export class Lesson {
     @OneToMany(() => Enrollment, enrollment => enrollment.lesson)
     enrollments: Enrollment[];
 
-    @OneToMany(() => Comment, (comment) => comment.lesson)
+    @OneToMany(() => Comment, (comment) => comment.lesson, { eager: true })
     comments: Comment[];
 }

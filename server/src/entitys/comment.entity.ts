@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany } from 'typeorm';
 import { User } from './user.entity';
 import { Blog } from './blog.entity';
 import { Lesson } from './lesson.entity';
@@ -11,10 +11,13 @@ export class Comment {
   @Column()
   content: string;
 
-  @Column({ default: 0 }) 
-  likeCount: number;
+  @Column({ default: false })
+  isCreator: boolean;
+
+  @ManyToMany(() => User, (user) => user.likedComments, { eager: true }) // người like comment
+  likes: User[]; 
   
-  @ManyToOne(() => User, (user) => user.comments)
+  @ManyToOne(() => User, (user) => user.comments, { eager: true }) // người tạo comment
   user: User;
 
   @ManyToOne(() => Blog, (blog) => blog.comments)

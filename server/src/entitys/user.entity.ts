@@ -59,7 +59,10 @@ export class User {
     @JoinTable({ name: 'user_likes_blog' })
     likedBlogs: Blog[]; 
 
-    
+    @ManyToMany(() => Comment, (comment) => comment.likes)
+    @JoinTable({ name: 'user_likes_comment' })
+    likedComments: Comment[]; 
+
     constructor(partial: Partial<User>) {
         Object.assign(this, partial);
         if (!this.avatar) {
