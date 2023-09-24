@@ -75,7 +75,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-start',
 }));
 
-export default function TestT({courseDetail, lessonDetail} : any)  {
+export default function TestT({lessonDetail,setLessonDetail,courseDetail } : any)  {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -95,8 +95,7 @@ export default function TestT({courseDetail, lessonDetail} : any)  {
       sx={{
         top: 'auto',
         bottom: 0,
-        width: { sm: '100%' },
-      }}
+        width: { sm: '100%' }}}
       >
         <Toolbar>
           <Typography variant="button" noWrap sx={{ flexGrow: 1 }} component="div">
@@ -129,7 +128,7 @@ export default function TestT({courseDetail, lessonDetail} : any)  {
           <p className='text-start text-2xl font-medium'>{lessonDetail?.title}</p>
           <p className='text-start text-xs'>Updated {courseDetail?.createdAt && new Date(courseDetail.createdAt).toLocaleDateString('en-GB')}</p>
           <br />
-          <LessonTab content={lessonDetail?.content}/>
+          <LessonTab lessonDetail={lessonDetail} setLessonDetail={setLessonDetail}/>
        </div>
       </Main>
       <Drawer

@@ -36,7 +36,7 @@ const blogApi = {
 
   async unLikeBlog(blogId: number){ 
     const url = `blog/${blogId}/unlike`; 
-    return axiosClient.post(url);  
+    return axiosClient.delete(url);  
   },
 
 };

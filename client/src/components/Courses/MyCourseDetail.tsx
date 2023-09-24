@@ -22,7 +22,6 @@ const Transition = React.forwardRef(function Transition(
 
 const MyCourseDetail = () => {
     const [loading, setloading] = useState(false)
-    const { user } = useUser();
     const [courseDetail, setcourseDetail] = useState<any>([]);
     const params : any = useParams();
     const [valudeDefaultCategory, setValudeDefaultCategory] = useState('');

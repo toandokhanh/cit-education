@@ -62,6 +62,7 @@ const LessonDetail: React.FC = () => {
     try {
       setLoading(true);
       const response: any = await lessonsApi.lessonDetail(idLesson);
+      console.log(response);
       setLessonDetail(response);
       setVideoUrl(`${HTTP_URL_SERVER_NEST}${response.video.outputPathMP4}`);
       setInfoLessson({title: response.title, content: response.content})
@@ -275,7 +276,7 @@ const LessonDetail: React.FC = () => {
           <br />
             {!user?.isInstructor ? (
             <>
-            <TestT lessonDetail={lessonDetail} courseDetail={courseDetail}/>
+            <TestT lessonDetail={lessonDetail} setLessonDetail={setLessonDetail} courseDetail={courseDetail}/>
             </>
             ): (
               <>

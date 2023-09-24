@@ -23,7 +23,7 @@ export class CommentController {
 
     // create a new comment for the lesson
     @UseGuards(AuthGuard("jwt"))
-    @Post('/lesson/:blogId/create')
+    @Post('/lesson/:lessonId/create')
     async createLessonComment(
         @User() user: any,
         @Body() commentContent: CreateCommentDto,
