@@ -95,8 +95,8 @@ export class LessonController {
 
   @UseGuards(AuthGuard("instructor"))
   @Delete(':idlesson/delete')
-  async deleteLesson(@Param('idlesson') idlesson : number){
-    return this.lessonService.deleteLesson(idlesson)
+  async deleteLesson(@Param('idlesson') idlesson : number, @User() user: any){
+    return this.lessonService.deleteLesson(idlesson, user.userId)
   }
 
 

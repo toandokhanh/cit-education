@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import coursesApi from '../../../apis/coursesApi'
-import { MenuItem, TextField, makeStyles } from '@mui/material'
 
 const Step1CreateLesson = ({courseId, getCourseId} : any) => {
     const [courses, getCourses] = useState<any[]>([]);
@@ -26,9 +25,7 @@ const Step1CreateLesson = ({courseId, getCourseId} : any) => {
         onChange={(e) => getCourseId(e.target.value)}
         required
         >
-        {/* <option value="" disabled>
-            Please select your course
-        </option> */}
+
         {courses?.map((option) => (
             <option key={option?.id} value={option?.id}>
             {option?.title}

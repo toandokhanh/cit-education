@@ -16,4 +16,5 @@ export class CreateBlogDto extends BaseDto{
     @Expose()
     @Transform(({ value }) => value) 
     user: number;
+
 } 

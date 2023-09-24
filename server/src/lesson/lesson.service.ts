@@ -97,7 +97,11 @@ export class LessonService {
     }
 
 
-    async deleteLesson(idLesson : number): Promise<DeleteResult> {
+    async deleteLesson(idLesson : any, userId : number): Promise<DeleteResult> {
+        const lesson = await this.lessonrepository.findOne({where: {id: idLesson, course: {creator: {id: userId}}}})
+        lesson.comments = []
+        lesson.enrollments = []
+        await this.lessonrepository.save(lesson)
         return await this.lessonrepository.delete(idLesson);
     }
 

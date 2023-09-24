@@ -5,6 +5,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateBlogDto } from './dto/createBlog.dto';
 import { User } from 'src/entitys/user.entity';
 import { UpdateBlogDto } from './dto/updateBlog.dto';
+import { Comment } from 'src/entitys/comment.entity';
 
 @Injectable()
 export class BlogService {
@@ -14,10 +15,15 @@ export class BlogService {
         private readonly blogsResponse : Repository<Blog>,
         @InjectRepository(User)
         private readonly UsersResponse : Repository<User>,
+        @InjectRepository(Comment)
+        private readonly commentsResponse : Repository<Comment>,
     ){}
 
     async getAllBlogs(): Promise<Blog[]>{
-        const blogs = await this.blogsResponse.find()
+        const blogs = await this.blogsResponse.find({      
+          order: {createdAt: 'DESC'} 
+        })
+
         if (!blogs){ 
             throw new NotFoundException('Blogs not found');
         }
@@ -58,10 +64,16 @@ export class BlogService {
 
 
     async deleteBlog (blogId: number, user: any): Promise<DeleteResult>{
-        const blog = await this.blogsResponse.findOne({where: {id: blogId, user: {id: user.userId}}})
+        const blog = await this.blogsResponse.findOne({
+          where: { id: blogId, user: { id: user.userId } },
+          relations: ['comments', 'likes'], 
+        });
         if (!blog){ 
             throw new NotFoundException('blog not found');
         }
+        blog.comments = []
+        blog.likes = [];
+        await this.blogsResponse.save(blog);
         return await this.blogsResponse.delete(blogId)
     }
 

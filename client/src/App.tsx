@@ -14,6 +14,9 @@ import MyCourseDetail from './components/Courses/MyCourseDetail';
 import UserDetail from './components/Auth/UserDetail';
 import AllCourses from './components/Courses/AllCourses';
 import TestT from './components/Lesson/TestT';
+import Blog from './components/Blog/Blog';
+import BlogDetails from './components/Blog/BlogDetails';
+import CreateBlog from './components/Blog/CreateBlog';
 
 function App() {
   return (
@@ -33,6 +36,9 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/about' element={<About />} />
+            <Route path='/blog' element={<Blog />} />
+            <Route path='/blog/:idBlog/details' element={<BlogDetails />} />
+            <Route path='/blog/create' element={<CreateBlog />} />
           </Routes>
         </BrowserRouter>
       </UserProvider>
