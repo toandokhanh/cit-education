@@ -35,7 +35,8 @@ export class CommentService {
             const comment = this.commentsResponse.create({
                 content: commentContent.content,
                 user: user,
-                isCreator: true
+                isCreator: true,
+                likes: []
             })
             await this.commentsResponse.save(comment)
             blog.comments.push(comment)
@@ -43,7 +44,8 @@ export class CommentService {
         }else{
             const comment = this.commentsResponse.create({
                 content: commentContent.content,
-                user: user
+                user: user,
+                likes: []
             })
             await this.commentsResponse.save(comment)
             blog.comments.push(comment)
@@ -65,7 +67,8 @@ export class CommentService {
             const comment = this.commentsResponse.create({
                 content: commentContent.content,
                 user: user,
-                isCreator: true
+                isCreator: true,
+                likes: []
             })
             await this.commentsResponse.save(comment)
             lesson.comments.push(comment)
@@ -73,7 +76,8 @@ export class CommentService {
         }else{
             const comment = this.commentsResponse.create({
                 content: commentContent.content,
-                user: user
+                user: user,
+                likes: []
             })
             await this.commentsResponse.save(comment)
             lesson.comments.push(comment)
@@ -89,7 +93,7 @@ export class CommentService {
         if (!user || !comment){ 
             throw new NotFoundException('Informations not found');
         }
-        return await this.commentsResponse.update(comment, {content: commentContent.content})
+        return await this.commentsResponse.update(commentId, {content: commentContent.content})
     }
 
 
@@ -99,7 +103,15 @@ export class CommentService {
         if (!user || !comment){ 
             throw new NotFoundException('Informations not found');
         }
-        return await this.commentsResponse.delete(comment)
+        await this.usersResponse
+        .createQueryBuilder()
+        .relation(User, 'likedComments')
+        .of(user)
+        .remove(comment);
+
+        // Tiếp theo, xóa comment
+        const result = await this.commentsResponse.delete(commentId);
+        return result;
     }
 
     
