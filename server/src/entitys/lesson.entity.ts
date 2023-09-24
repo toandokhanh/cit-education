@@ -1,6 +1,6 @@
 
 
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Video } from "./video.entity";
 import { Course } from "./course.entity";
 import { Enrollment } from "./enrollment.entity";
@@ -17,6 +17,12 @@ export class Lesson {
 
     @Column()
     content: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+  
+    @UpdateDateColumn()
+    updatedAt: Date;
 
     @ManyToOne(() => Video, video => video.lesson, { eager: true })
     video: Video;

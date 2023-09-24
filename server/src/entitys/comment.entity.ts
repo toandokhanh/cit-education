@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Blog } from './blog.entity';
 import { Lesson } from './lesson.entity';
@@ -13,6 +13,12 @@ export class Comment {
 
   @Column({ default: false })
   isCreator: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToMany(() => User, (user) => user.likedComments, { eager: true }) // người like comment
   likes: User[]; 

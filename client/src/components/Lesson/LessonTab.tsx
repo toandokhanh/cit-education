@@ -135,8 +135,6 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
     }
   };
 
-  const [liked, setLiked] = React.useState(false);
-
   const handleLikeComment = async (index: number, commentId: number) => {
     try {
       const comment = lessonDetail.comments[index];
@@ -265,20 +263,32 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
         </DialogActions>
       </Dialog>
         <div className='my-10'>
-          <div className="mb-4 flex items-center gap-2">
-            {user && (
-              <Avatar sx={{ width: 32, height: 32 }} alt={user?.fullname} src="/static/images/avatar/1.jpg" />
-            )}
-            <input name="comment" value={comment} onChange={(e) => setComment(e.target.value)} type="text" className="w-full rounded-lg border border-gray-400 p-2" placeholder="Write a comment ..." />
-            <button onClick={createComment} className="ml-2 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600">Send</button>
+          <div className="mb-4">
+            <div className='flex gap-3'>
+              {user && (
+                <Avatar sx={{ width: 32, height: 32 }} alt={user?.fullname} src="/static/images/avatar/1.jpg" />
+              )}
+            <div className=" w-full py-2 px-4 mb-1 bg-white rounded-lg rounded-t-lg border border-gray-200  ">
+              <label htmlFor="comment" className="sr-only">Your comment</label>
+              <textarea value={comment} onChange={(e) => setComment(e.target.value)} name='comment' id="comment" rows={6} className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0  " placeholder="Write a comment..." required />
+            </div>
+            </div>
+           <div className='flex mt-2 justify-end'> 
+           <button onClick={createComment} className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-white bg-black rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                Post comment
+          </button>
+           </div>
+           <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           </div>
-        </div>
-        <div>
-            <br />
-            <br />
-            <br />
+
         </div>
       </CustomTabPanel>
     </Box>
   );
 }
+
