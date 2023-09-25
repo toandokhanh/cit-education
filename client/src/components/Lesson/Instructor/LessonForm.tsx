@@ -6,6 +6,7 @@ import axios from 'axios'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { HTTP_URL_SERVER_NEST } from '../../../constant/constant'
 const LessonForm = () => {
   const [videoFile, setvideoFile] = React.useState<any>();
   const [value, setValue] = useState<any>('');
@@ -44,7 +45,7 @@ const LessonForm = () => {
     const formData = new FormData();
     formData.append('file', videoFile);
     try {
-      const response = await axios.post('http://localhost:3003/upload/video', formData, {
+      const response = await axios.post(HTTP_URL_SERVER_NEST+'/upload/video', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

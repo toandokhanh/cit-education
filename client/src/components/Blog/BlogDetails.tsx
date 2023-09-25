@@ -13,6 +13,7 @@ import { useUser } from '../Contexts/UserContext'
 import commentApi from '../../apis/commentApi'
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import DOMPurify from 'dompurify'
+import { HTTP_URL_SERVER_NEST } from '../../constant/constant'
 
 const BlogDetails = () => {
   const { user } = useUser();
@@ -187,7 +188,7 @@ const BlogDetails = () => {
                         <header className="mb-4 lg:mb-6 not-format">
                           <address className="flex items-center mb-6 not-italic">
                             <div className="inline-flex items-center mr-3 text-sm text-gray-900 w-full">
-                              <Avatar  sx={{ width: 64, height: 64 }} className="mr-4 w-16 h-16 rounded-full" src="/static/images/avatar/1.jpg" alt={blogDetails.user.fullname} />
+                              <Avatar  sx={{ width: 64, height: 64 }} className="mr-4 w-16 h-16 rounded-full" src={`${HTTP_URL_SERVER_NEST}${blogDetails.user.avatar}` || `/static/images/avatar/1.jpg`} alt={blogDetails.user.fullname} />
                               <div className='flex justify-between w-full items-center'>
                               <div>
                                 <Link to={`/user/${blogDetails?.user?.email?.split('@')[0]}`} rel="author" className="text-xl font-bold text-gray-900 uppercase">{blogDetails.user.fullname}</Link>
@@ -224,7 +225,7 @@ const BlogDetails = () => {
                           {blogDetails.comments.map((comment: any, index: number) => (
                             <div key={comment.id} className='text-start flex my-3 mx-3 gap-2'>
                                 <Link to={`/user/${comment?.user?.email?.split('@')[0]}`}>
-                                          <Avatar sx={{ width: 32, height: 32 }} alt={comment.user.fullname} src="/static/images/avatar/1.jpg" />
+                                          <Avatar sx={{ width: 32, height: 32 }} alt={comment.user.fullname} src={`${HTTP_URL_SERVER_NEST}${comment.user.avatar}` || `/static/images/avatar/1.jpg`} />
                                 </Link>
                                 <div>
                                 <div className="bg-gray-200 rounded-3xl px-4 pt-2 pb-2.5 ">

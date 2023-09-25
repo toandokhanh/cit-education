@@ -24,26 +24,26 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [Courses, setCourses] = useState<any[]>([])
   const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
-  useEffect(() => {
-    const fetchMyCoursesBasedInstructor = async () => {
-        try {
-            const myCourses = await coursesApi.getMyCoursesCreated()
-            setCourses(myCourses)
-            setLoading(false);
-        } catch (error) {
-          console.error('Error fetching courses:', error);
-        }
-    }
-    const fetchMyCoursesBasedStudent = async () => {
-      try {
-        const myCourses = await coursesApi.getMyCoursesRegistered()
+  const fetchMyCoursesBasedInstructor = async () => {
+    try {
+        const myCourses = await coursesApi.getMyCoursesCreated()
         setCourses(myCourses)
-        console.log(myCourses)
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      }
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
   }
+  const fetchMyCoursesBasedStudent = async () => {
+    try {
+      const myCourses = await coursesApi.getMyCoursesRegistered()
+      setCourses(myCourses)
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
+  }
+
+  useEffect(() => {
     if(user?.role === 'instructor'){
       fetchMyCoursesBasedInstructor()
     }
@@ -78,7 +78,6 @@ const Home: React.FC = () => {
               </Grid>
             </div>
           ): (<h4 className='text-start text-3xl font-semibold mb-[28rem]'>You don't have any courses yet</h4>)}
-          
           </Container>
         </>
       ) : (
@@ -115,7 +114,7 @@ const Home: React.FC = () => {
                               </TableCell>
                               <TableCell align="left">{course?.createdAt}</TableCell>
                               <TableCell align="center">
-                                <img height='100px' width='100px' src={'http://localhost:3003'+course?.thumbnail}/>
+                                <img height='100px' width='100px' src={HTTP_URL_SERVER_NEST+course?.thumbnail}/>
                               </TableCell>
                               <TableCell align="center">
                                 <Link to={'/myCourses/'+course?.id} ><EditNoteIcon fontSize='small' color='primary'/></Link>

@@ -30,7 +30,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
         }else{
           response.isInstructor = false;
         }
-        // Sử dụng dispatch để cập nhật trạng thái người dùng
         dispatch({ type: 'SET_USER', payload: response });
       } catch (error) {
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);

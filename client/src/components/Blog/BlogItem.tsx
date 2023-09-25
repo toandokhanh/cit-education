@@ -9,6 +9,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useUser } from '../Contexts/UserContext';
 import ReactQuill from 'react-quill';
 import blogApi from '../../apis/blogApi';
+import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 const BlogItem = ({blog, setBlogs}: any) => {
     const { user } = useUser();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -150,7 +151,7 @@ const BlogItem = ({blog, setBlogs}: any) => {
         <div className="flex items-center justify-between mt-4">
             <Link className='flex items-center text-[#1976d2] hover:underline' to={`/blog/${blog?.id}/details`}>Read more</Link>
             <Link className='flex items-center' to={`/user/${blog?.user?.email?.split('@')[0]}`}>
-                <Avatar  sx={{ width: 32, height: 32 }} src="/static/images/avatar/1.jpg" alt={blog.user.fullname} className="object-cover w-10 h-10 mx-4 rounded-full" />
+                <Avatar  sx={{ width: 32, height: 32 }} src={`${HTTP_URL_SERVER_NEST}${blog.user.avatar}` || `/static/images/avatar/1.jpg`} alt={blog.user.fullname} className="object-cover w-10 h-10 mx-4 rounded-full" />
                 <span className="hover:underline ml-[-5px]">{blog.user.fullname}</span>
             </Link>
         </div>

@@ -1,10 +1,11 @@
-import { Body, ConflictException, Controller, Get, Post, UseGuards, Req, Param} from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, Post, UseGuards, Param, Put} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDTO } from './dto/checkUser.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express'
+// import { Request } from 'express'
+import { User } from './decorator/user.decorator';
 // import { log } from 'console';
 // import { plainToClass } from 'class-transformer';
 
@@ -17,8 +18,8 @@ export class UserController {
          
     @UseGuards(AuthGuard('jwt'))
     @Get('me')
-    async detailUser(@Req() request: Request){
-        return request.user
+    async detailUser(@User() user: any){
+        return user
     }
 
     @Get()
@@ -52,4 +53,9 @@ export class UserController {
         return await this.userService.getUserDetails(email);
     }
 
+    @UseGuards(AuthGuard('jwt'))
+    @Put('/update')
+    async updateUser(@Body() data: any, @User() user: any){
+        return await this.userService.updateUser(data, user.userId);
+    }
 }

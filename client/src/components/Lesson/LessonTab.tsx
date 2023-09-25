@@ -12,6 +12,7 @@ import { useUser } from '../Contexts/UserContext';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import commentApi from '../../apis/commentApi';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -178,33 +179,30 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
     <Box sx={{ width: '100%' }}>
       
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="lesson contents" {...a11yProps(0)} />
-          <Tab label="Take notes" {...a11yProps(1)} disabled />
-          <Tab label="Q&A" {...a11yProps(2)} />
-        </Tabs>
+       
+          {user && 
+            user.isInstructor ? 
+            (
+                <div className="flex justify-between items-center mb-6 mt-5">
+                  <h2 className="text-lg lg:text-2xl font-bold text-gray-900">Discussion ({lessonDetail.comments.length})</h2>
+                </div>
+            )
+            : (
+              <>
+               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                  <Tab label="Q&A" {...a11yProps(0)} />
+                  <Tab label="lesson contents" {...a11yProps(1)} />
+                  <Tab label="Take notes" {...a11yProps(2)} disabled  />
+                </Tabs>
+              </>
+            )
+          }
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Typography className='text-start' dangerouslySetInnerHTML={{ __html: cleanHtml }} />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        Take notes
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
         {lessonDetail.comments.map((comment: any, index: number) => (
           <div key={comment.id} className='text-start flex my-3 mx-3 gap-2'>
               <Link to={`/user/${comment?.user?.email?.split('@')[0]}`}>
-                        <Avatar sx={{ width: 32, height: 32 }} alt={comment.user.fullname} src="/static/images/avatar/1.jpg" />
+                        <Avatar sx={{ width: 32, height: 32 }} alt={comment.user.fullname} src={`${HTTP_URL_SERVER_NEST}${comment.user.avatar}` || `/static/images/avatar/1.jpg`} />
               </Link>
               <div>
               <div className="bg-gray-200 rounded-3xl px-4 pt-2 pb-2.5 ">
@@ -265,9 +263,6 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
         <div className='my-10'>
           <div className="mb-4">
             <div className='flex gap-3'>
-              {user && (
-                <Avatar sx={{ width: 32, height: 32 }} alt={user?.fullname} src="/static/images/avatar/1.jpg" />
-              )}
             <div className=" w-full py-2 px-4 mb-1 bg-white rounded-lg rounded-t-lg border border-gray-200  ">
               <label htmlFor="comment" className="sr-only">Your comment</label>
               <textarea value={comment} onChange={(e) => setComment(e.target.value)} name='comment' id="comment" rows={6} className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0  " placeholder="Write a comment..." required />
@@ -287,6 +282,22 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
           </div>
 
         </div>
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <Typography className='text-start' dangerouslySetInnerHTML={{ __html: cleanHtml }} />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        Take notes
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </CustomTabPanel>
     </Box>
   );

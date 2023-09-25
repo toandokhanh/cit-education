@@ -32,6 +32,9 @@ export class User {
     @Column()
     role: string;
 
+    @Column({ nullable: true }) // Đặt nullable: true cho trường dob
+    bio: string;
+
     @CreateDateColumn()
     createdAt: Date;
 

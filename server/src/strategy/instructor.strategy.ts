@@ -17,7 +17,7 @@ export class InstructorStrategy extends PassportStrategy(Strategy, 'instructor')
             return { 
                 userId: payload.id, 
                 email: payload.email, 
-                avatart: payload.avatart, 
+                avatar: payload.avatart, 
                 fullname: payload.fullname, 
                 role: payload.role, 
             };

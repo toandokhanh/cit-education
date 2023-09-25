@@ -9,7 +9,7 @@ export interface Category {
 export interface User{
   userId: number;
   email: string;
-  avatart: string;
+  avatar: string;
   fullname: string;
   role: string;
   isInstructor: boolean;

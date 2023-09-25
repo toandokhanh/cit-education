@@ -16,6 +16,7 @@ import lessonsApi from '../../../apis/lessonsApi';
 import Snackbar from '@mui/material/Snackbar';
 import Progress from '../../Layouts/Progress';
 import {useNavigate} from 'react-router-dom'
+import { HTTP_URL_SERVER_NEST } from '../../../constant/constant';
 const steps = ['Select course', 'Upload lecture video', 'Lecture information'];
 
 export default function StepsCreateLesson() {
@@ -71,7 +72,7 @@ export default function StepsCreateLesson() {
             const formData = new FormData();
             formData.append('file', videoFile);
             try {
-              const response = await axios.post('http://localhost:3003/upload/video', formData, {
+              const response = await axios.post(`${HTTP_URL_SERVER_NEST}/upload/video`, formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },

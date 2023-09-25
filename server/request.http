@@ -51,3 +51,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6I
 { 
     "data": "data"
 }
+
+
+
+###
+GET http://localhost:3003/blog/v1/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InN0dWRlbnQiLCJlbWFpbCI6ImFuQGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoiYW4gYW4iLCJhdmF0YXJ0IjoiaHR0cHM6Ly9sb2NhbGhvc3Q6MzAwMy9pbWFnZS9kZWZhdWx0X2F2dC5wbmciLCJpYXQiOjE2OTU2MjE3MTksImV4cCI6MTY5NTcwODExOX0.pT9bK1ZL1It0EzLy3mZP5rgQrTnfKCfdX22db52nua4

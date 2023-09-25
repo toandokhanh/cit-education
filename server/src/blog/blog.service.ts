@@ -31,6 +31,15 @@ export class BlogService {
     }
 
 
+    async getUserBlogs(userId: number){
+      const user = await this.UsersResponse.findOne({where: {id: userId} })
+      if (!user){ 
+        throw new NotFoundException('User not found');
+      }
+      const myBlogs = await this.blogsResponse.find({where:{user: {id: userId}}})
+      return myBlogs
+    }
+
     async getBlogDetails(blogId: number): Promise<Blog>{ 
         const blog = await this.blogsResponse.findOne({where: {id: blogId}})
         if (!blog){ 

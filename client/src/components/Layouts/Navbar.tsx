@@ -15,11 +15,14 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import BasicSpeedDial from './SpeedDial';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../Contexts/UserContext';
+import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 
 function Navbar({courses, setCourses }: any) {
   const navigate = useNavigate()
   const { logoutUser } = useUser();
   const { user } = useUser();
+  console.log('dasadasdasds',user);
+  
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -173,7 +176,7 @@ function Navbar({courses, setCourses }: any) {
                     <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
                       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt={user?.fullname} src='a'/>
+                        <Avatar alt={user?.fullname} src={`${HTTP_URL_SERVER_NEST}${user?.avatar}` || `/static/images/avatar/1.jpg`}/>
                       </IconButton>
                     </Tooltip>
                     
@@ -193,9 +196,11 @@ function Navbar({courses, setCourses }: any) {
                       open={Boolean(anchorElUser)}
                       onClose={handleCloseUserMenu}
                     >
+                        <Link to={`/user/${user?.email?.split('@')[0]}`}>
                         <MenuItem >
-                          <Typography textAlign="center"><Link to={'/me'}>Account</Link></Typography>
+                          <Typography textAlign="center">Account</Typography>
                         </MenuItem>
+                        </Link> 
                         <MenuItem>
                           <Typography textAlign="center"><Link to={'/myCourses'}>My Courses</Link></Typography>
                         </MenuItem>
