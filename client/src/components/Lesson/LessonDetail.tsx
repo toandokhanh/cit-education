@@ -18,6 +18,7 @@ import coursesApi from '../../apis/coursesApi';
 import LessonsLists from './LessonsItems';
 import TestT from './TestT';
 import enrollmentApi from '../../apis/enrollmentApi';
+import LessonTab from './LessonTab';
 const drawerWidth = 400;
 
 
@@ -254,8 +255,10 @@ const LessonDetail: React.FC = () => {
   useEffect(() => {
     fetchCourseDetails();
     fetchLessonDetails();
-    UpdateLearnedLesson();
-  }, [idLesson, idCourse]);
+    if(user?.role === 'student'){
+      UpdateLearnedLesson();
+    }
+  }, [idLesson, idCourse, user]);
   
   useEffect(() => {
     if(lessonDetail?.video?.pathSRT){
@@ -276,7 +279,7 @@ const LessonDetail: React.FC = () => {
           <br />
             {!user?.isInstructor ? (
             <>
-            <TestT lessonDetail={lessonDetail} setLessonDetail={setLessonDetail} courseDetail={courseDetail}/>
+              <TestT lessonDetail={lessonDetail} setLessonDetail={setLessonDetail} courseDetail={courseDetail}/>
             </>
             ): (
               <>
@@ -367,7 +370,7 @@ const LessonDetail: React.FC = () => {
                   </Box>
                 </Grid>
                 
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={12}>
                 <div className='text-start my-3 '>
                       <p className='font-semibold'>
                         Lesson title
@@ -419,6 +422,9 @@ const LessonDetail: React.FC = () => {
                     </div>
                 </Grid>
                 {/* grid 2 */}
+                <Grid item xs={12} md={12}>
+                  <LessonTab lessonDetail={lessonDetail} setLessonDetail={setLessonDetail}/>
+                </Grid>
               </Grid>
               </>
             )}

@@ -27,6 +27,13 @@ const userApi = {
     const url = `user/${email}`; 
     return axiosClient.get(url); 
   },
+
+
+
+  async updateUser(data: any): Promise<any> { // http://localhost:3003/user/update
+    const url = `user/update`; 
+    return axiosClient.put(url, data); 
+  },
 };
 
 export default userApi;

@@ -51,3 +51,10 @@ Authorization: Bearer REPLACE_WITH_A_FRESH_LOGIN_TOKEN
 { 
     "data": "data"
 }
+
+
+
+###
+GET http://localhost:3003/blog/v1/me
+Content-Type: application/json
+Authorization: Bearer REPLACE_WITH_A_FRESH_LOGIN_TOKEN

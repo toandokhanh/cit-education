@@ -39,6 +39,11 @@ const blogApi = {
     return axiosClient.delete(url);  
   },
 
+
+  async getMyBlogs(){ 
+    const url = `blog/v1/me`; 
+    return axiosClient.get(url);  
+  },
 };
 
 export default blogApi;

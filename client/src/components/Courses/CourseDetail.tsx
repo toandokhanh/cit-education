@@ -106,7 +106,7 @@ const CourseDetail = () => {
               </Grid>
               <Grid item xs={12} sm={3} px={5}>
                 <div style={{ width: '100%', paddingBottom: '60%', position: 'relative' }}>
-                  <img style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, borderRadius: '0.75rem'}} src={'http://localhost:3003/' + courseDetail?.thumbnail} alt={courseDetail?.title} />
+                  <img style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, borderRadius: '0.75rem'}} src={HTTP_URL_SERVER_NEST + courseDetail?.thumbnail} alt={courseDetail?.title} />
                 </div>
                 <p className=' font-semibold text-2xl text-[#feb800] uppercase my-5 '>free of charge</p>
                 <button 

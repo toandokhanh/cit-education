@@ -37,18 +37,24 @@
 
 
 import { Repository } from 'typeorm';
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entitys/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ILike } from 'typeorm';
+import { Course } from 'src/entitys/course.entity';
+import { Blog } from 'src/entitys/blog.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Course)
+    private readonly courseRepository: Repository<Course>,
+    @InjectRepository(Blog)
+    private readonly blogRepository: Repository<Blog>,
     private jwtService: JwtService
   ) {}
 
@@ -97,15 +103,41 @@ export class UserService {
 
   async getUserDetails(email: string){
     try {
-      console.log(email);
       const user = await this.userRepository.findOne({  
-        where: { email: ILike(`%${email}%`) },
-        select: ["id", "email", "fullname", "gender", "role", "createdAt", "updatedAt"]
+        where: { email: ILike(`${email}@%`) },
+        select: ["id", "email", "fullname", "gender", "role", "bio", "avatar", "createdAt", "updatedAt"]
       });
-      return user;
+      const blogs = await this.blogRepository.find({where: {user: {id: user.id}}})
+      if (user.role === 'instructor') {
+        const courses = await this.courseRepository.find({where: {creator: {id: user.id}}});
+        return {
+          user,
+          courses,
+          blogs
+        }
+      }else {
+        const courses = await this.courseRepository.find({where: {enrollments: {user: {id: user.id}}}})
+        return {
+          user,
+          courses,
+          blogs
+        }
+      }
     } catch (error) {
       console.error(error);
       throw error;
     }
+  }
+
+  // lười code vậy cho nhanh :))
+  async updateUser(data: any, userId: number){
+    const user = await this.userRepository.findOne({where: {id: userId}})
+    if (!user) {
+      throw new NotFoundException('User not found?');
+    }
+    user.avatar = `/images/${data.avatar}`;
+    user.bio = data.bio;
+    user.fullname = data.fullname;
+    return await this.userRepository.save(user);
   }
 }

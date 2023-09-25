@@ -5,6 +5,7 @@ import coursesApi from '../../apis/coursesApi'
 import { Grid, Container } from '@mui/material'
 import ActionAreaCard from './ActionAreaCard'
 import Progress from '../Layouts/Progress'
+import { HTTP_URL_SERVER_NEST } from '../../constant/constant'
 
 const AllCourses = () => {
   const [loading, setLoading] = useState(true)
@@ -31,7 +32,7 @@ const AllCourses = () => {
         <Grid container spacing={4}>
           {courses?.map((course) => 
             <Grid item xs={3} mb={3} key={course.id}>
-              <ActionAreaCard thumbnail={'http://localhost:3003' + course.thumbnail} title={course.title} link={'/course/' + course.id} description={course.description} lengthStudent={course?.students?.length}/>
+              <ActionAreaCard thumbnail={HTTP_URL_SERVER_NEST + course.thumbnail} title={course.title} link={'/course/' + course.id} description={course.description} lengthStudent={course?.students?.length}/>
             </Grid>
           )}
         </Grid>

@@ -6,10 +6,12 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { jwtConstants } from './constant/constant';
 import { JwtStrategy } from '../strategy/jwt.strategy';
+import { Course } from 'src/entitys/course.entity';
+import { Blog } from 'src/entitys/blog.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Course, Blog]),
     JwtModule.register({
       secret :jwtConstants.secret,
       signOptions: { expiresIn: '1d' },
