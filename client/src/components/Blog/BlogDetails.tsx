@@ -57,7 +57,7 @@ const BlogDetails = () => {
     setCommentContent(content)
     setCommentId(event.currentTarget.tabIndex);
     if (user) {
-      if (Number(userComment) === user.userId) {
+      if (Number(userComment) === user.id) {
         setAnchorEl(event.currentTarget);
       }
     }
@@ -68,7 +68,7 @@ const BlogDetails = () => {
   const handleLikeComment = async (index: number, commentId: number) => {
     try {
       const comment = blogDetails.comments[index];
-      const isLikedByUser = comment.likes.some((like: any) => like.id === user?.userId);
+      const isLikedByUser = comment.likes.some((like: any) => like.id === user?.id);
       let updatedComment;
   
       if (isLikedByUser) {
@@ -78,7 +78,7 @@ const BlogDetails = () => {
         // Cập nhật trạng thái "liked" và danh sách likes của comment
         updatedComment = {
           ...comment,
-          likes: comment.likes.filter((like: any) => like.id !== user?.userId),
+          likes: comment.likes.filter((like: any) => like.id !== user?.id),
         };
       } else {
         // Nếu chưa "like", thực hiện "like" bằng cách gọi API
@@ -87,7 +87,7 @@ const BlogDetails = () => {
         // Cập nhật trạng thái "liked" và danh sách likes của comment
         updatedComment = {
           ...comment,
-          likes: [...comment.likes, { id: user?.userId }],
+          likes: [...comment.likes, { id: user?.id }],
         };
       }
   
@@ -197,7 +197,7 @@ const BlogDetails = () => {
                               </div>
                               <div className='flex gap-5'>
                                 <div className='flex content-center'>
-                                {blogDetails?.likes?.some((like: any) => like.id === user?.userId) ? (
+                                {blogDetails?.likes?.some((like: any) => like.id === user?.id) ? (
                                     <FavoriteRounded
                                       onClick={() => handleUnLikeBlog(blogDetails.id)}
                                     />
@@ -234,11 +234,11 @@ const BlogDetails = () => {
                                 </div>
                                 
                                 <div className="text-xs ml-4 mt-0.5 text-gray-500 ">
-                                  {comment.user.id === user?.userId ?('You') : comment.isCreator ? (<p>Creator <HowToRegIcon fontSize='small'/></p>) : ('User')} 
+                                  {comment.user.id === user?.id ?('You') : comment.isCreator ? (<p>Creator <HowToRegIcon fontSize='small'/></p>) : ('User')} 
                                 </div>
                                 
                                 <div className="bg-white  border border-white  rounded-full float-right -mt-8 mr-0.5 flex shadow items-center ">
-                                  {comment?.likes?.some((like: any) => like.id === user?.userId) ? (
+                                  {comment?.likes?.some((like: any) => like.id === user?.id) ? (
                                     // Nếu đã "like" comment, hiển thị biểu tượng trái tim đỏ
                                     <FavoriteRounded
                                       fontSize='small'

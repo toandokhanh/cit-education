@@ -57,4 +57,24 @@ export class EnrollmentService {
             isEnrollment: true
         }
     }
+
+
+
+    async getAllEnrollments(idUser: number){
+        const user = await this.userResponse.findOne({where : {id: idUser}})
+        if (!user) {
+            throw new NotFoundException('Ussr not found');
+        }
+        const courses = await this.courseResponse.find({where: {creator:{id: idUser}}})
+        // Khởi tạo mảng để lưu trữ các enrollments tương ứng
+        const enrollments = [];
+        // Duyệt qua từng khóa học
+        for (const course of courses) {
+            // Lọc các enrollments dựa trên id của khóa học hiện tại
+            const enrollmentsForCourse = await this.enrollmentResponse.find({ where: { course: {id: course.id} } });
+            // Thêm các enrollments này vào mảng enrollments chung
+            enrollments.push(...enrollmentsForCourse);
+        }
+        return enrollments
+    }
 }

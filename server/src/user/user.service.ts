@@ -67,6 +67,13 @@ export class UserService {
     return this.userRepository.findOne({ where: { email } });
 }
 
+  async getUser(userId: number){
+    const user = await this.userRepository.findOne({where: {id: userId}})
+    if (!user) {
+      throw new NotFoundException('User not found?');
+    }
+    return user;
+  }
 
   async getUsers(): Promise<User[]> {
     const users = await this.userRepository.find();
@@ -131,13 +138,32 @@ export class UserService {
 
   // lười code vậy cho nhanh :))
   async updateUser(data: any, userId: number){
+    // console.log(data);
     const user = await this.userRepository.findOne({where: {id: userId}})
     if (!user) {
       throw new NotFoundException('User not found?');
     }
-    user.avatar = `/images/${data.avatar}`;
-    user.bio = data.bio;
-    user.fullname = data.fullname;
+    if(data.avatar){
+      if (data.avatar !== user.avatar) {
+        // console.log('changed avatar');
+        user.avatar = `/images/${data.avatar}`;
+      }
+    }
+    if(data.fullname){
+      if(data.fullname !== user.fullname){
+        // console.log('changed fullname');
+        user.fullname = data.fullname;
+      }
+    }
+    if(data.bio){
+      if(data.bio !== user.bio){
+        // console.log('changed bio');
+        user.bio = data.bio;
+      }
+    }
+    
     return await this.userRepository.save(user);
   }
 }
+
+

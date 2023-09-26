@@ -48,7 +48,7 @@ const BlogItem = ({blog, setBlogs}: any) => {
       setBlogId(event.currentTarget.tabIndex);
       setData({title, content})
       if (user) {
-        if (Number(createrId) === user.userId) {
+        if (Number(createrId) === user.id) {
           setAnchorEl(event.currentTarget);
         }
       }

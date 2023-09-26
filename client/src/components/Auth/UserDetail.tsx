@@ -61,7 +61,7 @@ const UserDetail = () => {
   const fetchUser = async () => {
     try {
       const response = await userApi.getUserDetail(email)
-      console.log(response);
+      // console.log(response);
       setData(response)
     } catch (error) {
       console.error(error)
@@ -69,7 +69,8 @@ const UserDetail = () => {
   }
   
   const handleUpdateUser = async () => {
-    const formData = new FormData();
+    if(videoFile){
+      const formData = new FormData();
       formData.append('file', videoFile);
       try {
         const response = await axios.post(`${HTTP_URL_SERVER_NEST}/upload/image`, formData, {
@@ -85,11 +86,13 @@ const UserDetail = () => {
       } catch (error) {
         console.error('Error uploading file:', error);
       }
+    }else(
+      setCallUserApi(true)
+    )
   }
   const updateUser = async () => {
-    console.log(infoUser);
-    if(infoUser.avatar || infoUser.bio || infoUser.fullname){
       try {
+        console.log(infoUser);
         const response = await userApi.updateUser(infoUser)
         setData((prevData: any) => ({
           ...prevData,
@@ -100,7 +103,6 @@ const UserDetail = () => {
       } catch (error) {
         console.error('Error updating user:', error);
       }
-    }
   }
   useEffect(() => {
     fetchUser()
@@ -119,7 +121,7 @@ const UserDetail = () => {
             <br />
             <br />
               <Avatar sx={{ width: '7rem', height: '7rem', borderRadius: '99999px', margin: '0 auto' }} alt={data?.user?.fullname} src={`${HTTP_URL_SERVER_NEST}${data.user.avatar}` || `/static/images/avatar/1.jpg`} />
-              {userCurrent?.user?.userId === Number(data.user.id) ? (
+              {userCurrent?.user?.id === Number(data.user.id) ? (
                   <span onClick={handleClickOpenFormComment}><BorderColorIcon sx={{ fontSize: 12, marginTop: '-60px', marginLeft: '90px' }}/></span>
                 ): null}
               <Dialog open={openFormUpdateUser} onClose={handleCloseFormUser}>
@@ -167,7 +169,7 @@ const UserDetail = () => {
               </Dialog>
               <h2 className="text-center text-2xl font-semibold mt-3 capitalize">
                 {data.user?.fullname} 
-                {userCurrent?.user?.userId === Number(data.user.id) ? (
+                {userCurrent?.user?.id === Number(data.user.id) ? (
                   <span onClick={handleClickOpenFormComment}><BorderColorIcon sx={{ fontSize: 12 }}/></span>
                 ): null}
               </h2>
@@ -181,7 +183,7 @@ const UserDetail = () => {
                 <h3 className="text-xl font-semibold">Bio</h3>
                 <p className="text-gray-600 mt-2">
                   {data.user.bio|| '"In code we trust"'}
-                  {userCurrent?.user?.userId === Number(data.user.id) ? (
+                  {userCurrent?.user?.id === Number(data.user.id) ? (
                   <span onClick={handleClickOpenFormComment}><BorderColorIcon sx={{ fontSize: 12 }}/></span>
                 ): null}
                 </p>

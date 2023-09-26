@@ -17,7 +17,7 @@ export class AdminStrategy extends PassportStrategy(Strategy, 'admin') {
             return { 
                 userId: payload.id, 
                 email: payload.email, 
-                avatart: payload.avatart, 
+                avatar: payload.avatart, 
                 fullname: payload.fullname, 
                 role: payload.role, 
             };

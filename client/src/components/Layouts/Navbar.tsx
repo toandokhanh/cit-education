@@ -21,8 +21,6 @@ function Navbar({courses, setCourses }: any) {
   const navigate = useNavigate()
   const { logoutUser } = useUser();
   const { user } = useUser();
-  console.log('dasadasdasds',user);
-  
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -52,7 +50,7 @@ function Navbar({courses, setCourses }: any) {
             <Container maxWidth="xl" >
               <Toolbar disableGutters>
                 <ApartmentIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                <Link to='/'>
+                <Link to='/home'>
                   <Typography
                     variant="h6"
                     noWrap
@@ -119,11 +117,10 @@ function Navbar({courses, setCourses }: any) {
                   </Menu>
                 </Box>
                 <ApartmentIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                <Link to='/home'>
                 <Typography
                   variant="h5"
                   noWrap
-                  component="a"
-                  href="/"
                   sx={{
                     mr: 2,
                     display: { xs: 'flex', md: 'none' },
@@ -137,6 +134,7 @@ function Navbar({courses, setCourses }: any) {
                 >
                   CITED
                 </Typography>
+                </Link>
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                     {/* const pages = ['Courses', 'Roadmap', 'Blog', 'About']; */}
                     {!user?.isInstructor ? (
@@ -202,10 +200,7 @@ function Navbar({courses, setCourses }: any) {
                         </MenuItem>
                         </Link> 
                         <MenuItem>
-                          <Typography textAlign="center"><Link to={'/myCourses'}>My Courses</Link></Typography>
-                        </MenuItem>
-                        <MenuItem>
-                          <Typography textAlign="center"><Link to={'/statistic'}>Statistic</Link></Typography>
+                          <Typography textAlign="center"><Link to={'/home'}>My Courses</Link></Typography>
                         </MenuItem>
                         <MenuItem onClick={handleLogout}>
                           <Typography textAlign="center" >Logout</Typography>
