@@ -130,7 +130,7 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
     setCommentContent(content)
     setCommentId(event.currentTarget.tabIndex);
     if (user) {
-      if (Number(userComment) === user.userId) {
+      if (Number(userComment) === user.id) {
         setAnchorEl(event.currentTarget);
       }
     }
@@ -139,7 +139,7 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
   const handleLikeComment = async (index: number, commentId: number) => {
     try {
       const comment = lessonDetail.comments[index];
-      const isLikedByUser = comment.likes.some((like: any) => like.id === user?.userId);
+      const isLikedByUser = comment.likes.some((like: any) => like.id === user?.id);
       let updatedComment;
   
       if (isLikedByUser) {
@@ -149,7 +149,7 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
         // Cập nhật trạng thái "liked" và danh sách likes của comment
         updatedComment = {
           ...comment,
-          likes: comment.likes.filter((like: any) => like.id !== user?.userId),
+          likes: comment.likes.filter((like: any) => like.id !== user?.id),
         };
       } else {
         // Nếu chưa "like", thực hiện "like" bằng cách gọi API
@@ -158,7 +158,7 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
         // Cập nhật trạng thái "liked" và danh sách likes của comment
         updatedComment = {
           ...comment,
-          likes: [...comment.likes, { id: user?.userId }],
+          likes: [...comment.likes, { id: user?.id }],
         };
       }
   
@@ -211,11 +211,11 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
               </div>
               
               <div className="text-xs ml-4 mt-0.5 text-gray-500 ">
-                {comment.user.id === user?.userId ?('You') : comment.isCreator ? (<p>Creator <HowToRegIcon fontSize='small'/></p>) : ('User')} 
+                {comment.user.id === user?.id ?('You') : comment.isCreator ? (<p>Creator <HowToRegIcon fontSize='small'/></p>) : ('User')} 
               </div>
               
               <div className="bg-white  border border-white  rounded-full float-right -mt-8 mr-0.5 flex shadow items-center ">
-                {comment?.likes?.some((like: any) => like.id === user?.userId) ? (
+                {comment?.likes?.some((like: any) => like.id === user?.id) ? (
                   // Nếu đã "like" comment, hiển thị biểu tượng trái tim đỏ
                   <FavoriteRounded
                     fontSize='small'

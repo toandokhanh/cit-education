@@ -23,4 +23,13 @@ export class EnrollmentController {
         return this.enrollmentService.getLessonId(idCourse,user.userId)
     }
 
+
+
+
+    @UseGuards(AuthGuard("instructor"))
+    @Get('/v1/statistic')
+    async getAllEnrollments(@User() user: any){
+        return this.enrollmentService.getAllEnrollments(user.userId)
+    }
+
 }

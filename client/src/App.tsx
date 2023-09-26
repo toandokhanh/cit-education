@@ -13,7 +13,6 @@ import About from './components/About/About';
 import MyCourseDetail from './components/Courses/MyCourseDetail';
 import UserDetail from './components/Auth/UserDetail';
 import AllCourses from './components/Courses/AllCourses';
-import TestT from './components/Lesson/TestT';
 import Blog from './components/Blog/Blog';
 import BlogDetails from './components/Blog/BlogDetails';
 import CreateBlog from './components/Blog/CreateBlog';

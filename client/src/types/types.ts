@@ -7,7 +7,7 @@ export interface Category {
 
 
 export interface User{
-  userId: number;
+  id: number;
   email: string;
   avatar: string;
   fullname: string;

@@ -19,7 +19,7 @@ export class UserController {
     @UseGuards(AuthGuard('jwt'))
     @Get('me')
     async detailUser(@User() user: any){
-        return user
+        return await this.userService.getUser(user.userId);
     }
 
     @Get()
