@@ -16,6 +16,8 @@ import AllCourses from './components/Courses/AllCourses';
 import Blog from './components/Blog/Blog';
 import BlogDetails from './components/Blog/BlogDetails';
 import CreateBlog from './components/Blog/CreateBlog';
+import Roadmap from './components/Roadmap/Roadmap';
+import RoadmapDetails from './components/Roadmap/RoadmapDetails';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/about' element={<About />} />
+            <Route path='/roadmap' element={<Roadmap />} />
+            <Route path='/category/:idCate' element={<RoadmapDetails />} />
             <Route path='/blog' element={<Blog />} />
             <Route path='/blog/:idBlog/details' element={<BlogDetails />} />
             <Route path='/blog/create' element={<CreateBlog />} />

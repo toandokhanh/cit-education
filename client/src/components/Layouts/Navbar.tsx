@@ -159,7 +159,7 @@ function Navbar({courses, setCourses }: any) {
                     <><BasicSpeedDial courses={courses} setCourses={setCourses}/></>
                   )}
                 </div>
-                <div className="mr-8 relative">
+                {/* <div className="mr-8 relative">
                   <input
                     type="text"
                     placeholder=" Search courses"
@@ -168,7 +168,7 @@ function Navbar({courses, setCourses }: any) {
                   <div className="absolute left-2 top-2">
                     <i className="material-icons text-gray-500">search</i>
                   </div>
-                </div>
+                </div> */}
                 {user ? (
                   <>
                     <Box sx={{ flexGrow: 0 }}>

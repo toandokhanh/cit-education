@@ -1,5 +1,6 @@
 import { Course } from "../types/types";
 import axiosClient from "./axiosClient";
+import categoryApi from "./catetoryApi";
 
 const coursesApi = {
   // lấy ra các khóa học do instructor tạo ra
@@ -45,6 +46,21 @@ const coursesApi = {
 
   async registerCourse(idCourse: number) : Promise<any> {
     const url = `course/${idCourse}/enrollment`
+    return axiosClient.get(url)
+  },
+
+  async searchCourses(searchTerm: any) : Promise<any> {
+    const url = `/course/search?name=${searchTerm}`
+    return axiosClient.get(url)
+  },
+
+  async searchMyCourses(searchTerm: any) : Promise<any> {
+    const url = `/mycourse/search?name=${searchTerm}`
+    return axiosClient.get(url)
+  },
+
+  async getCoursesBasedOnCate(cateId: number) : Promise<any> {
+    const url = `course/categories/${cateId}`
     return axiosClient.get(url)
   }
     

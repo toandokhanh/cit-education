@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from 'src/entitys/course.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { Category } from 'src/entitys/catetory.entity';
 import { User } from 'src/entitys/user.entity';
@@ -33,6 +33,22 @@ export class CourseService {
         return courses;
     }
     
+    async searchCoursesByName(name: string) {
+        
+        
+        const courses = await this.courseRepository.find({
+          where: {
+            title: ILike(`%${name}%`), // Sử dụng ILike để không phân biệt chữ hoa chữ thường
+          },
+          order: {
+            id: 'ASC',
+          },
+        });
+        return courses;
+      }
+
+
+
     async getDetailCourse(id: number): Promise<Course>{
         // const course = await this.courseRepository.findOne({where: {id}})
         // const course = await this.courseRepository

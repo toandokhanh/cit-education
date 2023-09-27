@@ -1,6 +1,6 @@
 import { UpdateCourseDto } from './dto/updateCourse.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Controller, Get, Param, Post, Body, UseGuards, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, UseGuards, Delete, Put, Query } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { User } from 'src/user/decorator/user.decorator';
 import { CreateCourseDto } from './dto/createCourse.dto';
@@ -18,6 +18,12 @@ export class CourseController {
         return await this.coursesService.getAllCourses()
     }
 
+
+
+    @Get('search')
+    async searchCourses(@Query('name') name: string) {
+      return await this.coursesService.searchCoursesByName(name);
+    }
 
     // find course details
     @Get('/:id')
@@ -80,4 +86,6 @@ export class CourseController {
         return await this.coursesService.getMyCoursesRegistered(userId)
     }
 
+
+    
 }
