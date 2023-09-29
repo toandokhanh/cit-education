@@ -44,6 +44,11 @@ const blogApi = {
     const url = `blog/v1/me`; 
     return axiosClient.get(url);  
   },
+
+  async searchBlogs(searchTerm: any) : Promise<any> {
+    const url = `/blog/search?title=${searchTerm}`
+    return axiosClient.get(url)
+  },
 };
 
 export default blogApi;

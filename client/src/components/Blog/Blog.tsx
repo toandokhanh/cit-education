@@ -8,10 +8,17 @@ import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import { Link } from 'react-router-dom'
 const Blog = () => {
   const [blogs, setBlogs] = useState<any>([])
+  const [searchTerm, setSearchTerm] = React.useState(undefined)
   const fetchBlogs = async () =>{
     try {
-      const response = await blogApi.getAllBlogs()
-      setBlogs(response)
+      if(searchTerm){
+        console.log(searchTerm);
+        const response = await blogApi.searchBlogs(searchTerm)
+        setBlogs(response)
+      }else{
+        const response = await blogApi.getAllBlogs()
+        setBlogs(response)
+      }
     } catch (error) {
       console.error('Error fetching blog', error)
     }
@@ -19,11 +26,11 @@ const Blog = () => {
 
   useEffect(() => {
     fetchBlogs()
-  }, [])
+  }, [searchTerm])
   
   return (
     <>
-      <Navbar/>
+      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
       <Container >
       <br />
       <br />

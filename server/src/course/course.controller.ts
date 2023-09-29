@@ -20,7 +20,7 @@ export class CourseController {
 
 
 
-    @Get('search')
+    @Get('/search')
     async searchCourses(@Query('name') name: string) {
       return await this.coursesService.searchCoursesByName(name);
     }
@@ -55,21 +55,13 @@ export class CourseController {
         return await this.coursesService.createCourse(course)
     }
 
-    // get my courses
-    @UseGuards(AuthGuard('instructor'))
-    @Get('v1/me')
-    async getMyCourse(@User() user: any)
-    {
-        const userId = user.userId
-        return await this.coursesService.getMyCourse(userId)
-    }
     
     // get courses base on catetory
     @Get('categories/:id')
     async getCoursesBaseCate(@Param('id') id: number){
         return await this.coursesService.getCoursesBaseCate(id)
     }
-
+    
     // Enrollments
     @UseGuards(AuthGuard('student'))
     @Get(':idCourse/enrollment')
@@ -77,13 +69,20 @@ export class CourseController {
         const idUser = user.userId
         return await this.coursesService.enrollCourse(idCourse, idUser)
     }
+    
+    // get my courses
+    @UseGuards(AuthGuard('instructor'))
+    @Get('v1/me')
+    async getMyCourse(@User() user: any)
+    {
+        return await this.coursesService.getMyCourse(user.userId)
+    }
 
     // lấy ra các khóa học đã đăng ký
     @UseGuards(AuthGuard('student'))
     @Get('v1/registered')
     async getMyCoursesRegistered(@User() user: any){
-        const userId = user.userId
-        return await this.coursesService.getMyCoursesRegistered(userId)
+        return await this.coursesService.getMyCoursesRegistered( user.userId)
     }
 
 

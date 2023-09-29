@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Blog } from 'src/entitys/blog.entity';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { CreateBlogDto } from './dto/createBlog.dto';
 import { User } from 'src/entitys/user.entity';
 import { UpdateBlogDto } from './dto/updateBlog.dto';
@@ -29,8 +29,18 @@ export class BlogService {
         }
         return blogs
     }
-
-
+    async searchBlogsByTitle(title: string) {
+      const blogs = await this.blogsResponse.find({
+        where: {
+          title: ILike(`%${title}%`), // Sử dụng ILike để không phân biệt chữ hoa chữ thường
+        },
+        order: {
+          id: 'ASC',
+        },
+      });
+      return blogs
+    }
+    
     async getUserBlogs(userId: number){
       const user = await this.UsersResponse.findOne({where: {id: userId} })
       if (!user){ 

@@ -34,8 +34,6 @@ export class CourseService {
     }
     
     async searchCoursesByName(name: string) {
-        
-        
         const courses = await this.courseRepository.find({
           where: {
             title: ILike(`%${name}%`), // Sử dụng ILike để không phân biệt chữ hoa chữ thường

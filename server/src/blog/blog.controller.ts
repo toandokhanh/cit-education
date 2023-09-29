@@ -1,6 +1,6 @@
 import { AuthGuard } from '@nestjs/passport';
 import { BlogService } from './blog.service';
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards,  } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards,  } from '@nestjs/common';
 import { CreateBlogDto } from './dto/createBlog.dto';
 import { User } from 'src/user/decorator/user.decorator';
 import { UpdateBlogDto } from './dto/updateBlog.dto';
@@ -16,6 +16,12 @@ export class BlogController {
     @Get()
     async getAllBlogs(){
         return await this.blogService.getAllBlogs();
+    }
+
+    // search
+    @Get('/search')
+    async searchBlogs(@Query('title') title: string){
+        return await this.blogService.searchBlogsByTitle(title);
     }
 
     // get deltail blog
