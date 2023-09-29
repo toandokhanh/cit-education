@@ -141,7 +141,7 @@ const CourseDetail = () => {
                   <div className='ml-3'>
                   <Link to={`/user/${courseDetail?.creator?.email?.split('@')[0]}`}>
                     <Chip
-                      avatar={<Avatar alt={courseDetail?.creator?.fullname} src='' />}
+                      avatar={<Avatar alt={courseDetail?.creator?.fullname} src={`${HTTP_URL_SERVER_NEST}${courseDetail?.creator?.avatar}` || `/static/images/avatar/1.jpg`} />}
                       label={courseDetail?.creator?.fullname}
                       variant="outlined"
                     />
@@ -157,7 +157,7 @@ const CourseDetail = () => {
                     {courseDetail?.students?.map((student: any) =>
                     <Tooltip key={student?.email} title={student?.fullname} followCursor>
                       <Link to={`/user/${student?.email.split('@')[0]}`}>
-                        <Avatar sx={{ width: 34, height: 34 }} alt={student?.fullname} src="/static/images/avatar/1.jpg" />
+                        <Avatar sx={{ width: 34, height: 34 }} alt={student?.fullname} src={`${HTTP_URL_SERVER_NEST}${student.avatar}` || `/static/images/avatar/1.jpg`} />
                       </Link>
                     </Tooltip>
                     )}

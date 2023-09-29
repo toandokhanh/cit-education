@@ -17,9 +17,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../Contexts/UserContext';
 import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 
-function Navbar({courses, setCourses }: any) {
+function Navbar({courses, setCourses, searchTerm, setSearchTerm  }: any) {
   const navigate = useNavigate()
   const { logoutUser } = useUser();
+
   const { user } = useUser();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -159,16 +160,21 @@ function Navbar({courses, setCourses }: any) {
                     <><BasicSpeedDial courses={courses} setCourses={setCourses}/></>
                   )}
                 </div>
-                {/* <div className="mr-8 relative">
+                {!user?.isInstructor && setSearchTerm && (
+                  <div className="mr-8 relative">
                   <input
                     type="text"
+                    name='search'
+                    value={searchTerm || ''}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder=" Search courses"
                     className="py-[6px] px-6 bg-gray-200 text-gray-800 rounded-full pl-8 focus:outline-none focus:ring focus:border-blue-300"
                   />
                   <div className="absolute left-2 top-2">
                     <i className="material-icons text-gray-500">search</i>
                   </div>
-                </div> */}
+              </div>
+                )}
                 {user ? (
                   <>
                     <Box sx={{ flexGrow: 0 }}>
