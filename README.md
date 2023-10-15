@@ -1,5 +1,5 @@
 # CIT-Education
-A platform has been developed to assist instructors in uploading their course lectures, complete with automatically generated subtitles, and allows users to interact with each other through comments, ratings, and other related blogs, etc.
+A platform has been developed to assist instructors in uploading their course lectures, complete with automatically generated subtitles, and allows users to interact with each other through comments, ratings, and other related blogs, etc. The website is inspired by https://fullstack.edu.vn/
 # Tech-stack used in this repo
 Backend: NestJS(typeORM), Flask, PostgreSQL, ...
 
