@@ -41,5 +41,4 @@ FrontEnd: ReactTS, TailwindCSS, MUI, ...
 
 
 # About
-This is my specialized academic project, which I've managed to accomplish after three months of dedicated self-learning. I'd like to express my gratitude to all who have taken the time to review it. For those who wish to delve into the specifics, please do not hesitate to contact us via email at ktoan515@gmail.com.
-
+This is the specialized academic project that I managed to complete after three months of dedicated self-study. I would like to express my gratitude to everyone who took the time to review it. Those who want to learn more specifically please contact me via email at ktoan515@gmail.com.
