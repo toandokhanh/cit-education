@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Layouts/Navbar'
 import Footer from '../Layouts/Footer'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useParams, useNavigate} from 'react-router-dom'
 import blogApi from '../../apis/blogApi'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { format } from 'date-fns';
@@ -24,7 +24,7 @@ const BlogDetails = () => {
   const [comment, setComment] = React.useState('');
   const [commentContent, setCommentContent] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-
+  const navigation = useNavigate()
   const fetchBlogDetails = async () => {
     try {
       const respose: any = await blogApi.getBlogDetails(idBlog)
@@ -101,6 +101,7 @@ const BlogDetails = () => {
       }));
     } catch (error) {
       console.error("Error liking/unliking comment", error);
+      navigation('/login')
     }
   };
 
@@ -111,6 +112,7 @@ const BlogDetails = () => {
       setBlogDetails(response);
     } catch (error) {
       console.error("Error liked blog", error);
+      navigation('/login')
     }
             
   }
@@ -139,6 +141,7 @@ const BlogDetails = () => {
       }
     } catch (error) {
       console.error("Error creating comment", error);
+      navigation('/login')
     }
   };
 

@@ -167,7 +167,7 @@ function Navbar({courses, setCourses, searchTerm, setSearchTerm  }: any) {
                     name='search'
                     value={searchTerm || ''}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder=" Search courses"
+                    placeholder=" Search ..."
                     className="py-[6px] px-6 bg-gray-200 text-gray-800 rounded-full pl-8 focus:outline-none focus:ring focus:border-blue-300"
                   />
                   <div className="absolute left-2 top-2">

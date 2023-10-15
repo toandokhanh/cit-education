@@ -29,7 +29,7 @@ const RoadmapDetails = () => {
         
         <Navbar/>
         <Container className='mt-12'>
-        {courses.length > 0 ? (
+        {courses?.length > 0 ? (
           <div>
             <h4 className='text-start text-3xl font-semibold mb-9'>Course related to {cate.name}</h4>
             <Grid container spacing={4}>

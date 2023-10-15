@@ -103,10 +103,12 @@ export class CommentService {
         if (!user || !comment){ 
             throw new NotFoundException('Informations not found');
         }
+        console.log('user, comment')
+        console.log(user, comment.likes)
         await this.usersResponse
         .createQueryBuilder()
         .relation(User, 'likedComments')
-        .of(user)
+        .of(comment.likes)
         .remove(comment);
 
         // Tiếp theo, xóa comment
