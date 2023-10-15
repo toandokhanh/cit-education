@@ -36,7 +36,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
         console.error('Error fetching user:', error);
       }
     }
-    
   };
 
   useEffect(() => {

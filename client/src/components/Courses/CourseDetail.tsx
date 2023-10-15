@@ -64,6 +64,7 @@ const CourseDetail = () => {
         }
       } catch (error) {
         console.error('Error registering course', error);
+        navigation('/login')
       }
     }
 
