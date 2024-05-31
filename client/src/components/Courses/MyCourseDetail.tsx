@@ -191,7 +191,7 @@ const MyCourseDetail = () => {
                     TransitionComponent={Transition}
                     >
                     <DialogTitle id="alert-dialog-title">
-                        {"Thông báo cực căng"}
+                        {"Thông báo"}
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">

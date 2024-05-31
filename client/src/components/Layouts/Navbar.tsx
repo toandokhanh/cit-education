@@ -41,7 +41,8 @@ function Navbar({courses, setCourses, searchTerm, setSearchTerm  }: any) {
   
   const handleLogout = async () => {
     await logoutUser()
-    navigate('/home');
+    return navigate('/');
+    // return navigate('/home');
   }
 
   

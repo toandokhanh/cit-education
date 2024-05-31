@@ -157,7 +157,8 @@ export class CourseService {
         if (!course) {
             throw new NotFoundException('Course not found');
         }
-        await this.lessonRepository.delete({ course });
+        console.log("Course deleted");
+        await this.lessonRepository.delete({course});
         await this.courseRepository.delete(idCourse);
         return course
     }
