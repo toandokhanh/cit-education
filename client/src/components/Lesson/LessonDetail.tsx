@@ -405,7 +405,7 @@ const LessonDetail: React.FC = () => {
                         aria-describedby="alert-dialog-description"
                       >
                         <DialogTitle id="alert-dialog-title">
-                          {"Thông báo cực căng"}
+                          {"Thông báo"}
                         </DialogTitle>
                         <DialogContent>
                           <DialogContentText id="alert-dialog-description">
