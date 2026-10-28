@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Blog } from 'src/entitys/blog.entity';
+import { Blog } from '../entities/blog.entity';
 import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
-import { CreateBlogDto } from './dto/createBlog.dto';
-import { User } from 'src/entitys/user.entity';
-import { UpdateBlogDto } from './dto/updateBlog.dto';
-import { Comment } from 'src/entitys/comment.entity';
+import { CreateBlogDto } from './dto/create-blog.dto';
+import { User } from '../entities/user.entity';
+import { UpdateBlogDto } from './dto/update-blog.dto';
+import { Comment } from '../entities/comment.entity';
 
 @Injectable()
 export class BlogService {
@@ -20,11 +20,11 @@ export class BlogService {
     ){}
 
     async getAllBlogs(): Promise<Blog[]>{
-        const blogs = await this.blogsResponse.find({      
-          order: {createdAt: 'DESC'} 
+        const blogs = await this.blogsResponse.find({
+          order: {createdAt: 'DESC'}
         })
 
-        if (!blogs){ 
+        if (!blogs){
             throw new NotFoundException('Blogs not found');
         }
         return blogs
@@ -40,19 +40,19 @@ export class BlogService {
       });
       return blogs
     }
-    
+
     async getUserBlogs(userId: number){
       const user = await this.UsersResponse.findOne({where: {id: userId} })
-      if (!user){ 
+      if (!user){
         throw new NotFoundException('User not found');
       }
       const myBlogs = await this.blogsResponse.find({where:{user: {id: userId}}})
       return myBlogs
     }
 
-    async getBlogDetails(blogId: number): Promise<Blog>{ 
+    async getBlogDetails(blogId: number): Promise<Blog>{
         const blog = await this.blogsResponse.findOne({where: {id: blogId}})
-        if (!blog){ 
+        if (!blog){
             throw new NotFoundException('Blog not found');
         }
         return blog
@@ -61,7 +61,7 @@ export class BlogService {
     async createBlog(blog: any): Promise<Blog[]>{
         const realeData = CreateBlogDto.plainToClass(blog);
         const user = await this.UsersResponse.findOne({ where: {id: realeData.user}})
-        if (!user){ 
+        if (!user){
             throw new NotFoundException('User not found');
         }
         realeData.user = user;
@@ -71,11 +71,11 @@ export class BlogService {
 
     async updateBlog(blogId: number, data: UpdateBlogDto, user: any): Promise<UpdateResult>{
         const writer = await this.UsersResponse.findOne({ where: {id: user.userId}})
-        if (!writer){ 
+        if (!writer){
             throw new NotFoundException('User not found');
         }
         const blog = await this.blogsResponse.findOne({where: {id: blogId, user: {id: writer.id}}})
-        if (!blog){ 
+        if (!blog){
             throw new NotFoundException('blog not found');
         }
         return await this.blogsResponse.update(blogId, data)
@@ -85,9 +85,9 @@ export class BlogService {
     async deleteBlog (blogId: number, user: any): Promise<DeleteResult>{
         const blog = await this.blogsResponse.findOne({
           where: { id: blogId, user: { id: user.userId } },
-          relations: ['comments', 'likes'], 
+          relations: ['comments', 'likes'],
         });
-        if (!blog){ 
+        if (!blog){
             throw new NotFoundException('blog not found');
         }
         blog.comments = []
@@ -111,12 +111,12 @@ export class BlogService {
           blog.likes.push(user);
           await this.blogsResponse.save(blog);
         }
-      
+
         return blog;
       }
 
 
-      
+
       async unlikeBlog(blogId: number, userId: number): Promise<Blog> {
         const blog = await this.blogsResponse.findOne({ where: { id: blogId }, relations: ['likes'] });
         if (!blog) {
@@ -130,7 +130,7 @@ export class BlogService {
         if (!blog.likes) {
           blog.likes = [];
         }
-      
+
         const indexOfUser = blog.likes.findIndex((likedUser) => likedUser.id === userId);
         if (indexOfUser !== -1) {
           blog.likes.splice(indexOfUser, 1);
@@ -138,7 +138,7 @@ export class BlogService {
         }
         return blog;
       }
-      
+
 }
 
 

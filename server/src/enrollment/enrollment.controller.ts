@@ -1,7 +1,7 @@
 import { AuthGuard } from '@nestjs/passport';
 import { EnrollmentService } from './enrollment.service';
 import { Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
-import { User } from 'src/user/decorator/user.decorator';
+import { User } from '../user/decorator/user.decorator';
 
 @Controller('enrollment')
 export class EnrollmentController {

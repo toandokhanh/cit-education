@@ -1,5 +1,5 @@
 import { JwtModule } from '@nestjs/jwt';
-import { User } from '../entitys/user.entity';
+import { User } from '../entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
@@ -7,8 +7,8 @@ import { UserService } from './user.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AdminStrategy } from '../strategy/admin.strategy';
 import { JwtStrategy } from '../strategy/jwt.strategy';
-import { Course } from 'src/entitys/course.entity';
-import { Blog } from 'src/entitys/blog.entity';
+import { Course } from '../entities/course.entity';
+import { Blog } from '../entities/blog.entity';
 
 @Module({
   imports: [

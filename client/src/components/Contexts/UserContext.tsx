@@ -2,7 +2,7 @@ import React, { createContext, useContext, ReactNode, useEffect, useReducer } fr
 import { User } from '../../types/types';
 import userApi from '../../apis/userApi';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
-import setAuthToken from '../utils/SetAuthToken';
+import setAuthToken from '../../utils/setAuthToken';
 import userReducer from '../reducers/authReducer';
 interface UserContextProps {
   user: User | null;

@@ -7,7 +7,7 @@ export class AlgorithmController {
     constructor(private algorithmService: AlgorithmService){}
 
     @Get()
-    async getCategorys(){
+    async getCategories(){
         return await this.algorithmService.getAlgorithms()
     }
 }

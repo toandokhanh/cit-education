@@ -1,7 +1,7 @@
 // Home.tsx
 
 // import React, { useEffect, useState } from 'react';
-// import categoryApi from '../../apis/catetoryApi';
+// import categoryApi from '../../apis/categoryApi';
 // import { Category } from '../../types/types';
 import Footer from '../Layouts/Footer';
 import { useUser } from '../Contexts/UserContext';
@@ -51,7 +51,7 @@ const Home: React.FC = () => {
       fetchMyCoursesBasedStudent()
     }
   }, [user])
-  
+
   return (
     <>
     {accessToken ? (
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
                       <TableCell align="left">Thumbnail</TableCell>
                     </TableRow>
                   </TableHead>
-                  {Courses.map((course, index) => 
+                  {Courses.map((course, index) =>
                   <TableBody key={index}>
                         <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                               <TableCell  component="th" scope="row">{index+1}</TableCell>
@@ -109,7 +109,7 @@ const Home: React.FC = () => {
                                   <div className='mb-3 max-h-5 overflow-hidden text-[blue]' key={lesson.id}>
                                     <Link to={'/course/'+course?.id+'/lesson/'+ lesson.id+'/detail'}>{lesson.title}</Link>
                                     <br />
-                                  </div> 
+                                  </div>
                                 )}
                               </TableCell>
                               <TableCell align="left">{course?.createdAt}</TableCell>
@@ -126,7 +126,7 @@ const Home: React.FC = () => {
               </TableContainer>
               </>
             ): (<h4 className='text-start text-3xl font-semibold mb-[28rem]'>You don't have any courses yet</h4>)}
-            
+
           </Container>
       )}
       <Footer />
@@ -134,7 +134,7 @@ const Home: React.FC = () => {
     ) : (
       <Navigate to="/" />
     )}
-      
+
     </>
   );
 };

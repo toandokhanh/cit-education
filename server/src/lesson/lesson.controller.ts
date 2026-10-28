@@ -1,14 +1,14 @@
 import { LessonService } from './lesson.service';
 import { AuthGuard } from "@nestjs/passport";
 import { Controller, Post, Body, Param, UseGuards, Get, BadRequestException, Delete, Put, InternalServerErrorException } from "@nestjs/common";
-import { CreateLessonDTO } from "./dto/createLesson.dto";
-import { User } from "src/user/decorator/user.decorator";
+import { CreateLessonDTO } from "./dto/create-lesson.dto";
+import { User } from "../user/decorator/user.decorator";
 import { workerUrl } from "./constant/constant";
 import axios from "axios";
 import { ConfigService } from '@nestjs/config';
-import { UpdateSubtitleDTO } from './dto/updateSubtitle.dto';
+import { UpdateSubtitleDTO } from './dto/update-subtitle.dto';
 import { assertOwnedUpload } from '../common/media';
-import { UpdateLessonDTO } from './dto/updateLesson.dto';
+import { UpdateLessonDTO } from './dto/update-lesson.dto';
 
 @Controller(":coursesId/lesson")
 export class LessonController {

@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { EnrollmentController } from './enrollment.controller';
 import { EnrollmentService } from './enrollment.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Enrollment } from 'src/entitys/enrollment.entity';
-import { User } from 'src/entitys/user.entity';
-import { Course } from 'src/entitys/course.entity';
-import { Lesson } from 'src/entitys/lesson.entity';
+import { Enrollment } from '../entities/enrollment.entity';
+import { User } from '../entities/user.entity';
+import { Course } from '../entities/course.entity';
+import { Lesson } from '../entities/lesson.entity';
 
 @Module({
   imports: [

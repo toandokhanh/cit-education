@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from '../Contexts/UserContext';
 import { TransitionProps } from '@mui/material/transitions';
 import coursesApi from '../../apis/coursesApi';
-import categoryApi from '../../apis/catetoryApi';
+import categoryApi from '../../apis/categoryApi';
 import Navbar from '../Layouts/Navbar';
 import Progress from '../Layouts/Progress';
 import Footer from '../Layouts/Footer';
@@ -36,13 +36,13 @@ const MyCourseDetail = () => {
         }));
       };
 
-      
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
       setOpen(true);
     };
-  
+
     const handleClose = () => {
       setOpen(false);
     };
@@ -60,7 +60,7 @@ const MyCourseDetail = () => {
             setloading(false);
           }
         };
-        
+
         fetchCourseDetails();
       }, []);
 
@@ -69,7 +69,7 @@ const MyCourseDetail = () => {
           try {
             const response = await categoryApi.getCategories();
             setCategories(response);
-            
+
           } catch (error) {
             console.error('Error fetching categories:', error);
           }
@@ -77,7 +77,7 @@ const MyCourseDetail = () => {
         fetchCategories();
       }, [courseDetail]);
 
-      
+
       React.useEffect(() => {
         const fetchUpdateCourse = async () => {
           try {
@@ -104,7 +104,7 @@ const MyCourseDetail = () => {
         if(action === 'delete') {
           fetchDeleteCourse();
           setAction('');
-        } 
+        }
         if(action === 'update'){
           fetchUpdateCourse();
           setAction('');
@@ -147,15 +147,15 @@ const MyCourseDetail = () => {
                 <br />
                 {valudeDefaultCategory && (
                 <TextField
-                    margin="dense" 
+                    margin="dense"
                     fullWidth
                     select
-                    label="Select Catetorys"
+                    label="Select Categorys"
                     helperText="Please select your currency"
                     name="category"
                     defaultValue={valudeDefaultCategory}
                     onChange={handleInputChange}
-                    required 
+                    required
                     >{categories.map(option => (
                     <MenuItem key={option.name} value={option.id}>
                         {option.name}
@@ -164,10 +164,10 @@ const MyCourseDetail = () => {
                 </TextField>
                 )}
                 <br />
-                <br />   
+                <br />
                 {/* <img height={200} width={200} className='object-cover mx-auto my-3 rounded-md' src={HTTP_URL_SERVER_NEST+courseDetail?.thumbnail} alt="" /> */}
                 <br />
-                <div className='flex justify-center gap-96'> 
+                <div className='flex justify-center gap-96'>
                 <Button
                 component="label"
                 variant="contained"

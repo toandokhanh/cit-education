@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Algorithm } from 'src/entitys/algorithm.entity';
-import { Course } from 'src/entitys/course.entity';
-import { Language } from 'src/entitys/language.entity';
-import { Lesson } from 'src/entitys/lesson.entity';
-import { Video } from 'src/entitys/video.entity';
+import { Algorithm } from '../entities/algorithm.entity';
+import { Course } from '../entities/course.entity';
+import { Language } from '../entities/language.entity';
+import { Lesson } from '../entities/lesson.entity';
+import { Video } from '../entities/video.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 @Injectable()

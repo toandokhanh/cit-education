@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course } from 'src/entitys/course.entity';
-import { Enrollment } from 'src/entitys/enrollment.entity';
-import { Lesson } from 'src/entitys/lesson.entity';
-import { User } from 'src/entitys/user.entity';
+import { Course } from '../entities/course.entity';
+import { Enrollment } from '../entities/enrollment.entity';
+import { Lesson } from '../entities/lesson.entity';
+import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class EnrollmentService {
 
 
     async UpdateLessonInEnrollment(idCourse: number, idLesson: any, idUser: number){
-        
+
         // simple check
         const user = await this.userResponse.findOne({where : {id: idUser}})
         const course = await this.courseResponse.findOne({where : {id: idCourse}})

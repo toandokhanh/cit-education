@@ -5,7 +5,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { CourseModule } from './course/course.module';
-import { CatetoryModule } from './catetory/catetory.module';
+import { CategoryModule } from './category/category.module';
 import { LessonModule } from './lesson/lesson.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -18,12 +18,11 @@ import { BlogModule } from './blog/blog.module';
 import { CommentModule } from './comment/comment.module';
 @Module({
   imports: [
-    UserModule, 
-    CourseModule, 
+    UserModule,
     ConfigModule.forRoot({isGlobal: true,}),
     DatabaseModule,
     CourseModule,
-    CatetoryModule,
+    CategoryModule,
     LessonModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),

@@ -7,7 +7,7 @@ import { Avatar, Button, Dialog, DialogActions, DialogContent, MenuItem, Popover
 import DOMPurify from 'dompurify';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useUser } from '../Contexts/UserContext';
-import ReactQuill from 'react-quill';
+import RichTextEditor from '../RichTextEditor';
 import blogApi from '../../apis/blogApi';
 import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 const BlogItem = ({blog, setBlogs}: any) => {
@@ -84,7 +84,7 @@ const BlogItem = ({blog, setBlogs}: any) => {
         console.error("Error creating comment", error);
       }
     };
-  
+
   return (
     <div className="container max-w-4xl px-10 py-6 mx-auto rounded-lg shadow-sm bg-gray-100 my-5">
         <div className="flex items-center justify-between">
@@ -93,8 +93,8 @@ const BlogItem = ({blog, setBlogs}: any) => {
           <div><FavoriteBorderIcon fontSize='medium' color='action'/> <span>{blog.likes.length}</span></div>
           <div><ChatBubbleOutlineIcon fontSize='medium' color='action'/> <span>{blog.comments.length}</span></div>
           <div >
-            <MoreHorizIcon 
-            onClick={(event) => handleMore(event, blog.title ,blog.content)} 
+            <MoreHorizIcon
+            onClick={(event) => handleMore(event, blog.title ,blog.content)}
             fontSize='medium' color='action'
             id={blog?.user.id}
             tabIndex={blog.id}
@@ -125,13 +125,10 @@ const BlogItem = ({blog, setBlogs}: any) => {
               />
             </DialogContent>
             <DialogContent>
-              <ReactQuill
+              <RichTextEditor
                   className="h-96"
-                  theme="snow"
                   value={data.content}
                   onChange={handleQuillChange}
-                  modules={BlogItem.modules}
-                  formats={BlogItem.formats}
               />
             </DialogContent>
             <DialogActions>
@@ -158,29 +155,5 @@ const BlogItem = ({blog, setBlogs}: any) => {
     </div>
   )
 }
-
-BlogItem.modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    ['link', 'image'],
-    ['clean'],
-  ],
-};
-
-BlogItem.formats = [
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'link',
-  'image'
-];
 
 export default BlogItem

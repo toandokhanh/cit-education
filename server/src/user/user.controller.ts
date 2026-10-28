@@ -1,8 +1,8 @@
 import { Body, ConflictException, Controller, Get, Post, UseGuards, Param, Put} from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDTO } from './dto/createUser.dto';
+import { UserDTO } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { LoginUserDTO } from './dto/checkUser.dto';
+import { LoginUserDTO } from './dto/check-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 // import { Request } from 'express'
 import { User } from './decorator/user.decorator';

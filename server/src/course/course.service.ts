@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course } from 'src/entitys/course.entity';
+import { Course } from '../entities/course.entity';
 import { ILike, Repository } from 'typeorm';
-import { CreateCourseDto } from './dto/createCourse.dto';
-import { Category } from 'src/entitys/catetory.entity';
-import { User } from 'src/entitys/user.entity';
+import { CreateCourseDto } from './dto/create-course.dto';
+import { Category } from '../entities/category.entity';
+import { User } from '../entities/user.entity';
 import { UpdateResult } from  'typeorm';
-import { Lesson } from 'src/entitys/lesson.entity';
-import { Enrollment } from 'src/entitys/enrollment.entity';
+import { Lesson } from '../entities/lesson.entity';
+import { Enrollment } from '../entities/enrollment.entity';
 
 @Injectable()
 export class CourseService {
@@ -80,7 +80,7 @@ export class CourseService {
         }
         const catetory = await this.categoryRepository.findOne({where: {id: realeCourse.category}})
         if (!catetory) {
-            throw new NotFoundException('Catetory not found');
+            throw new NotFoundException('Category not found');
         }
         realeCourse.creator = user
         realeCourse.category = catetory
@@ -94,7 +94,7 @@ export class CourseService {
     async getCoursesBaseCate(id: number) {
         const catetory = await this.categoryRepository.findOne({where: {id}})
         if (!catetory) {
-            throw new NotFoundException('Catetory not found');
+            throw new NotFoundException('Category not found');
         }
         const courses = await this.courseRepository.find({where : {
             category : {id: id}

@@ -1,9 +1,9 @@
-import { UpdateCourseDto } from './dto/updateCourse.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Controller, Get, Param, Post, Body, UseGuards, Delete, Put, Query } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { User } from 'src/user/decorator/user.decorator';
-import { CreateCourseDto } from './dto/createCourse.dto';
+import { User } from '../user/decorator/user.decorator';
+import { CreateCourseDto } from './dto/create-course.dto';
 
 @Controller('course')
 export class CourseController {

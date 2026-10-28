@@ -5,7 +5,7 @@ import { LOCAL_STORAGE_TOKEN_NAME } from '../../constant/constant';
 import { Typography } from '@mui/material';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Switch } from '@headlessui/react'
-import TestT from '../Lesson/TestT';
+import LessonSubtitleEditor from '../Lesson/LessonSubtitleEditor';
 export default function Commom() {
   const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
   return (
@@ -190,7 +190,7 @@ export default function Commom() {
       </div>
       </>
     )}
-    
+
     </>
   )
 }

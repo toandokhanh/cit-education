@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Layouts/Navbar'
 import Footer from '../Layouts/Footer'
-import categoryApi from '../../apis/catetoryApi'
+import categoryApi from '../../apis/categoryApi'
 import { Link } from 'react-router-dom'
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt'
 const Roadmap = () => {
@@ -18,7 +18,7 @@ const Roadmap = () => {
   useEffect(() => {
     fetchCategory()
   }, [])
-  
+
   return (
     <>
       <Navbar/>

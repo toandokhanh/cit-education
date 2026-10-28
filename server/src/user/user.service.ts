@@ -1,12 +1,12 @@
 import { Repository } from 'typeorm';
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entitys/user.entity';
+import { User } from '../entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ILike } from 'typeorm';
-import { Course } from 'src/entitys/course.entity';
-import { Blog } from 'src/entitys/blog.entity';
+import { Course } from '../entities/course.entity';
+import { Blog } from '../entities/blog.entity';
 
 @Injectable()
 export class UserService {

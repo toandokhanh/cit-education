@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Blog } from 'src/entitys/blog.entity';
-import { Comment } from 'src/entitys/comment.entity';
-import { Lesson } from 'src/entitys/lesson.entity';
-import { User } from 'src/entitys/user.entity';
+import { Blog } from '../entities/blog.entity';
+import { Comment } from '../entities/comment.entity';
+import { Lesson } from '../entities/lesson.entity';
+import { User } from '../entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { CreateCommentDto } from './dto/createComment.dto';
+import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Injectable()
 export class CommentService {
-    
+
     constructor(
         @InjectRepository(Comment)
         private readonly commentsResponse : Repository<Comment>,
@@ -27,7 +27,7 @@ export class CommentService {
         // check user
         const user = await this.usersResponse.findOne({where: {id: userId}})
         const blog = await this.blogsResponse.findOne({where: {id: blogId}})
-        if (!user || !blog){ 
+        if (!user || !blog){
             throw new NotFoundException('Informations not found');
         }
         const findBlogCreater = await this.blogsResponse.findOne({where: {user : {id: userId}}})
@@ -54,12 +54,12 @@ export class CommentService {
     }
 
 
-    
+
     async createLessonComment(userId: number, lessonId: any, commentContent: CreateCommentDto): Promise<Lesson>{
-        // check 
+        // check
         const user = await this.usersResponse.findOne({where: {id: userId}})
         const lesson = await this.lessonsResponse.findOne({where: {id: lessonId}})
-        if (!user || !lesson){ 
+        if (!user || !lesson){
             throw new NotFoundException('Informations not found');
         }
         const findLessonCreater = await this.lessonsResponse.findOne({where: {course: {creator: {id: userId}}}})
@@ -90,7 +90,7 @@ export class CommentService {
 
         const user = await this.usersResponse.findOne({where: {id: userId}})
         const comment = await this.commentsResponse.findOne({where: {id: commentId, user: {id: userId}}})
-        if (!user || !comment){ 
+        if (!user || !comment){
             throw new NotFoundException('Informations not found');
         }
         return await this.commentsResponse.update(commentId, {content: commentContent.content})
@@ -100,7 +100,7 @@ export class CommentService {
     async deleteComment(userId: number, commentId: number): Promise<DeleteResult>{
         const user = await this.usersResponse.findOne({where: {id: userId}})
         const comment = await this.commentsResponse.findOne({where: {id: commentId, user: {id: userId}}})
-        if (!user || !comment){ 
+        if (!user || !comment){
             throw new NotFoundException('Informations not found');
         }
         await this.usersResponse
@@ -113,7 +113,7 @@ export class CommentService {
         return result;
     }
 
-    
+
     async likeComment(commentId: number, userId: number): Promise<Comment> {
         const comment = await this.commentsResponse.findOne({ where: { id: commentId }, relations: ['likes'] });
         const user = await this.usersResponse.findOne({ where: { id: userId } });
@@ -129,12 +129,12 @@ export class CommentService {
           comment.likes.push(user);
           await this.commentsResponse.save(comment);
         }
-      
+
         return comment;
       }
 
 
-      
+
       async unlikeComment(commentId: number, userId: number): Promise<Comment> {
         const comment = await this.commentsResponse.findOne({ where: { id: commentId }, relations: ['likes'] });
         if (!comment) {
@@ -148,7 +148,7 @@ export class CommentService {
         if (!comment.likes) {
           comment.likes = [];
         }
-      
+
         const indexOfUser = comment.likes.findIndex((likedUser) => likedUser.id === userId);
         if (indexOfUser !== -1) {
           comment.likes.splice(indexOfUser, 1);
@@ -156,6 +156,6 @@ export class CommentService {
         }
         return comment;
       }
-      
+
 }
 

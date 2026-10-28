@@ -1,6 +1,5 @@
 import { TextField } from '@mui/material';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import RichTextEditor from '../../RichTextEditor';
 
 const Step3CreateLesson = ({ data, setData } : any) => {
   const handleInputChange = (event: any) => {
@@ -34,40 +33,13 @@ const Step3CreateLesson = ({ data, setData } : any) => {
         onChange={handleInputChange}
       />
       <p className="text-start">Contents</p>
-      <ReactQuill
+      <RichTextEditor
         className="h-64"
-        theme="snow"
         value={data.content}
         onChange={handleQuillChange}
-        modules={Step3CreateLesson.modules}
-        formats={Step3CreateLesson.formats}
       />
     </div>
   );
 };
-
-Step3CreateLesson.modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    ['link', 'image'],
-    ['clean'],
-  ],
-};
-
-Step3CreateLesson.formats = [
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'link',
-  'image'
-];
 
 export default Step3CreateLesson;

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams , Navigate} from 'react-router-dom';
 import { Container, Grid, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Snackbar, List, Divider, Toolbar, ListItem, ListItemButton, ListItemText, ListItemIcon } from '@mui/material';
-import ReactPlayer from 'react-player';
 import Navbar from '../Layouts/Navbar';
 import Footer from '../Layouts/Footer';
 import Progress from '../Layouts/Progress';
 import DOMPurify from 'dompurify';
 import lessonsApi from '../../apis/lessonsApi';
 import { useUser } from '../Contexts/UserContext';
-import ReactQuill from 'react-quill';
+import RichTextEditor from '../RichTextEditor';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import AddIcon from '@mui/icons-material/Add';
@@ -16,7 +15,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 import coursesApi from '../../apis/coursesApi';
 import LessonsLists from './LessonsItems';
-import TestT from './TestT';
+import LessonSubtitleEditor from './LessonSubtitleEditor';
 import enrollmentApi from '../../apis/enrollmentApi';
 import LessonTab from './LessonTab';
 const drawerWidth = 400;
@@ -278,7 +277,7 @@ const LessonDetail: React.FC = () => {
           <br />
             {!user?.isInstructor ? (
             <>
-              <TestT lessonDetail={lessonDetail} setLessonDetail={setLessonDetail} courseDetail={courseDetail}/>
+              <LessonSubtitleEditor lessonDetail={lessonDetail} setLessonDetail={setLessonDetail} courseDetail={courseDetail}/>
             </>
             ): (
               <>
@@ -289,13 +288,10 @@ const LessonDetail: React.FC = () => {
                 <Grid item xs={12} md={6} sx={{ margin: '0 auto',border:'1px black solid' }}>
                   <Box sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
                   <p className='font-semibold text-start'>Video</p>
-                      <ReactPlayer
-                      url={videoUrl}
-                      width="100%"
-                      height="100%"
+                      <video
+                      src={videoUrl}
+                      style={{ width: '100%', height: '100%' }}
                       controls
-                      sx={{ color: 'white' , backgoundColor: 'blue'}}
-                      // playing
                       />
                   </Box>
                 </Grid>
@@ -388,7 +384,7 @@ const LessonDetail: React.FC = () => {
                         <p className='font-semibold'>
                         Lesson content
                         </p>
-                      <ReactQuill
+                      <RichTextEditor
                         value={infoLesson.content}
                         onChange={handleQuillContentChange}
                       />

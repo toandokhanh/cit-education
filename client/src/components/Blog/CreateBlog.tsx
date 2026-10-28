@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../Layouts/Navbar'
-import ReactQuill from 'react-quill';
+import RichTextEditor from '../RichTextEditor';
 import { TextField } from '@mui/material';
 import blogApi from '../../apis/blogApi';
 import {Link, useNavigate} from 'react-router-dom'
@@ -54,13 +54,10 @@ const CreateBlog = () => {
             value={data.title}
             onChange={handleInputChange}
         />
-            <ReactQuill
+            <RichTextEditor
             className="h-96"
-            theme="snow"
             value={data.content}
             onChange={handleQuillChange}
-            modules={CreateBlog.modules}
-            formats={CreateBlog.formats}
         />
         <div className='flex mt-16 float-right'>
         <button onClick={handleSubmit} className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-black rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
@@ -68,33 +65,9 @@ const CreateBlog = () => {
         </button>
         </div>
         </div>
-        
+
     </div>
   )
 }
 
-CreateBlog.modules = {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-      ['link', 'image'],
-      ['clean'],
-    ],
-  };
-  
-  CreateBlog.formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image'
-  ];
-  
 export default CreateBlog

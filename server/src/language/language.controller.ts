@@ -8,7 +8,7 @@ export class LanguageController {
     ){}
 
     @Get()
-    async getCategorys(){
+    async getCategories(){
         return await this.languageService.getLanguages()
     }
 

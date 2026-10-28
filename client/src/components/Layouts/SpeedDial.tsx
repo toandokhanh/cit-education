@@ -16,7 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import MenuItem from '@mui/material/MenuItem';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-import categoryApi from '../../apis/catetoryApi';
+import categoryApi from '../../apis/categoryApi';
 import { Category } from '../../types/types';
 import { Course } from '../../types/types';
 import axios from 'axios';
@@ -26,7 +26,7 @@ import { Menu } from '@mui/material';
 import { HTTP_URL_SERVER_NEST } from '../../constant/constant';
 
 interface BasicSpeedDialProps {
-  setCourses: React.Dispatch<React.SetStateAction<any[]>>; 
+  setCourses: React.Dispatch<React.SetStateAction<any[]>>;
   courses: any;
 }
 export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps) {
@@ -114,15 +114,15 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
         try {
           const response = await categoryApi.getCategories();
           setCategories(response);
-          
+
         } catch (error) {
           console.error('Error fetching categories:', error);
         }
       };
-      
+
       fetchCategories();
     }, []);
-    
+
     React.useEffect(() => {
       const createCourse = async () => {
         try {
@@ -142,7 +142,7 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
         setcallCoursesApi(false);
       }
     }, [callCoursesApi]);
-    
+
   return (
     <>
       <Box>
@@ -178,7 +178,7 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
           data-testid="myTestDialog"
           onClick={(event) => event.stopPropagation()}
         >
-          <form onSubmit={UploadForm} noValidate> 
+          <form onSubmit={UploadForm} noValidate>
             <DialogTitle>Create a new course</DialogTitle>
             <DialogContent>
             <DialogContentText>
@@ -207,21 +207,21 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
               variant="standard"
               value={data.description}
               onChange={handleInputChange}
-              required 
+              required
             />
             <TextField
-                margin="dense" 
+                margin="dense"
                 fullWidth
                 id="standard-select-currency"
                 select
-                label="Select Catetorys"
+                label="Select Categorys"
                 defaultValue="EUR"
                 helperText="Please select your currency"
                 variant="standard"
                 name="category"
-                value={data?.category}  
+                value={data?.category}
                 onChange={handleInputChange}
-                required 
+                required
               >
                 {categories.map(option => (
                   <MenuItem key={option.name} value={option.id}>
@@ -246,7 +246,7 @@ export default function BasicSpeedDial({courses,setCourses}: BasicSpeedDialProps
               </DialogActions>
             </form>
       </Dialog>
-      
+
   </>
   );
 }
