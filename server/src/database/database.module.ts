@@ -6,15 +6,15 @@ import { ConfigService } from '@nestjs/config';
         TypeOrmModule.forRootAsync({
            useFactory:(configService : ConfigService) => ({
                 type: 'postgres',
-                host: 'localhost',
-                port: configService.getOrThrow('PORT'),
+                host: configService.get('DB_HOST', '127.0.0.1'),
+                port: Number(configService.get('DB_PORT', '5432')),
                 username: configService.getOrThrow('DB_USERNAME'),
                 password: configService.getOrThrow('DB_PASSWORD'),
                 database: configService.getOrThrow('DB_NAME'),
                 autoLoadEntities: true,
                 // entities: ['dist/**/*.entity{.ts,.js}'],
                 // synchronize: false,
-                synchronize: true,
+                synchronize: configService.get('DB_SYNCHRONIZE') === 'true',
                 // retryDelay: 3000,
                 // retryAttempts: 10,
            }),

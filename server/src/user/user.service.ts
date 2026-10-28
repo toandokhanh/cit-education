@@ -1,41 +1,3 @@
-// import { EntityManager } from 'typeorm';
-// // import { plainToClass } from 'class-transformer';
-// import { Injectable } from '@nestjs/common';
-// import { UserDTO } from './dto/user.dto';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { User } from '../entitys/user.entity';
-// @Injectable()
-// export class UserService {
-//     constructor(
-//         @InjectRepository(User)
-//         private readonly entityManager: EntityManager,
-//       ) {}
-
-
-//       async getUsers(): Promise<User[]> {
-//         // Sử dụng EntityManager để truy vấn tất cả người dùng từ cơ sở dữ liệu
-//         const users = await this.entityManager.find(User);
-//         return users;
-//     }
-
-    
-//     async registerUser(user: UserDTO){
-//         const realUser = UserDTO.plainToClass(user);
-//         console.log('realUser.email')
-//         console.log(realUser.email)
-//         const userFinal = new User(realUser)
-//         await this.entityManager.save(userFinal);
-//         return userFinal; 
-//     }
-
-//     async loginUser(){
-//         return "login"
-//     }
-// }
-
-
-
-
 import { Repository } from 'typeorm';
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -62,9 +24,9 @@ export class UserService {
   // async findOne(condition: any): Promise<User> {
   //   return this.userRepository.findOne(condition);
   // }
-  
+
   async findOneByEmail(email: string): Promise<User> {
-    return this.userRepository.findOne({ where: { email } });
+    return this.userRepository.createQueryBuilder('user').addSelect('user.password').where('user.email = :email', { email }).getOne();
 }
 
   async getUser(userId: number){
@@ -82,7 +44,8 @@ export class UserService {
 
   async registerUser(data: any): Promise<any> {
     const savedUser = await this.userRepository.save(data);
-    return savedUser;
+    const { password, ...safeUser } = savedUser;
+    return safeUser;
   }
 
   async loginUser(user: any) {
@@ -96,8 +59,8 @@ export class UserService {
             throw new BadRequestException('invalid credentials');
         }
         const jwt = await this.jwtService.signAsync({
-          id : checkUser.id, 
-          role: checkUser.role, 
+          id : checkUser.id,
+          role: checkUser.role,
           email: checkUser.email,
           fullname: checkUser.fullname,
           avatart: checkUser.avatar,
@@ -110,7 +73,7 @@ export class UserService {
 
   async getUserDetails(email: string){
     try {
-      const user = await this.userRepository.findOne({  
+      const user = await this.userRepository.findOne({
         where: { email: ILike(`${email}@%`) },
         select: ["id", "email", "fullname", "gender", "role", "bio", "avatar", "createdAt", "updatedAt"]
       });
@@ -136,7 +99,6 @@ export class UserService {
     }
   }
 
-  // lười code vậy cho nhanh :))
   async updateUser(data: any, userId: number){
     // console.log(data);
     const user = await this.userRepository.findOne({where: {id: userId}})
@@ -161,7 +123,7 @@ export class UserService {
         user.bio = data.bio;
       }
     }
-    
+
     return await this.userRepository.save(user);
   }
 }

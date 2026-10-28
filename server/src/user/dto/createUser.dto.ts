@@ -9,10 +9,14 @@ import { BaseDto } from "src/common/base.dto";
 export class UserDTO extends BaseDto{
     // @IsNotEmpty()
     // userId: string;
+    @IsString()
+    @IsNotEmpty()
     firstname : string;
+    @IsString()
+    @IsNotEmpty()
     lastname : string;
     @Transform(({obj}) => obj.firstname + ' ' + obj.lastname)
-    @Expose()   
+    @Expose()
     fullname : string;
 
 
@@ -41,11 +45,11 @@ export class UserDTO extends BaseDto{
     @IsDateString()
     @Expose()
     dob: Date;
-    
+
     @IsNotEmpty()
     @IsString()
     @Expose()
-    @IsIn(["student", "instructor", "admin"]) // Các giá trị role hợp lệ
+    @IsIn(["student", "instructor"]) // Public account roles
     role: string;
 
 }

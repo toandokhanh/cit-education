@@ -15,19 +15,20 @@ export class UserController {
         private userService: UserService
     )
     {}
-         
+
     @UseGuards(AuthGuard('jwt'))
     @Get('me')
     async detailUser(@User() user: any){
         return await this.userService.getUser(user.userId);
     }
 
+    @UseGuards(AuthGuard('admin'))
     @Get()
     async getUser()
     {
         return await this.userService.getUsers();
     }
-    
+
     @Post('/register')
     async register(@Body() user: UserDTO) {
         const realUser = UserDTO.plainToClass(user);

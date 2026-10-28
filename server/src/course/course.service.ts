@@ -14,13 +14,13 @@ export class CourseService {
     constructor(
         @InjectRepository(Course)
         private readonly courseRepository: Repository<Course>,
-        @InjectRepository(Category) 
+        @InjectRepository(Category)
         private categoryRepository: Repository<Category>,
-        @InjectRepository(User) 
+        @InjectRepository(User)
         private userRepository: Repository<User>,
-        @InjectRepository(Lesson) 
+        @InjectRepository(Lesson)
         private lessonRepository: Repository<Lesson>,
-        @InjectRepository(Enrollment) 
+        @InjectRepository(Enrollment)
         private enrollmentRepository: Repository<Enrollment>,
       ) {}
 
@@ -32,7 +32,7 @@ export class CourseService {
         });
         return courses;
     }
-    
+
     async searchCoursesByName(name: string) {
         const courses = await this.courseRepository.find({
           where: {
@@ -110,15 +110,15 @@ export class CourseService {
         }
     }
 
-    async enrollCourse(idCourse: number,idUser: number){ 
+    async enrollCourse(idCourse: number,idUser: number){
         const user = await this.userRepository.findOne({where: {id: idUser}})
         const course = await this.courseRepository.findOne({where: {id: idCourse}})
         course.lessons.sort((a : any, b : any) => a.id - b.id);
-        if(!user || !course){ 
+        if(!user || !course){
             throw new NotFoundException('Informations not found');
         }
         const lesson = course.lessons[0]
-        if(!lesson){ 
+        if(!lesson){
             throw new NotFoundException('lessons Informations not found');
         }
         course.students.push(user)
@@ -141,19 +141,28 @@ export class CourseService {
                 }
             },
             order: {
-                id: 'ASC' 
+                id: 'ASC'
             }
         });
         return courses;
     }
-    
 
-    async updateCourse(idCourse : number, data: any): Promise<UpdateResult> {
-        return await this.courseRepository.update(idCourse, data);
+
+    private async requireOwnedCourse(id: number, userId: number) {
+        const course = await this.courseRepository.findOne({ where: { id, creator: { id: userId } } });
+        if (!course) throw new NotFoundException('Course not found');
+        return course;
     }
 
-    async deleteCourse(idCourse: number): Promise<any> {
-        const course = await this.courseRepository.findOne({where: {id: idCourse}});
+    async updateCourse(idCourse : number, data: any, userId: number): Promise<UpdateResult> {
+        await this.requireOwnedCourse(idCourse, userId);
+        const category = await this.categoryRepository.findOne({ where: { id: data.category } });
+        if (!category) throw new NotFoundException('Category not found');
+        return await this.courseRepository.update(idCourse, { title: data.title, description: data.description, category });
+    }
+
+    async deleteCourse(idCourse: number, userId: number): Promise<any> {
+        const course = await this.requireOwnedCourse(idCourse, userId);
         if (!course) {
             throw new NotFoundException('Course not found');
         }

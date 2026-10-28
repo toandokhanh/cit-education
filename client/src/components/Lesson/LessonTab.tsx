@@ -98,7 +98,7 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
         handleCloseFormComment()
         handleClose()
         setLessonDetail(updatedLessonDetail);
-        
+
       }
     } catch (error) {
       console.error("Error creating comment", error);
@@ -141,11 +141,11 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
       const comment = lessonDetail.comments[index];
       const isLikedByUser = comment.likes.some((like: any) => like.id === user?.id);
       let updatedComment;
-  
+
       if (isLikedByUser) {
         // Nếu đã "like", thực hiện "unlike" bằng cách gọi API
         await commentApi.unLikeComment(commentId);
-  
+
         // Cập nhật trạng thái "liked" và danh sách likes của comment
         updatedComment = {
           ...comment,
@@ -154,17 +154,17 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
       } else {
         // Nếu chưa "like", thực hiện "like" bằng cách gọi API
         await commentApi.likeComment(commentId);
-  
+
         // Cập nhật trạng thái "liked" và danh sách likes của comment
         updatedComment = {
           ...comment,
           likes: [...comment.likes, { id: user?.id }],
         };
       }
-  
+
       // Cập nhật comment cụ thể trong danh sách lessonDetail.comments
       lessonDetail.comments[index] = updatedComment;
-  
+
       // Cập nhật state với phiên bản mới của lessonDetail
       setLessonDetail((prevData: any) => ({
         ...prevData,
@@ -174,14 +174,14 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
       console.error("Error liking/unliking comment", error);
     }
   };
-  
+
   return (
     <Box sx={{ width: '100%' }}>
-      
+
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-       
-          {user && 
-            user.isInstructor ? 
+
+          {user &&
+            user.isInstructor ?
             (
                 <div className="flex justify-between items-center mb-6 mt-5">
                   <h2 className="text-lg lg:text-2xl font-bold text-gray-900">Discussion ({lessonDetail.comments.length})</h2>
@@ -190,7 +190,7 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
             : (
               <>
                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                  <Tab label="Q&A" {...a11yProps(0)} />
+                  <Tab label="Q&amp;A" {...a11yProps(0)} />
                   <Tab label="lesson contents" {...a11yProps(1)} />
                   <Tab label="Take notes" {...a11yProps(2)} disabled  />
                 </Tabs>
@@ -209,11 +209,11 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
                 <div className="font-semibold text-sm leading-relaxed">{comment.user.fullname} </div>
                 <div className="text-sm leading-snug md:leading-normal">{comment.content}</div>
               </div>
-              
+
               <div className="text-xs ml-4 mt-0.5 text-gray-500 ">
-                {comment.user.id === user?.id ?('You') : comment.isCreator ? (<p>Creator <HowToRegIcon fontSize='small'/></p>) : ('User')} 
+                {comment.user.id === user?.id ?('You') : comment.isCreator ? (<p>Creator <HowToRegIcon fontSize='small'/></p>) : ('User')}
               </div>
-              
+
               <div className="bg-white  border border-white  rounded-full float-right -mt-8 mr-0.5 flex shadow items-center ">
                 {comment?.likes?.some((like: any) => like.id === user?.id) ? (
                   // Nếu đã "like" comment, hiển thị biểu tượng trái tim đỏ
@@ -268,7 +268,7 @@ export default function LessonTab({lessonDetail, setLessonDetail }: any) {
               <textarea value={comment} onChange={(e) => setComment(e.target.value)} name='comment' id="comment" rows={6} className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0  " placeholder="Write a comment..." required />
             </div>
             </div>
-           <div className='flex mt-2 justify-end'> 
+           <div className='flex mt-2 justify-end'>
            <button onClick={createComment} className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-white bg-black rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                 Post comment
           </button>

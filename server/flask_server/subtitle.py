@@ -1,3 +1,5 @@
+import subprocess
+import shlex
 import argparse
 import os,sys
 import createsub
@@ -28,10 +30,10 @@ args = parser.parse_args()
 
 def mp4_to_wav(filename,output,name):
     # name = filename[filename.index('/'):filename.[]]
-    os.system('ffmpeg -i {} -ar 44100 {}/{}.wav'.format(filename,output,name))
+    subprocess.run(shlex.split('ffmpeg -i {} -ar 44100 {}/{}.wav'.format(filename, output, name)), check=True, timeout=1800)
 
 def noise_deepfilternet(file,file_out):
-    os.system('deepFilter {} -o {}'.format(file,file_out))
+    subprocess.run(shlex.split('deepFilter {} -o {}'.format(file, file_out)), check=True, timeout=1800)
     # print("Đã giảm tiếng ồn DeepFilterNet")
     print('')
 
@@ -43,10 +45,10 @@ def noise_reduce(file,file_out):
     # print('Đã giảm tiếng ồn xong!')
     print('')
 
-def rename(filename,newname): 
+def rename(filename,newname):
     os.rename(filename, newname)
 
-try: 
+try:
     newname = args.new_name
 
     noises = args.algorithm_noise
@@ -60,12 +62,12 @@ except:
     print('')
 
 def wav_to_flac(filename,output):
-    os.system('ffmpeg -y -f wav -i {} -write_xing 0 -f flac {}'.format(filename,output))
+    subprocess.run(shlex.split('ffmpeg -y -f wav -i {} -write_xing 0 -f flac {}'.format(filename, output)), check=True, timeout=1800)
 
 
 def videoOutput(file_in,file_srt,file_out):
         # print(file_in, file_srt, file_out)
-        os.system('ffmpeg -y -i {} -filter_complex "subtitles={}" {}'.format(file_in,file_srt,file_out))
+        subprocess.run(shlex.split('ffmpeg -y -i {} -filter_complex "subtitles={}" {}'.format(file_in, file_srt, file_out)), check=True, timeout=1800)
 
 def checkfolder (path):
     # path = 'tmp'
@@ -75,7 +77,7 @@ def checkfolder (path):
         os.makedirs(path)
 if __name__ == "__main__":
         from time import gmtime, strftime
-        time_text = str(strftime("%Y%m%d_%H%M%S", gmtime())) 
+        time_text = str(strftime("%Y%m%d_%H%M%S", gmtime()))
         folder = time_text
         # os.mkdir(folder)
         # os.mkdir(folder)
@@ -84,21 +86,21 @@ if __name__ == "__main__":
         start_time = datetime.now()
 
         # Lấy ra đường dẫn chứa file
-        path = os.path.dirname(directory) + '/' 
+        path = os.path.dirname(directory) + '/'
         # Lấy ra tên file nhập vào có cả duôi file
         file = os.path.basename(directory)
 
         # Lấy ra tên file
         name1 = os.path.splitext(file)
         name = name1[0]
-        
-        
+
+
         # if not (os.path.exists(path)):
-        #     os.mkdir(path) 
+        #     os.mkdir(path)
         mp4_to_wav(path+file,path,name)
         if not newname:
             newname = name
-        
+
         if noises:
             # Giảm nhiễu dùng thuật toán deepfilter
             if noises == 'deep':
@@ -150,7 +152,7 @@ if __name__ == "__main__":
         srt_output = srt_output
         content = ', '+folder+', '+args.source_path+', '+read_video_info+', '+args.l_in+', '+args.l_out+', '+args.algorithm_noise+', '+str(end_time-start_time)+', '+wav_input+', '+wav_output+', '+path_txt+', '+srt_output+', '+video_output
         print(content)
-        
+
 
 
 

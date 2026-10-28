@@ -36,8 +36,8 @@ lerna-debug.log*
 docker-compose.yaml
 .env
 
-src/user/constant/
 
-createsub.py
+
+
 
 public/

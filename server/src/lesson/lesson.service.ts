@@ -25,9 +25,9 @@ export class LessonService {
     async findLessonInCourse(lessonId: number) {
 
         const lesson = await this.lessonrepository.findOne(
-            { where: { id: String(lessonId) } }, 
+            { where: { id: String(lessonId) } },
         );
-        
+
         if (!lesson) {
             throw new NotFoundException('lesson not found');
         }
@@ -76,14 +76,14 @@ export class LessonService {
             outputPathWAV: data.outputWavPath
         })
 
-        
+
         // create a new lesson
         const newLesson = await this.lessonrepository.save({
             title: data.title,
             content: data.content,
             video :newVideo
         })
-       
+
         data.course.lessons.push(newLesson);
         await this.courserepository.save(data.course);
         return {
@@ -92,13 +92,21 @@ export class LessonService {
         }
     }
 
-    async updateLesson(idLesson : number, data: any): Promise<UpdateResult> {
-        return await this.lessonrepository.update(idLesson, data);
+    async ownedLesson(id: string, userId: number) {
+        const lesson = await this.lessonrepository.findOne({ where: { id, course: { creator: { id: userId } } } });
+        if (!lesson) throw new NotFoundException('Lesson not found');
+        return lesson;
+    }
+
+    async updateLesson(idLesson : number, data: any, userId: number): Promise<UpdateResult> {
+        await this.ownedLesson(String(idLesson), userId);
+        return await this.lessonrepository.update(idLesson, { title: data.title, content: data.content });
     }
 
 
     async deleteLesson(idLesson : any, userId : number): Promise<DeleteResult> {
         const lesson = await this.lessonrepository.findOne({where: {id: idLesson, course: {creator: {id: userId}}}})
+        if (!lesson) throw new NotFoundException('Lesson not found');
         lesson.comments = []
         lesson.enrollments = []
         await this.lessonrepository.save(lesson)

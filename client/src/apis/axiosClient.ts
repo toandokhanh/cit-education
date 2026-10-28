@@ -1,8 +1,8 @@
 import axios from "axios";
-import { LOCAL_STORAGE_TOKEN_NAME } from "../constant/constant";
+import { LOCAL_STORAGE_TOKEN_NAME, HTTP_URL_SERVER_NEST } from "../constant/constant";
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:3003',
+  baseURL: HTTP_URL_SERVER_NEST,
   headers: {
     'Content-Type' : 'application/json'
   }
@@ -11,7 +11,7 @@ const axiosClient = axios.create({
 // Add a request interceptor to axiosClient
 axiosClient.interceptors.request.use(
   function (config) {
-    const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME); 
+    const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
     }

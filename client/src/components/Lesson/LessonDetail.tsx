@@ -23,7 +23,7 @@ const drawerWidth = 400;
 
 
 const LessonDetail: React.FC = () => {
-  
+
   const navigate = useNavigate();
   const [srtData, setSrtData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,7 +50,7 @@ const LessonDetail: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
-  }; 
+  };
   const handleMessageClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -92,19 +92,18 @@ const LessonDetail: React.FC = () => {
     try {
       await lessonsApi.updateLessonDetails(idLesson, infoLesson)
       setLessonDetail((prevData: any) => {
-        return { ...prevData }; 
+        return { ...prevData };
       });
     } catch (error) {
       console.error('Error fetching lesson updations:', error);
     }
   };
-  
+
   const fetchUpdateSubtitle = async () => {
     try {
       setLoading(true)
       const data = {
-        pathMP4: lessonDetail?.video?.pathMP4,
-        pathSRT: lessonDetail?.video?.pathSRT,
+        lessonId: Number(lessonDetail?.id),
         data: srtData
       }
       const response: any = await lessonsApi.updateSubtitle(data)
@@ -163,7 +162,7 @@ const LessonDetail: React.FC = () => {
     });
   }
 
-  
+
   const handleTitleChange = (event: any) => {
     const { name, value } = event.target;
     setInfoLessson((prevData: any) => ({
@@ -178,7 +177,7 @@ const LessonDetail: React.FC = () => {
       content: value,
     }));
   };
-  
+
 
   const handleAddRow = (index: number) => {
     const newSrtItem = {
@@ -193,23 +192,23 @@ const LessonDetail: React.FC = () => {
     }
     setSrtData(updatedSrtData);
   };
-    
-  
+
+
   const handleRemoveRow = (indexToRemove: number) => {
     const updatedSrtData = [...srtData];
-    updatedSrtData.splice(indexToRemove - 1, 1); 
+    updatedSrtData.splice(indexToRemove - 1, 1);
     for (let i = indexToRemove - 1; i < updatedSrtData.length; i++) {
       updatedSrtData[i].index = i + 1;
     }
     setSrtData(updatedSrtData);
   };
-  
+
   const handleInputChange = (index: number, field: string, value: string) => {
     const updatedSrtData = [...srtData];
     updatedSrtData[index][field] = value;
     setSrtData(updatedSrtData);
   };
-  
+
 
   const handleDownloadTxt = () => {
     axios.get(`${HTTP_URL_SERVER_NEST}${lessonDetail.video.pathTXT}`)
@@ -259,14 +258,14 @@ const LessonDetail: React.FC = () => {
       UpdateLearnedLesson();
     }
   }, [idLesson, idCourse, user]);
-  
+
   useEffect(() => {
     if(lessonDetail?.video?.pathSRT){
       setLoading(true)
       fetchSrtFile()
       setLoading(false)
     }
-  }, [lessonDetail]); 
+  }, [lessonDetail]);
 
 
   return (
@@ -294,9 +293,9 @@ const LessonDetail: React.FC = () => {
                       url={videoUrl}
                       width="100%"
                       height="100%"
-                      controls 
+                      controls
                       sx={{ color: 'white' , backgoundColor: 'blue'}}
-                      // playing 
+                      // playing
                       />
                   </Box>
                 </Grid>
@@ -319,25 +318,25 @@ const LessonDetail: React.FC = () => {
                         <TableRow key={index} >
                           <TableCell component="th" scope="row">{data.index}</TableCell>
                           <TableCell component="th" scope="row">
-                            <input 
-                              className='w-full' 
+                            <input
+                              className='w-full'
                               style={{borderRadius: '5px', border: '1px solid black' }}
                               value={data.startTime}
                               onChange={(e) => handleInputChange(data.index-1, 'startTime', e.target.value)}
                               />
                           </TableCell>
                           <TableCell align="left">
-                              <input 
-                                className='w-full' 
+                              <input
+                                className='w-full'
                                 style={{borderRadius: '5px', border: '1px solid black' }}
                                 value={data.endTime}
                                 onChange={(e) => handleInputChange(data.index-1, 'endTime', e.target.value)}
                                 />
                           </TableCell>
                           <TableCell align="left">
-                            <textarea 
-                              style={{borderRadius: '5px', border: '1px solid black' }} 
-                              rows={3}  
+                            <textarea
+                              style={{borderRadius: '5px', border: '1px solid black' }}
+                              rows={3}
                               name="postContent"
                               value={data.text}
                               onChange={(e) => handleInputChange(data.index-1, 'text', e.target.value)}
@@ -369,7 +368,7 @@ const LessonDetail: React.FC = () => {
                   </TableContainer>
                   </Box>
                 </Grid>
-                
+
                 <Grid item xs={12} md={12}>
                 <div className='text-start my-3 '>
                       <p className='font-semibold'>
@@ -430,7 +429,7 @@ const LessonDetail: React.FC = () => {
             )}
           </>
         )}
-        
+
         <Snackbar
           open={openMessage}
           autoHideDuration={3000}

@@ -10,14 +10,14 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ unique: true }) 
+    @Column({ unique: true })
     @IsEmail()
     email: string;
 
     @Column()
     fullname: string;
 
-    @Column()
+    @Column({ select: false })
     password: string;
 
     @Column()
@@ -60,11 +60,11 @@ export class User {
 
     @ManyToMany(() => Blog, (blog) => blog.likes)
     @JoinTable({ name: 'user_likes_blog' })
-    likedBlogs: Blog[]; 
+    likedBlogs: Blog[];
 
     @ManyToMany(() => Comment, (comment) => comment.likes)
     @JoinTable({ name: 'user_likes_comment' })
-    likedComments: Comment[]; 
+    likedComments: Comment[];
 
     constructor(partial: Partial<User>) {
         Object.assign(this, partial);

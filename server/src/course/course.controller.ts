@@ -9,7 +9,7 @@ import { CreateCourseDto } from './dto/createCourse.dto';
 export class CourseController {
     constructor(
         private coursesService: CourseService
-    ) 
+    )
     {}
 
     // get all courses
@@ -32,17 +32,17 @@ export class CourseController {
     }
 
 
-    // delete a course 
+    // delete a course
     @UseGuards(AuthGuard('instructor'))
     @Delete('/:idCourse/delete')
-    async delete(@Param('idCourse') idCourse: number) {
-      return this.coursesService.deleteCourse(idCourse);
-    } 
+    async delete(@Param('idCourse') idCourse: number, @User() user: any) {
+      return this.coursesService.deleteCourse(idCourse, user.userId);
+    }
 
     @UseGuards(AuthGuard('instructor'))
     @Put('/:idCourse/update')
-    async updateCourse(@Param('idCourse') idCourse: number, @Body() data: UpdateCourseDto){
-        return this.coursesService.updateCourse(idCourse, data);
+    async updateCourse(@Param('idCourse') idCourse: number, @Body() data: UpdateCourseDto, @User() user: any){
+        return this.coursesService.updateCourse(idCourse, data, user.userId);
 
     }
 
@@ -55,13 +55,13 @@ export class CourseController {
         return await this.coursesService.createCourse(course)
     }
 
-    
+
     // get courses base on catetory
     @Get('categories/:id')
     async getCoursesBaseCate(@Param('id') id: number){
         return await this.coursesService.getCoursesBaseCate(id)
     }
-    
+
     // Enrollments
     @UseGuards(AuthGuard('student'))
     @Get(':idCourse/enrollment')
@@ -69,7 +69,7 @@ export class CourseController {
         const idUser = user.userId
         return await this.coursesService.enrollCourse(idCourse, idUser)
     }
-    
+
     // get my courses
     @UseGuards(AuthGuard('instructor'))
     @Get('v1/me')
@@ -86,5 +86,5 @@ export class CourseController {
     }
 
 
-    
+
 }

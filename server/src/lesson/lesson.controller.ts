@@ -3,14 +3,18 @@ import { AuthGuard } from "@nestjs/passport";
 import { Controller, Post, Body, Param, UseGuards, Get, BadRequestException, Delete, Put, InternalServerErrorException } from "@nestjs/common";
 import { CreateLessonDTO } from "./dto/createLesson.dto";
 import { User } from "src/user/decorator/user.decorator";
-import { CreateSubtitleflaskApiUrl, UpdateSubtitleflaskApiUrl } from "./constant/constant";
+import { workerUrl } from "./constant/constant";
 import axios from "axios";
+import { ConfigService } from '@nestjs/config';
+import { UpdateSubtitleDTO } from './dto/updateSubtitle.dto';
+import { assertOwnedUpload } from '../common/media';
 import { UpdateLessonDTO } from './dto/updateLesson.dto';
 
 @Controller(":coursesId/lesson")
 export class LessonController {
     constructor(
-        private lessonService :LessonService
+        private lessonService :LessonService,
+        private config: ConfigService
     ){}
 
   handleFilePath(file: any) {
@@ -43,7 +47,7 @@ export class LessonController {
   async createLess(
     @Body() lesson: CreateLessonDTO, // lesson information
     @Param("coursesId") coursesId: number, // course ID
-    @User() user: any, // creator 
+    @User() user: any, // creator
   ) {
     const course = await this.lessonService.findCourse(coursesId)
     if(course.creator.email !== user.email){
@@ -53,17 +57,18 @@ export class LessonController {
     const title = lesson.title;
     const content = lesson.content;
     const video = lesson.video;
+    assertOwnedUpload(video, user.userId);
     const sourceLanguage = lesson.sourceLanguage;
     const targetLanguage = lesson.targetLanguage;
     const algorithm = lesson.algorithm;
-    const flaskApiUrl = CreateSubtitleflaskApiUrl;
+    const flaskApiUrl = workerUrl('createSubtitle');
     try {
       const response = await axios.post(flaskApiUrl, {
         video,
         sourceLanguage,
         targetLanguage,
         algorithm,
-      });
+      }, { headers: { 'X-Service-Token': this.config.getOrThrow('FLASK_SERVICE_TOKEN') }, timeout: 1800000 });
 
       return await this.lessonService.create(
         {
@@ -102,22 +107,21 @@ export class LessonController {
 
   @UseGuards(AuthGuard("instructor"))
   @Put(':idlesson/update')
-  async updateLesson(@Param('idlesson') idlesson : number,@Body() data: UpdateLessonDTO ){
-    return this.lessonService.updateLesson(idlesson, data)
+  async updateLesson(@Param('idlesson') idlesson : number,@Body() data: UpdateLessonDTO, @User() user: any ){
+    return this.lessonService.updateLesson(idlesson, data, user.userId)
   }
 
 
 
   @UseGuards(AuthGuard("instructor"))
   @Post('updatesrtfile')
-  async updateSubtitle(@Body() data: any) {
-    try {
-      const flaskUrl = UpdateSubtitleflaskApiUrl ; 
-      await axios.post(flaskUrl, data);
-      return { message: 'Subtitle updated successfully'};}
-    catch (error) {
-      console.error('Error updating subtitle:', error);
-      throw new InternalServerErrorException('Subtitle update failed'); // Hoặc sử dụng exception phù hợp
-    }
+  async updateSubtitle(@Body() data: UpdateSubtitleDTO, @User() user: any) {
+    const lesson = await this.lessonService.ownedLesson(String(data.lessonId), user.userId);
+    const response = await axios.post(workerUrl('updateSubtitle'), {
+      pathMP4: lesson.video.pathMP4,
+      pathSRT: lesson.video.pathSRT,
+      data: data.data,
+    }, { headers: { 'X-Service-Token': this.config.getOrThrow('FLASK_SERVICE_TOKEN') }, timeout: 1800000 });
+    return response.data;
   }
 }

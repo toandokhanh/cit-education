@@ -1,60 +1,6 @@
-POST http://localhost:3003/user/login
-Content-Type: application/json
+@baseUrl = http://localhost:3003
+@accessToken = REPLACE_WITH_A_FRESH_LOGIN_TOKEN
 
-{
-    "email": "student@gmail.com",
-    "password": "student@gmail.com"
-}
-
-
-
-###
-
-POST http://localhost:3003/4/lesson
-Content-Type: application/json
-Authorization: Bearer REPLACE_WITH_A_FRESH_LOGIN_TOKEN
-
-{
-    "title": "Bài 1: Tư duy của 1 Backend developer",
-    "content": "nội dung bài học",
-    "video": "1.mp4",
-    "sourceLanguage": "vi",
-    "targetLanguage": "vi",
-    "algorithm": "deep"
-}
-
-
-
-###
-GET http://localhost:3003/catetory
-Content-Type: application/json
-
-
-
-###
-GET http://localhost:3003/language
-Content-Type: application/json
-
-
-
-###
-GET http://localhost:3003/algorithm
-Content-Type: application/json
-
-
-
-###
-POST http://localhost:3003/1/lesson/updatesrtfile
-Content-Type: application/json
-Authorization: Bearer REPLACE_WITH_A_FRESH_LOGIN_TOKEN
-
-{ 
-    "data": "data"
-}
-
-
-
-###
-GET http://localhost:3003/blog/v1/me
-Content-Type: application/json
-Authorization: Bearer REPLACE_WITH_A_FRESH_LOGIN_TOKEN
+### Current user
+GET {{baseUrl}}/user/me
+Authorization: Bearer {{accessToken}}
